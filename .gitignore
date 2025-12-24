@@ -1,0 +1,7 @@
+/target
+
+# fastembed / HF-style model cache
+.fastembed/
+.fastembed_cache/
+**/.fastembed_cache/
+**/.fastembed/
