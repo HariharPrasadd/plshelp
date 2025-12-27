@@ -1,5 +1,5 @@
 use fastembed::{TextEmbedding, InitOptions, EmbeddingModel};
-use std::{any::type_name, string};
+use std::any::type_name;
 use rusqlite::{Connection, Result, params};
 
 /* mixedbread model information
@@ -71,7 +71,7 @@ fn init_db(db_path: &str) -> Result<Connection> {
 // INPUT: Iterate over parallel vectors
 fn insert_documents(
     conn: &Connection,
-    contents: &[String],
+    contents: &Vec<&str>,
     embeddings: &[Vec<f32>],
 ) -> Result<()> {
     assert_eq!(contents.len(), embeddings.len());
@@ -91,12 +91,9 @@ fn insert_documents(
 // OUTPUT: Search with natural language query
 fn search(
     connection: &Connection,
-    query_text: &str,
+    query_embedding: &Vec<Vec<f32>>,
     top_k: usize,
 ) -> Result<Vec<(Document, f32)>> {
-    // Generate embedding from natural language query
-    let query_embedding = generate_embedding(query_text);
-    
     let mut statement = connection.prepare(
         "SELECT id, content, embedding FROM documents"
     )?;
@@ -108,7 +105,7 @@ fn search(
             let embedding_bytes: Vec<u8> = row.get(2)?;
             
             let document_embedding = bytes_to_embedding(&embedding_bytes);
-            let similarity_score = cosine_similarity(&query_embedding, &document_embedding);
+            let similarity_score = cosine_similarity(&query_embedding[0], &document_embedding);
             
             let document = Document {
                 id: document_id,
@@ -131,7 +128,7 @@ fn search(
 
 fn main() {
     // initialize connection to db
-    let connection = init_db("plshelp.db")?;
+    let connection = init_db("plshelp.db").expect("Could not initialize database");
 
     // load embedding model
     let mut model = TextEmbedding::try_new(
@@ -140,29 +137,29 @@ fn main() {
 
     // dummy input
     let documents = vec![
-    "Hooks let your code \"do something\" when something happens in React - either the state changes, the lifecycle changes, or something else. ",
-    "Binary crates are programs you can compile to an executable that you can run.",
-    "A package is a bundle of one or more crates that provides a set of functionality. A package contains a Cargo.toml file that describes how to build those crates. ",
-    // You can leave out the prefix but it's recommended
-    "When declaring modules, you add an declaration statement, eg \"mod garden\" at the top of your crate root (src/lib.rs or src/main.rs) to say you're including this module. You can then add this mod's code in i) mod garden {} within the crate root, ii) in src/garden.rs, iii) or in src/garden/mod.rs.",
+    "A closure in Rust is an anonymous function that can capture variables from its surrounding scope, allowing you to pass behavior as a value.",
+    "In HTTP, a 404 status code means the server was reached successfully but the requested resource could not be found.",
+    "A hash map stores key–value pairs and provides average constant-time lookup by computing a hash of the key.",
+    "In machine learning, overfitting occurs when a model learns noise in the training data and performs poorly on unseen examples.",
+    "Garbage collection is a form of automatic memory management where the runtime periodically reclaims memory that is no longer reachable by the program.",
     ];
 
     // Generate embeddings with the default batch size, 256
-    let doc_embeddings = model.embed(&documents, None).expect("Could not generate embeddings for documentation");
+    let doc_embeddings: Vec<Vec<f32>> = model.embed(&documents, None).expect("Could not generate embeddings for documentation");
+
+    // Insert documents into sqlite db
+    insert_documents(&connection, &documents, &doc_embeddings).expect("Could not add documents to database.");
 
     // Raw user query
-    let user_query = "Rules for declaring modules?";
+    let user_query = "Why does my model not accurately predict out of distribution values?";
 
-    // Add relevant prompt to allow the user query to be used for retrieval
-    let retrieval_query = format!{"Represent this sentence for searching relevant passages: {user_query}"};
+    // Generate query embedding by adding prefix and converting string to Vec<string>
+    let query_embedding: Vec<Vec<f32>> = model.embed([format!{"Represent this sentence for searching relevant passages: {user_query}"}], None).expect("Could not generate embeddings for query.");
 
-    // Generate embedding from retrieval query
-    let query_vector = [format!{"{retrieval_query}"}];
+    // Results vector
+    let results = search(&connection, &query_embedding, 3).expect("Could not search results.");
 
-    let query_embedding = model.embed(query_vector, None).expect("Could not generate embeddings for query.");
-
-    let results = search(&connection, &user_query, 3)?;
-
+    // List all results in the format {index}. {answer} (score: {score})
     for (rank, (document, score)) in results.iter().enumerate() {
         println!("{}. {} (score: {:.4})", 
             rank + 1, 
