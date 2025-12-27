@@ -5,3 +5,4 @@ edition = "2024"
 
 [dependencies]
 fastembed = "5.5.0"
+rusqlite = "0.38.0"
