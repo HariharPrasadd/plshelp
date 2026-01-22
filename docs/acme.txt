@@ -1,0 +1,200 @@
+AcmeStream SDK Documentation
+Version 2.4.1
+Last updated: 2025-11-03
+
+==================================================
+1. Overview
+==================================================
+
+AcmeStream is a real-time data ingestion and processing SDK designed for high-throughput event pipelines. It supports streaming, batching, and hybrid modes, and can be embedded in backend services, edge devices, and serverless environments.
+
+The SDK is language-agnostic at the protocol layer, with first-class client libraries for Python, Java, and TypeScript. All clients communicate with the AcmeStream Control Plane using HTTPS and WebSocket connections.
+
+Key design goals:
+- Low latency (<50 ms end-to-end under nominal load)
+- Horizontal scalability
+- Deterministic replay
+- At-least-once delivery semantics
+
+==================================================
+2. Installation
+==================================================
+
+2.1 Python
+
+Install using pip:
+
+    pip install acmestream
+
+The minimum supported Python version is 3.9. Python 3.8 reached end-of-support in AcmeStream SDK version 2.3.0.
+
+2.2 Java
+
+Maven dependency:
+
+    <dependency>
+        <groupId>com.acme</groupId>
+        <artifactId>acmestream</artifactId>
+        <version>2.4.1</version>
+    </dependency>
+
+Java 11 or later is required. Java 8 is not supported due to TLS and concurrency limitations.
+
+2.3 TypeScript
+
+Install via npm:
+
+    npm install @acme/acmestream
+
+The TypeScript SDK requires Node.js 18 or later.
+
+==================================================
+3. Authentication
+==================================================
+
+All AcmeStream clients authenticate using API keys issued via the Acme Developer Console.
+
+There are two types of keys:
+- Publish keys (prefix: pk_)
+- Read keys (prefix: rk_)
+
+Keys must be passed as an Authorization header:
+
+    Authorization: Bearer <API_KEY>
+
+API keys are scoped to a single project and environment (development, staging, or production).
+
+Security note: API keys should never be embedded directly in client-side applications.
+
+==================================================
+4. Core Concepts
+==================================================
+
+4.1 Streams
+
+A stream is an append-only, ordered log of events. Each event is assigned a monotonically increasing offset.
+
+Streams are immutable: once written, events cannot be modified or deleted individually. Stream retention policies determine how long events are kept.
+
+4.2 Events
+
+An event consists of:
+- A payload (JSON, Protobuf, or Avro)
+- A timestamp (assigned by the producer unless overridden)
+- Optional metadata (key-value pairs, max 1 KB total)
+
+The maximum event size is 1 MB after serialization.
+
+4.3 Consumers
+
+Consumers read from streams using consumer groups. Within a consumer group, each event is delivered to exactly one consumer instance.
+
+Offsets are committed automatically every 5 seconds by default.
+
+==================================================
+5. Publishing Data
+==================================================
+
+Events can be published individually or in batches.
+
+Example (Python):
+
+    stream.publish(
+        name="user-signups",
+        payload={"user_id": 123, "source": "web"}
+    )
+
+Batch publishing is recommended for high-throughput workloads. The maximum batch size is 500 events or 5 MB, whichever comes first.
+
+==================================================
+6. Consuming Data
+==================================================
+
+Consumers subscribe to one or more streams.
+
+Example (Java):
+
+    consumer.subscribe("user-signups");
+
+Consumers may rewind to a specific offset or timestamp for replay purposes.
+
+Warning: Rewinding consumers in a production environment may result in duplicate processing.
+
+==================================================
+7. Error Handling
+==================================================
+
+7.1 Retries
+
+Transient network failures are retried automatically using exponential backoff with jitter.
+
+Default retry policy:
+- Initial delay: 200 ms
+- Maximum delay: 10 seconds
+- Maximum attempts: 7
+
+7.2 Dead Letter Queues (DLQ)
+
+If an event fails processing after all retries, it may be routed to a Dead Letter Queue.
+
+DLQs are optional and must be enabled per stream.
+
+==================================================
+8. Configuration
+==================================================
+
+Configuration can be provided via:
+- Environment variables
+- Configuration files
+- Explicit client options
+
+Order of precedence (highest to lowest):
+1. Explicit options
+2. Environment variables
+3. Configuration file
+
+Example environment variables:
+
+    ACMESTREAM_API_KEY
+    ACMESTREAM_ENDPOINT
+    ACMESTREAM_TIMEOUT_MS
+
+==================================================
+9. Performance Considerations
+==================================================
+
+For optimal performance:
+- Use batch publishing
+- Avoid synchronous consumers when possible
+- Co-locate producers and consumers in the same region
+
+Throughput scales linearly up to approximately 50,000 events per second per stream under typical workloads.
+
+==================================================
+10. Limitations
+==================================================
+
+- Maximum of 100 active streams per project
+- Maximum event size: 1 MB
+- Exactly-once delivery is not guaranteed
+
+==================================================
+11. FAQ
+==================================================
+
+Q: Does AcmeStream support exactly-once delivery?
+A: No. AcmeStream provides at-least-once delivery. Consumers must be idempotent.
+
+Q: Can I use AcmeStream in a browser?
+A: No. The SDK is intended for server-side and edge environments only.
+
+Q: What happens when a stream exceeds its retention period?
+A: Events older than the retention window are permanently deleted and cannot be recovered.
+
+==================================================
+12. Deprecations
+==================================================
+
+The legacy polling consumer API was deprecated in version 2.2.0 and will be removed in version 3.0.0.
+
+Users should migrate to the subscription-based consumer API as soon as possible.

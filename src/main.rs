@@ -71,7 +71,7 @@ fn init_db(db_path: &str) -> Result<Connection> {
 // INPUT: Iterate over parallel vectors
 fn insert_documents(
     conn: &Connection,
-    contents: &Vec<&str>,
+    contents: &Vec<String>,
     embeddings: &[Vec<f32>],
 ) -> Result<()> {
     assert_eq!(contents.len(), embeddings.len());
@@ -97,7 +97,7 @@ fn search(
     let mut statement = connection.prepare(
         "SELECT id, content, embedding FROM documents"
     )?;
-   
+    
     let mut results: Vec<(Document, f32)> = statement
         .query_map([], |row| {
             let document_id: i64 = row.get(0)?;
@@ -126,6 +126,74 @@ fn search(
     Ok(results)
 }
 
+/// Semantic chunking function that splits text based on semantic similarity
+/// Returns a vector of text chunks where boundaries are determined by drops in similarity
+fn semantic_chunk(
+    text: &str,
+    model: &mut TextEmbedding,
+    similarity_threshold: f32,  // e.g., 0.75 - chunks split when similarity drops below this
+) -> Vec<String> {
+    // 1. Split text into sentences (simple version - splits on period, exclamation, question mark)
+    let sentences: Vec<String> = text
+        .split(|c| c == '.' || c == '!' || c == '?')
+        .map(|s| s.trim().to_string())
+        .filter(|s| !s.is_empty() && s.len() > 3)  // Filter out very short fragments
+        .collect();
+    
+    // Edge case: if only one sentence, return it as single chunk
+    if sentences.len() <= 1 {
+        return vec![text.to_string()];
+    }
+    
+    // 2. Generate embeddings for each sentence
+    let sentence_refs: Vec<&str> = sentences.iter().map(|s| s.as_str()).collect();
+    let embeddings: Vec<Vec<f32>> = model
+        .embed(sentence_refs, None)
+        .expect("Could not generate sentence embeddings");
+    
+    // 3. Find chunk boundaries based on cosine similarity drops
+    let mut chunks: Vec<String> = Vec::new();
+    let mut chunk_start = 0;
+    
+    // CHUNKING LOGIC:
+    // - Compare each consecutive sentence pair (i, i+1) for semantic similarity
+    // - If similarity is HIGH: keep chunk_start where it is (sentences stay together)
+    // - If similarity is LOW (< threshold): create a boundary
+    //   → This captures ALL sentences from chunk_start to i (could be many sentences!)
+    //   → Then move chunk_start to i+1 to start a new chunk
+    // 
+    // Example: [S0, S1, S2, S3] with threshold=0.75
+    //   i=0: S0↔S1 similarity=0.85 → NO boundary (chunk_start stays 0)
+    //   i=1: S1↔S2 similarity=0.82 → NO boundary (chunk_start still 0)
+    //   i=2: S2↔S3 similarity=0.60 → BOUNDARY! 
+    //        → Create chunk from sentences[0..=2] = [S0, S1, S2] (3 sentences!)
+    //        → chunk_start = 3
+    //
+    // This naturally groups multiple consecutive similar sentences together
+    // by keeping chunk_start fixed until semantic similarity drops.
+    for i in 0..embeddings.len() - 1 {
+        let similarity = cosine_similarity(&embeddings[i], &embeddings[i + 1]);
+        
+        // If similarity drops below threshold, create a chunk boundary
+        if similarity < similarity_threshold {
+            // Combine sentences from chunk_start to i (inclusive)
+            let chunk_text = sentences[chunk_start..=i].join(". ") + ".";
+            chunks.push(chunk_text);
+            chunk_start = i + 1;
+        }
+    }
+    
+    // Add the final chunk (remaining sentences that weren't chunked in the loop)
+    // This happens when the last few sentences were all similar to each other,
+    // so no boundary was created and they're still waiting to be added.
+    if chunk_start < sentences.len() {
+        let chunk_text = sentences[chunk_start..].join(". ") + ".";
+        chunks.push(chunk_text);
+    }
+    
+    chunks
+}
+
 fn main() {
     // initialize connection to db
     let connection = init_db("plshelp.db").expect("Could not initialize database");
@@ -136,13 +204,21 @@ fn main() {
     ).expect("Could not load model");
 
     // dummy input
-    let documents = vec![
+    let _documents_old = vec![
     "A closure in Rust is an anonymous function that can capture variables from its surrounding scope, allowing you to pass behavior as a value.",
     "In HTTP, a 404 status code means the server was reached successfully but the requested resource could not be found.",
     "A hash map stores key–value pairs and provides average constant-time lookup by computing a hash of the key.",
     "In machine learning, overfitting occurs when a model learns noise in the training data and performs poorly on unseen examples.",
     "Garbage collection is a form of automatic memory management where the runtime periodically reclaims memory that is no longer reachable by the program.",
     ];
+
+    // dummy input string
+    let docstring = "A closure in Rust is an anonymous function that can capture variables from its surrounding scope, allowing you to pass behavior as a value. In HTTP, a 404 status code means the server was reached successfully but the requested resource could not be found. A hash map stores key–value pairs and provides average constant-time lookup by computing a hash of the key. In machine learning, overfitting occurs when a model learns noise in the training data and performs poorly on unseen examples. Garbage collection is a form of automatic memory management where the runtime periodically reclaims memory that is no longer reachable by the program.";
+    let documents = semantic_chunk(docstring, &mut model, 0.75);
+
+    for doc in &documents {
+        println!("{}", doc);
+    }
 
     // Generate embeddings with the default batch size, 256
     let doc_embeddings: Vec<Vec<f32>> = model.embed(&documents, None).expect("Could not generate embeddings for documentation");
