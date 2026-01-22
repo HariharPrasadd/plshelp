@@ -1,6 +1,8 @@
 use fastembed::{TextEmbedding, InitOptions, EmbeddingModel};
 use std::any::type_name;
 use rusqlite::{Connection, Result, params};
+use std::fs;
+use sentencex::segment;
 
 /* mixedbread model information
 
@@ -68,10 +70,15 @@ fn init_db(db_path: &str) -> Result<Connection> {
     Ok(conn)
 }
 
+fn clear_documents(conn: &Connection) -> Result<()> {
+    conn.execute("DELETE FROM documents", [])?;
+    Ok(())
+}
+
 // INPUT: Iterate over parallel vectors
 fn insert_documents(
     conn: &Connection,
-    contents: &Vec<String>,
+    contents: &Vec<&str>,
     embeddings: &[Vec<f32>],
 ) -> Result<()> {
     assert_eq!(contents.len(), embeddings.len());
@@ -126,76 +133,8 @@ fn search(
     Ok(results)
 }
 
-/// Semantic chunking function that splits text based on semantic similarity
-/// Returns a vector of text chunks where boundaries are determined by drops in similarity
-fn semantic_chunk(
-    text: &str,
-    model: &mut TextEmbedding,
-    similarity_threshold: f32,  // e.g., 0.75 - chunks split when similarity drops below this
-) -> Vec<String> {
-    // 1. Split text into sentences (simple version - splits on period, exclamation, question mark)
-    let sentences: Vec<String> = text
-        .split(|c| c == '.' || c == '!' || c == '?')
-        .map(|s| s.trim().to_string())
-        .filter(|s| !s.is_empty() && s.len() > 3)  // Filter out very short fragments
-        .collect();
-    
-    // Edge case: if only one sentence, return it as single chunk
-    if sentences.len() <= 1 {
-        return vec![text.to_string()];
-    }
-    
-    // 2. Generate embeddings for each sentence
-    let sentence_refs: Vec<&str> = sentences.iter().map(|s| s.as_str()).collect();
-    let embeddings: Vec<Vec<f32>> = model
-        .embed(sentence_refs, None)
-        .expect("Could not generate sentence embeddings");
-    
-    // 3. Find chunk boundaries based on cosine similarity drops
-    let mut chunks: Vec<String> = Vec::new();
-    let mut chunk_start = 0;
-    
-    // CHUNKING LOGIC:
-    // - Compare each consecutive sentence pair (i, i+1) for semantic similarity
-    // - If similarity is HIGH: keep chunk_start where it is (sentences stay together)
-    // - If similarity is LOW (< threshold): create a boundary
-    //   → This captures ALL sentences from chunk_start to i (could be many sentences!)
-    //   → Then move chunk_start to i+1 to start a new chunk
-    // 
-    // Example: [S0, S1, S2, S3] with threshold=0.75
-    //   i=0: S0↔S1 similarity=0.85 → NO boundary (chunk_start stays 0)
-    //   i=1: S1↔S2 similarity=0.82 → NO boundary (chunk_start still 0)
-    //   i=2: S2↔S3 similarity=0.60 → BOUNDARY! 
-    //        → Create chunk from sentences[0..=2] = [S0, S1, S2] (3 sentences!)
-    //        → chunk_start = 3
-    //
-    // This naturally groups multiple consecutive similar sentences together
-    // by keeping chunk_start fixed until semantic similarity drops.
-    for i in 0..embeddings.len() - 1 {
-        let similarity = cosine_similarity(&embeddings[i], &embeddings[i + 1]);
-        
-        // If similarity drops below threshold, create a chunk boundary
-        if similarity < similarity_threshold {
-            // Combine sentences from chunk_start to i (inclusive)
-            let chunk_text = sentences[chunk_start..=i].join(". ") + ".";
-            chunks.push(chunk_text);
-            chunk_start = i + 1;
-        }
-    }
-    
-    // Add the final chunk (remaining sentences that weren't chunked in the loop)
-    // This happens when the last few sentences were all similar to each other,
-    // so no boundary was created and they're still waiting to be added.
-    if chunk_start < sentences.len() {
-        let chunk_text = sentences[chunk_start..].join(". ") + ".";
-        chunks.push(chunk_text);
-    }
-    
-    chunks
-}
-
 fn main() {
-    // initialize connection to db
+      // initialize connection to db
     let connection = init_db("plshelp.db").expect("Could not initialize database");
 
     // load embedding model
@@ -203,44 +142,34 @@ fn main() {
        InitOptions::new(EmbeddingModel::MxbaiEmbedLargeV1Q).with_show_download_progress(true),
     ).expect("Could not load model");
 
-    // dummy input
-    let _documents_old = vec![
-    "A closure in Rust is an anonymous function that can capture variables from its surrounding scope, allowing you to pass behavior as a value.",
-    "In HTTP, a 404 status code means the server was reached successfully but the requested resource could not be found.",
-    "A hash map stores key–value pairs and provides average constant-time lookup by computing a hash of the key.",
-    "In machine learning, overfitting occurs when a model learns noise in the training data and performs poorly on unseen examples.",
-    "Garbage collection is a form of automatic memory management where the runtime periodically reclaims memory that is no longer reachable by the program.",
-    ];
-
     // dummy input string
-    let docstring = "A closure in Rust is an anonymous function that can capture variables from its surrounding scope, allowing you to pass behavior as a value. In HTTP, a 404 status code means the server was reached successfully but the requested resource could not be found. A hash map stores key–value pairs and provides average constant-time lookup by computing a hash of the key. In machine learning, overfitting occurs when a model learns noise in the training data and performs poorly on unseen examples. Garbage collection is a form of automatic memory management where the runtime periodically reclaims memory that is no longer reachable by the program.";
-    let documents = semantic_chunk(docstring, &mut model, 0.75);
-
-    for doc in &documents {
-        println!("{}", doc);
-    }
+    let docstring = fs::read_to_string("docs/acme.txt").expect("Could not load documentation file to string");
+    
+    // separate input string into sentences
+    let documents: Vec<&str> = segment("en", &docstring);
 
     // Generate embeddings with the default batch size, 256
     let doc_embeddings: Vec<Vec<f32>> = model.embed(&documents, None).expect("Could not generate embeddings for documentation");
 
+    // clear database before inserting new embeddings
+    clear_documents(&connection).expect("Could not clear database");
+
     // Insert documents into sqlite db
-    insert_documents(&connection, &documents, &doc_embeddings).expect("Could not add documents to database.");
+    insert_documents(&connection, &documents, &doc_embeddings).expect("Could not add documents to database");
 
     // Raw user query
-    let user_query = "Why does my model not accurately predict out of distribution values?";
+    let user_query = "Does AcmeStream guarantee exactly-once delivery?";
 
     // Generate query embedding by adding prefix and converting string to Vec<string>
     let query_embedding: Vec<Vec<f32>> = model.embed([format!{"Represent this sentence for searching relevant passages: {user_query}"}], None).expect("Could not generate embeddings for query.");
 
     // Results vector
-    let results = search(&connection, &query_embedding, 3).expect("Could not search results.");
+    let results = search(&connection, &query_embedding, 1).expect("Could not search results.");
 
     // List all results in the format {index}. {answer} (score: {score})
     for (rank, (document, score)) in results.iter().enumerate() {
-        println!("{}. {} (score: {:.4})", 
-            rank + 1, 
+        println!("{}",  
             document.content,
-            score,
         );
     }
 }
