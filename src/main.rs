@@ -78,7 +78,7 @@ fn clear_documents(conn: &Connection) -> Result<()> {
 // INPUT: Iterate over parallel vectors
 fn insert_documents(
     conn: &Connection,
-    contents: &Vec<&str>,
+    contents: &Vec<String>,
     embeddings: &[Vec<f32>],
 ) -> Result<()> {
     assert_eq!(contents.len(), embeddings.len());
@@ -133,6 +133,24 @@ fn search(
     Ok(results)
 }
 
+fn merge_qa_pairs(sentences: Vec<String>) -> Vec<String> {
+    let mut result: Vec<String> = Vec::new();
+    let mut i = 0;
+    
+    while i < sentences.len() {
+        if i < sentences.len() - 1 && sentences[i].trim_end().ends_with('?') {
+            // Merge question with next sentence (likely the answer)
+            result.push(format!("{} {}", sentences[i], sentences[i + 1]));
+            i += 2;
+        } else {
+            result.push(sentences[i].to_string());
+            i += 1;
+        }
+    }
+    
+    result
+}
+
 fn main() {
       // initialize connection to db
     let connection = init_db("plshelp.db").expect("Could not initialize database");
@@ -145,8 +163,9 @@ fn main() {
     // dummy input string
     let docstring = fs::read_to_string("docs/acme.txt").expect("Could not load documentation file to string");
     
-    // separate input string into sentences
-    let documents: Vec<&str> = segment("en", &docstring);
+    // separate input string into sentences, and merge QA pairs
+    let mut documents: Vec<String> = segment("en", &docstring).into_iter().map(|s| s.to_owned()).collect(); // note: segment returns Vec<&str>, so we're parsing that into Vec<String>
+    documents = merge_qa_pairs(documents);
 
     // Generate embeddings with the default batch size, 256
     let doc_embeddings: Vec<Vec<f32>> = model.embed(&documents, None).expect("Could not generate embeddings for documentation");
@@ -158,7 +177,7 @@ fn main() {
     insert_documents(&connection, &documents, &doc_embeddings).expect("Could not add documents to database");
 
     // Raw user query
-    let user_query = "Does AcmeStream guarantee exactly-once delivery?";
+    let user_query = "How do consumers replay old data?";
 
     // Generate query embedding by adding prefix and converting string to Vec<string>
     let query_embedding: Vec<Vec<f32>> = model.embed([format!{"Represent this sentence for searching relevant passages: {user_query}"}], None).expect("Could not generate embeddings for query.");
