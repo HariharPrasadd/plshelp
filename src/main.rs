@@ -23,10 +23,11 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use termios::{ECHO, TCSANOW, Termios, tcsetattr};
 use url::Url;
 
-const BASE_PATH: &str = "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spyder";
+const BASE_PATH: &str = "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider";
 const DEFAULT_TOP_K: usize = 5;
 const DEFAULT_CONTEXT_WINDOW: usize = 0;
 const DEFAULT_EMBEDDING_MODEL: EmbeddingModel = EmbeddingModel::MxbaiEmbedLargeV1Q;
+const MAX_CHILD_LENGTH: usize = 1200;
 
 static CONTENT_SELECTORS: LazyLock<Vec<Selector>> = LazyLock::new(|| {
     [
@@ -155,12 +156,25 @@ impl SearchMode {
 }
 
 #[derive(Debug, Clone)]
-struct ChunkRecord {
+struct ParentRecord {
     id: i64,
     library_name: String,
     source_url: String,
     source_page_order: i64,
-    chunk_index_in_page: i64,
+    parent_index_in_page: i64,
+    global_parent_index: i64,
+    content: String,
+}
+
+#[derive(Debug, Clone)]
+struct ChunkRecord {
+    id: i64,
+    parent_id: i64,
+    library_name: String,
+    source_url: String,
+    source_page_order: i64,
+    parent_index_in_page: i64,
+    child_index_in_parent: i64,
     global_chunk_index: i64,
     content: String,
     embedding: Vec<f32>,
@@ -424,12 +438,25 @@ fn init_db(db_path: &Path) -> Result<Connection, Box<dyn Error>> {
             library_name TEXT NOT NULL,
             created_at TEXT NOT NULL
         );
-        CREATE TABLE IF NOT EXISTS chunks (
+        CREATE TABLE IF NOT EXISTS parents (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             library_name TEXT NOT NULL,
             source_url TEXT NOT NULL,
             source_page_order INTEGER NOT NULL,
-            chunk_index_in_page INTEGER NOT NULL,
+            parent_index_in_page INTEGER NOT NULL,
+            global_parent_index INTEGER NOT NULL,
+            content TEXT NOT NULL,
+            token_count INTEGER NOT NULL,
+            created_at TEXT NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS chunks (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            parent_id INTEGER NOT NULL,
+            library_name TEXT NOT NULL,
+            source_url TEXT NOT NULL,
+            source_page_order INTEGER NOT NULL,
+            parent_index_in_page INTEGER NOT NULL,
+            child_index_in_parent INTEGER NOT NULL,
             global_chunk_index INTEGER NOT NULL,
             content TEXT NOT NULL,
             embedding BLOB NOT NULL,
@@ -466,8 +493,11 @@ fn init_db(db_path: &Path) -> Result<Connection, Box<dyn Error>> {
             content TEXT NOT NULL,
             updated_at TEXT NOT NULL
         );
+        CREATE INDEX IF NOT EXISTS idx_parents_library_name ON parents(library_name);
+        CREATE INDEX IF NOT EXISTS idx_parents_library_page ON parents(library_name, source_url, parent_index_in_page);
         CREATE INDEX IF NOT EXISTS idx_chunks_library_name ON chunks(library_name);
-        CREATE INDEX IF NOT EXISTS idx_chunks_library_page ON chunks(library_name, source_url, chunk_index_in_page);
+        CREATE INDEX IF NOT EXISTS idx_chunks_parent_id ON chunks(parent_id);
+        CREATE INDEX IF NOT EXISTS idx_chunks_library_page ON chunks(library_name, source_url, parent_index_in_page, child_index_in_parent);
         CREATE INDEX IF NOT EXISTS idx_pages_library_name ON pages(library_name);
         CREATE INDEX IF NOT EXISTS idx_pages_library_order ON pages(library_name, page_order);
         CREATE INDEX IF NOT EXISTS idx_library_groups_name ON library_groups(group_name);
@@ -539,6 +569,41 @@ fn run_db_migrations(conn: &Connection) -> Result<(), Box<dyn Error>> {
             "ALTER TABLE libraries ADD COLUMN max_chunks_per_page INTEGER NOT NULL DEFAULT 0;",
         )?;
     }
+
+    conn.execute_batch(
+        "
+        CREATE TABLE IF NOT EXISTS parents (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            library_name TEXT NOT NULL,
+            source_url TEXT NOT NULL,
+            source_page_order INTEGER NOT NULL,
+            parent_index_in_page INTEGER NOT NULL,
+            global_parent_index INTEGER NOT NULL,
+            content TEXT NOT NULL,
+            token_count INTEGER NOT NULL,
+            created_at TEXT NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS chunks (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            parent_id INTEGER NOT NULL,
+            library_name TEXT NOT NULL,
+            source_url TEXT NOT NULL,
+            source_page_order INTEGER NOT NULL,
+            parent_index_in_page INTEGER NOT NULL,
+            child_index_in_parent INTEGER NOT NULL,
+            global_chunk_index INTEGER NOT NULL,
+            content TEXT NOT NULL,
+            embedding BLOB NOT NULL,
+            token_count INTEGER NOT NULL,
+            created_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_parents_library_name ON parents(library_name);
+        CREATE INDEX IF NOT EXISTS idx_parents_library_page ON parents(library_name, source_url, parent_index_in_page);
+        CREATE INDEX IF NOT EXISTS idx_chunks_library_name ON chunks(library_name);
+        CREATE INDEX IF NOT EXISTS idx_chunks_parent_id ON chunks(parent_id);
+        CREATE INDEX IF NOT EXISTS idx_chunks_library_page ON chunks(library_name, source_url, parent_index_in_page, child_index_in_parent);
+        ",
+    )?;
 
     Ok(())
 }
@@ -819,7 +884,7 @@ fn compiled_text_for_library(
     })
 }
 
-fn backfill_pages_from_chunks(
+fn backfill_pages_from_parents(
     conn: &Connection,
     library_name: &str,
     now: &str,
@@ -833,18 +898,18 @@ fn backfill_pages_from_chunks(
         return Ok(());
     }
 
-    let chunk_count: i64 = conn.query_row(
-        "SELECT COUNT(*) FROM chunks WHERE library_name = ?1",
+    let parent_count: i64 = conn.query_row(
+        "SELECT COUNT(*) FROM parents WHERE library_name = ?1",
         params![library_name],
         |row| row.get(0),
     )?;
-    if chunk_count == 0 {
+    if parent_count == 0 {
         return Ok(());
     }
 
     let mut page_stmt = conn.prepare(
         "SELECT DISTINCT source_page_order, source_url
-         FROM chunks
+         FROM parents
          WHERE library_name = ?1
          ORDER BY source_page_order ASC, source_url ASC",
     )?;
@@ -860,9 +925,9 @@ fn backfill_pages_from_chunks(
     for (page_order, source_url) in page_pairs {
         let mut chunk_stmt = tx.prepare(
             "SELECT content
-             FROM chunks
+             FROM parents
              WHERE library_name = ?1 AND source_page_order = ?2 AND source_url = ?3
-             ORDER BY chunk_index_in_page ASC",
+             ORDER BY parent_index_in_page ASC",
         )?;
         let chunk_rows = chunk_stmt
             .query_map(params![library_name, page_order, source_url], |r| {
@@ -952,12 +1017,12 @@ fn compute_library_chars(conn: &Connection, library_name: &str) -> Result<i64, B
         return Ok(v);
     }
 
-    let from_chunks: i64 = conn.query_row(
-        "SELECT COALESCE(SUM(LENGTH(content)), 0) FROM chunks WHERE library_name = ?1",
+    let from_parents: i64 = conn.query_row(
+        "SELECT COALESCE(SUM(LENGTH(content)), 0) FROM parents WHERE library_name = ?1",
         params![library_name],
         |row| row.get(0),
     )?;
-    Ok(from_chunks)
+    Ok(from_parents)
 }
 
 fn compute_page_chunk_rollups(
@@ -1201,7 +1266,7 @@ fn refresh_stats(conn: &Connection, input_names: &[String]) -> Result<(), Box<dy
 
     let now = now_epoch();
     for library_name in &targets {
-        backfill_pages_from_chunks(conn, library_name, &now)?;
+        backfill_pages_from_parents(conn, library_name, &now)?;
         backfill_library_text(conn, library_name, &now)?;
         update_library_rollups(conn, library_name)?;
         conn.execute(
@@ -1499,10 +1564,10 @@ fn preprocess_for_chunking(input: &str) -> String {
 const CHUNK_MIN_CHARS: usize = 600;
 const CHUNK_MAX_CHARS: usize = 3000;
 
-fn split_by_paragraph_upper_bound(chunks: Vec<String>) -> Vec<String> {
+fn split_by_paragraph_upper_bound(chunks: Vec<String>, max_chars: usize) -> Vec<String> {
     let mut out = Vec::new();
     for chunk in chunks {
-        if chunk.chars().count() <= CHUNK_MAX_CHARS {
+        if chunk.chars().count() <= max_chars {
             out.push(chunk);
             continue;
         }
@@ -1541,7 +1606,7 @@ fn split_by_paragraph_upper_bound(chunks: Vec<String>) -> Vec<String> {
                 continue;
             }
             let candidate = format!("{current}\n\n{para}");
-            if candidate.chars().count() <= CHUNK_MAX_CHARS {
+            if candidate.chars().count() <= max_chars {
                 current = candidate;
             } else {
                 out.push(current);
@@ -1555,10 +1620,10 @@ fn split_by_paragraph_upper_bound(chunks: Vec<String>) -> Vec<String> {
     out
 }
 
-fn split_by_newline_upper_bound(chunks: Vec<String>) -> Vec<String> {
+fn split_by_newline_upper_bound(chunks: Vec<String>, max_chars: usize) -> Vec<String> {
     let mut out = Vec::new();
     for chunk in chunks {
-        if chunk.chars().count() <= CHUNK_MAX_CHARS {
+        if chunk.chars().count() <= max_chars {
             out.push(chunk);
             continue;
         }
@@ -1571,7 +1636,7 @@ fn split_by_newline_upper_bound(chunks: Vec<String>) -> Vec<String> {
 
             if !in_fence {
                 let candidate_len = current.chars().count() + line.chars().count();
-                if !current.is_empty() && candidate_len > CHUNK_MAX_CHARS {
+                if !current.is_empty() && candidate_len > max_chars {
                     out.push(std::mem::take(&mut current));
                 }
             }
@@ -1589,7 +1654,30 @@ fn split_by_newline_upper_bound(chunks: Vec<String>) -> Vec<String> {
     out
 }
 
-fn chunk_markdown_page(content: &str) -> Vec<String> {
+fn split_by_char_upper_bound(chunks: Vec<String>, max_chars: usize) -> Vec<String> {
+    let mut out = Vec::new();
+    for chunk in chunks {
+        if chunk.chars().count() <= max_chars {
+            out.push(chunk);
+            continue;
+        }
+
+        let chars: Vec<char> = chunk.chars().collect();
+        let mut start = 0usize;
+        while start < chars.len() {
+            let end = (start + max_chars).min(chars.len());
+            let piece: String = chars[start..end].iter().collect();
+            let trimmed = piece.trim().to_string();
+            if !trimmed.is_empty() {
+                out.push(trimmed);
+            }
+            start = end;
+        }
+    }
+    out
+}
+
+fn split_markdown_by_headings(content: &str) -> Vec<String> {
     let processed = preprocess_for_chunking(content);
     let mut out = Vec::new();
     let mut current = String::new();
@@ -1609,6 +1697,11 @@ fn chunk_markdown_page(content: &str) -> Vec<String> {
     if !current.trim().is_empty() {
         out.push(current);
     }
+    out
+}
+
+fn chunk_markdown_page(content: &str) -> Vec<String> {
+    let out = split_markdown_by_headings(content);
 
     // Final trim + dedupe pass.
     let mut cleaned = Vec::new();
@@ -1618,8 +1711,9 @@ fn chunk_markdown_page(content: &str) -> Vec<String> {
             cleaned.push(t);
         }
     }
-    cleaned = split_by_paragraph_upper_bound(cleaned);
-    cleaned = split_by_newline_upper_bound(cleaned);
+    cleaned = split_by_paragraph_upper_bound(cleaned, CHUNK_MAX_CHARS);
+    cleaned = split_by_newline_upper_bound(cleaned, CHUNK_MAX_CHARS);
+    cleaned = split_by_char_upper_bound(cleaned, CHUNK_MAX_CHARS);
 
     // Lower-bound only top-up: merge tiny chunks forward until min size.
     let mut topped = Vec::new();
@@ -1657,6 +1751,26 @@ fn chunk_markdown_page(content: &str) -> Vec<String> {
     }
 
     topped
+}
+
+fn chunk_parent_into_children(parent_content: &str) -> Vec<String> {
+    let trimmed = parent_content.trim();
+    if trimmed.is_empty() {
+        return Vec::new();
+    }
+    if trimmed.chars().count() <= MAX_CHILD_LENGTH {
+        return vec![trimmed.to_string()];
+    }
+
+    let mut children = split_markdown_by_headings(trimmed);
+    children = split_by_paragraph_upper_bound(children, MAX_CHILD_LENGTH);
+    children = split_by_newline_upper_bound(children, MAX_CHILD_LENGTH);
+    children = split_by_char_upper_bound(children, MAX_CHILD_LENGTH);
+    children
+        .into_iter()
+        .map(|chunk| chunk.trim().to_string())
+        .filter(|chunk| !chunk.is_empty())
+        .collect()
 }
 
 fn embedding_to_bytes(embedding: &[f32]) -> Vec<u8> {
@@ -1856,46 +1970,97 @@ fn chunk_library(
             tx.commit()?;
         }
 
-        let mut chunk_rows: Vec<(i64, String, i64, String)> = Vec::new();
+        let mut parent_rows: Vec<(i64, String, i64, String)> = Vec::new();
+        let mut chunk_rows: Vec<(i64, i64, String, i64, i64, String)> = Vec::new();
         let mut per_page_chunk_counts: Vec<i64> = Vec::with_capacity(page_inputs.len());
+        let mut global_parent_index = 0i64;
         for (page_order, page_url, page_content) in &page_inputs {
-            let page_chunks = chunk_markdown_page(page_content);
-            per_page_chunk_counts.push(page_chunks.len() as i64);
-            for (chunk_index_in_page, chunk) in page_chunks.into_iter().enumerate() {
-                chunk_rows.push((
+            let page_parents = chunk_markdown_page(page_content);
+            let mut child_count_for_page = 0i64;
+            for (parent_index_in_page, parent) in page_parents.into_iter().enumerate() {
+                let parent_index_in_page = parent_index_in_page as i64;
+                let children = chunk_parent_into_children(&parent);
+                child_count_for_page += children.len() as i64;
+                parent_rows.push((
                     *page_order,
                     page_url.clone(),
-                    chunk_index_in_page as i64,
-                    chunk,
+                    parent_index_in_page,
+                    parent.clone(),
                 ));
+                for (child_index_in_parent, child) in children.into_iter().enumerate() {
+                    chunk_rows.push((
+                        global_parent_index,
+                        *page_order,
+                        page_url.clone(),
+                        parent_index_in_page,
+                        child_index_in_parent as i64,
+                        child,
+                    ));
+                }
+                global_parent_index += 1;
             }
+            per_page_chunk_counts.push(child_count_for_page);
         }
 
+        if parent_rows.is_empty() {
+            return Err("No parent chunks generated from input.".into());
+        }
         if chunk_rows.is_empty() {
-            return Err("No chunks generated from input.".into());
+            return Err("No child chunks generated from input.".into());
         }
 
         let tx = conn.unchecked_transaction()?;
+        tx.execute(
+            "DELETE FROM parents WHERE library_name = ?1",
+            params![library_name],
+        )?;
         tx.execute(
             "DELETE FROM chunks WHERE library_name = ?1",
             params![library_name],
         )?;
 
         let now = now_epoch();
-        for (i, (source_page_order, chunk_source_url, chunk_index_in_page, chunk)) in
+        let mut parent_ids = Vec::with_capacity(parent_rows.len());
+        for (i, (source_page_order, parent_source_url, parent_index_in_page, parent)) in
+            parent_rows.iter().enumerate()
+        {
+            let token_count = parent.chars().count() as i64;
+            tx.execute(
+                "INSERT INTO parents (
+                    library_name, source_url, source_page_order, parent_index_in_page,
+                    global_parent_index, content, token_count, created_at
+                ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
+                params![
+                    library_name,
+                    parent_source_url,
+                    source_page_order,
+                    parent_index_in_page,
+                    i as i64,
+                    parent,
+                    token_count,
+                    now
+                ],
+            )?;
+            parent_ids.push(tx.last_insert_rowid());
+        }
+
+        for (i, (parent_row_index, source_page_order, chunk_source_url, parent_index_in_page, child_index_in_parent, chunk)) in
             chunk_rows.iter().enumerate()
         {
             let token_count = chunk.chars().count() as i64;
+            let parent_id = parent_ids[*parent_row_index as usize];
             tx.execute(
                 "INSERT INTO chunks (
-                    library_name, source_url, source_page_order, chunk_index_in_page,
-                    global_chunk_index, content, embedding, token_count, created_at
-                ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
+                    parent_id, library_name, source_url, source_page_order, parent_index_in_page,
+                    child_index_in_parent, global_chunk_index, content, embedding, token_count, created_at
+                ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)",
                 params![
+                    parent_id,
                     library_name,
                     chunk_source_url,
                     source_page_order,
-                    chunk_index_in_page,
+                    parent_index_in_page,
+                    child_index_in_parent,
                     i as i64,
                     chunk,
                     Vec::<u8>::new(),
@@ -1937,7 +2102,11 @@ fn chunk_library(
                 library_name
             ],
         )?;
-        Ok(format!("Chunked {} chunks.", chunk_rows.len()))
+        Ok(format!(
+            "Chunked {} parents into {} child chunks.",
+            parent_rows.len(),
+            chunk_rows.len()
+        ))
     })();
 
     match result {
@@ -2073,21 +2242,23 @@ fn load_chunks_for_library(
     library_name: &str,
 ) -> Result<Vec<ChunkRecord>, Box<dyn Error>> {
     let mut stmt = conn.prepare(
-        "SELECT id, library_name, source_url, source_page_order, chunk_index_in_page,
-                global_chunk_index, content, embedding
+        "SELECT id, parent_id, library_name, source_url, source_page_order, parent_index_in_page,
+                child_index_in_parent, global_chunk_index, content, embedding
          FROM chunks
          WHERE library_name = ?1 AND LENGTH(embedding) > 0",
     )?;
     let rows = stmt.query_map(params![library_name], |row| {
-        let bytes: Vec<u8> = row.get(7)?;
+        let bytes: Vec<u8> = row.get(9)?;
         Ok(ChunkRecord {
             id: row.get(0)?,
-            library_name: row.get(1)?,
-            source_url: row.get(2)?,
-            source_page_order: row.get(3)?,
-            chunk_index_in_page: row.get(4)?,
-            global_chunk_index: row.get(5)?,
-            content: row.get(6)?,
+            parent_id: row.get(1)?,
+            library_name: row.get(2)?,
+            source_url: row.get(3)?,
+            source_page_order: row.get(4)?,
+            parent_index_in_page: row.get(5)?,
+            child_index_in_parent: row.get(6)?,
+            global_chunk_index: row.get(7)?,
+            content: row.get(8)?,
             embedding: bytes_to_embedding(&bytes),
         })
     })?;
@@ -2096,6 +2267,27 @@ fn load_chunks_for_library(
         out.push(row?);
     }
     Ok(out)
+}
+
+fn load_parent_by_id(conn: &Connection, parent_id: i64) -> Result<ParentRecord, Box<dyn Error>> {
+    let parent = conn.query_row(
+        "SELECT id, library_name, source_url, source_page_order, parent_index_in_page, global_parent_index, content
+         FROM parents
+         WHERE id = ?1",
+        params![parent_id],
+        |row| {
+            Ok(ParentRecord {
+                id: row.get(0)?,
+                library_name: row.get(1)?,
+                source_url: row.get(2)?,
+                source_page_order: row.get(3)?,
+                parent_index_in_page: row.get(4)?,
+                global_parent_index: row.get(5)?,
+                content: row.get(6)?,
+            })
+        },
+    )?;
+    Ok(parent)
 }
 
 fn score_chunks(
@@ -2135,36 +2327,34 @@ fn score_chunks(
     scored
 }
 
-fn neighbors(
+fn parent_neighbors(
     conn: &Connection,
     library_name: &str,
     source_url: &str,
-    chunk_index_in_page: i64,
+    parent_index_in_page: i64,
     context: usize,
-) -> Result<Vec<ChunkRecord>, Box<dyn Error>> {
+) -> Result<Vec<ParentRecord>, Box<dyn Error>> {
     if context == 0 {
         return Ok(Vec::new());
     }
-    let low = chunk_index_in_page - context as i64;
-    let high = chunk_index_in_page + context as i64;
+    let low = parent_index_in_page - context as i64;
+    let high = parent_index_in_page + context as i64;
     let mut stmt = conn.prepare(
-        "SELECT id, library_name, source_url, source_page_order, chunk_index_in_page,
-                global_chunk_index, content, embedding
-         FROM chunks
-         WHERE library_name = ?1 AND source_url = ?2 AND chunk_index_in_page BETWEEN ?3 AND ?4
-         ORDER BY chunk_index_in_page ASC",
+        "SELECT id, library_name, source_url, source_page_order, parent_index_in_page,
+                global_parent_index, content
+         FROM parents
+         WHERE library_name = ?1 AND source_url = ?2 AND parent_index_in_page BETWEEN ?3 AND ?4
+         ORDER BY parent_index_in_page ASC",
     )?;
     let rows = stmt.query_map(params![library_name, source_url, low, high], |row| {
-        let bytes: Vec<u8> = row.get(7)?;
-        Ok(ChunkRecord {
+        Ok(ParentRecord {
             id: row.get(0)?,
             library_name: row.get(1)?,
             source_url: row.get(2)?,
             source_page_order: row.get(3)?,
-            chunk_index_in_page: row.get(4)?,
-            global_chunk_index: row.get(5)?,
+            parent_index_in_page: row.get(4)?,
+            global_parent_index: row.get(5)?,
             content: row.get(6)?,
-            embedding: bytes_to_embedding(&bytes),
         })
     })?;
     let mut out = Vec::new();
@@ -2236,10 +2426,20 @@ fn query_library(
         return Ok(());
     }
     let query_embedding = embed_query(mode, question)?;
-    let mut scored = score_chunks(&chunks, question, mode, query_embedding.as_deref());
-    scored.truncate(top_k);
+    let scored = score_chunks(&chunks, question, mode, query_embedding.as_deref());
+    let mut top_hits = Vec::new();
+    let mut seen_parents = HashSet::new();
+    for hit in scored {
+        if seen_parents.insert(hit.chunk.parent_id) {
+            top_hits.push(hit);
+        }
+        if top_hits.len() >= top_k {
+            break;
+        }
+    }
 
-    for (rank, hit) in scored.iter().enumerate() {
+    for (rank, hit) in top_hits.iter().enumerate() {
+        let parent = load_parent_by_id(conn, hit.chunk.parent_id)?;
         println!("{}. [{}] {}", rank + 1, hit.chunk.id, hit.chunk.source_url);
         if target_libraries.len() > 1 {
             println!("   library: {}", hit.chunk.library_name);
@@ -2250,26 +2450,31 @@ fn query_library(
                 hit.final_score, hit.vector_score, hit.keyword_score
             );
             println!(
-                "   location: page_order={} chunk_in_page={} global_index={}",
+                "   child location: page_order={} parent_in_page={} child_in_parent={} global_child_index={}",
                 hit.chunk.source_page_order,
-                hit.chunk.chunk_index_in_page,
+                hit.chunk.parent_index_in_page,
+                hit.chunk.child_index_in_parent,
                 hit.chunk.global_chunk_index
+            );
+            println!(
+                "   parent location: parent_id={} page_order={} global_parent_index={}",
+                parent.id, parent.source_page_order, parent.global_parent_index
             );
             println!("   library: {}", hit.chunk.library_name);
         }
-        println!("{}", hit.chunk.content);
+        println!("{}", parent.content);
         if context > 0 {
-            let around = neighbors(
+            let around = parent_neighbors(
                 conn,
-                &hit.chunk.library_name,
-                &hit.chunk.source_url,
-                hit.chunk.chunk_index_in_page,
+                &parent.library_name,
+                &parent.source_url,
+                parent.parent_index_in_page,
                 context,
             )?;
             if !around.is_empty() {
                 println!("--- context ---");
                 for c in around {
-                    if c.id != hit.chunk.id {
+                    if c.id != parent.id {
                         println!("[{}] {}", c.id, c.content);
                     }
                 }
@@ -2323,18 +2528,26 @@ fn ask_libraries(
         if chunks.is_empty() {
             continue;
         }
-        let mut scored = score_chunks(&chunks, question, mode, query_embedding.as_deref());
-        scored.truncate(top_k);
-        combined.extend(scored);
+        combined.extend(score_chunks(&chunks, question, mode, query_embedding.as_deref()));
     }
     combined.sort_by(|a, b| {
         b.final_score
             .partial_cmp(&a.final_score)
             .unwrap_or(CmpOrdering::Equal)
     });
-    combined.truncate(top_k);
+    let mut top_hits = Vec::new();
+    let mut seen_parents = HashSet::new();
+    for hit in combined {
+        if seen_parents.insert(hit.chunk.parent_id) {
+            top_hits.push(hit);
+        }
+        if top_hits.len() >= top_k {
+            break;
+        }
+    }
 
-    for (rank, hit) in combined.iter().enumerate() {
+    for (rank, hit) in top_hits.iter().enumerate() {
+        let parent = load_parent_by_id(conn, hit.chunk.parent_id)?;
         println!(
             "{}. [{}] {} ({})",
             rank + 1,
@@ -2342,19 +2555,19 @@ fn ask_libraries(
             hit.chunk.source_url,
             hit.chunk.library_name
         );
-        println!("{}", hit.chunk.content);
+        println!("{}", parent.content);
         if context > 0 {
-            let around = neighbors(
+            let around = parent_neighbors(
                 conn,
-                &hit.chunk.library_name,
-                &hit.chunk.source_url,
-                hit.chunk.chunk_index_in_page,
+                &parent.library_name,
+                &parent.source_url,
+                parent.parent_index_in_page,
                 context,
             )?;
             if !around.is_empty() {
                 println!("--- context ---");
                 for c in around {
-                    if c.id != hit.chunk.id {
+                    if c.id != parent.id {
                         println!("[{}] {}", c.id, c.content);
                     }
                 }
@@ -2425,6 +2638,15 @@ fn latest_failed_message(
         )
         .optional()?;
     Ok(msg)
+}
+
+fn parent_count_for_library(conn: &Connection, library_name: &str) -> Result<i64, Box<dyn Error>> {
+    let count = conn.query_row(
+        "SELECT COUNT(*) FROM parents WHERE library_name = ?1",
+        params![library_name],
+        |row| row.get(0),
+    )?;
+    Ok(count)
 }
 
 fn library_rollups(
@@ -2567,6 +2789,7 @@ fn show_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Error
             min_chunks,
             max_chunks,
         ) = library_rollups(conn, &library_name)?;
+        let parent_count = parent_count_for_library(conn, &library_name)?;
         let avg_chunks = if pages > 0 {
             chunks as f64 / pages as f64
         } else {
@@ -2580,6 +2803,7 @@ fn show_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Error
         println!("library_name: {library_name}");
         println!("source_url: {source_url}");
         println!("page_count: {pages}");
+        println!("parent_count: {parent_count}");
         println!("chunk_count: {chunks}");
         println!("embedded_chunk_count: {embedded_chunks}");
         println!("avg_chunks_per_page: {:.2}", avg_chunks);
@@ -2629,8 +2853,10 @@ fn show_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Error
     }
     let (content_size_chars, pages, chunks, empty_pages, min_chunks, max_chunks) =
         aggregate_rollups_for_libraries(conn, &members)?;
+    let mut parent_count = 0i64;
     let mut embedded_chunks = 0i64;
     for member in &members {
+        parent_count += parent_count_for_library(conn, member)?;
         let (_, _, _, embedded, _, _, _) = library_rollups(conn, member)?;
         embedded_chunks += embedded;
     }
@@ -2642,6 +2868,7 @@ fn show_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Error
     println!("library_name: {input_name}");
     println!("source_url: merged group");
     println!("page_count: {pages}");
+    println!("parent_count: {parent_count}");
     println!("chunk_count: {chunks}");
     println!("embedded_chunk_count: {embedded_chunks}");
     println!("avg_chunks_per_page: {:.2}", avg_chunks);
@@ -2682,6 +2909,10 @@ fn remove_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Err
         params![library_name],
     )?;
     conn.execute(
+        "DELETE FROM parents WHERE library_name = ?1",
+        params![library_name],
+    )?;
+    conn.execute(
         "DELETE FROM pages WHERE library_name = ?1",
         params![library_name],
     )?;
@@ -2705,15 +2936,28 @@ fn remove_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Err
 }
 
 fn open_chunk(conn: &Connection, chunk_id: i64) -> Result<(), Box<dyn Error>> {
-    let (library_name, source_url, content): (String, String, String) = conn.query_row(
-        "SELECT library_name, source_url, content FROM chunks WHERE id = ?1",
+    let (parent_id, library_name, source_url, content, child_index_in_parent): (
+        i64,
+        String,
+        String,
+        String,
+        i64,
+    ) = conn.query_row(
+        "SELECT parent_id, library_name, source_url, content, child_index_in_parent FROM chunks WHERE id = ?1",
         params![chunk_id],
-        |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
+        |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?, row.get(4)?)),
     )?;
+    let parent = load_parent_by_id(conn, parent_id)?;
     println!("chunk_id: {chunk_id}");
+    println!("parent_id: {parent_id}");
     println!("library_name: {library_name}");
     println!("source_url: {source_url}");
+    println!("child_index_in_parent: {child_index_in_parent}");
     println!();
+    println!("--- child ---");
     println!("{content}");
+    println!();
+    println!("--- parent ---");
+    println!("{}", parent.content);
     Ok(())
 }
