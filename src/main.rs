@@ -1677,6 +1677,59 @@ fn split_by_char_upper_bound(chunks: Vec<String>, max_chars: usize) -> Vec<Strin
     out
 }
 
+fn split_by_delimiter_outside_fences(input: &str, delimiter: &str) -> Vec<String> {
+    if delimiter.is_empty() {
+        return input.chars().map(|c| c.to_string()).collect();
+    }
+
+    let mut parts = Vec::new();
+    let mut current = String::new();
+    let mut in_fence = false;
+
+    if delimiter == "\n\n" || delimiter == "\n" {
+        for line in input.split_inclusive('\n') {
+            let line_no_nl = line.trim_end_matches('\n').trim_end_matches('\r');
+            let starts_fence = line_no_nl.trim_start().starts_with("```");
+            current.push_str(line);
+            if starts_fence {
+                in_fence = !in_fence;
+            }
+            let should_split = !in_fence
+                && ((delimiter == "\n\n" && line_no_nl.trim().is_empty())
+                    || delimiter == "\n");
+            if should_split {
+                let trimmed = current.trim().to_string();
+                if !trimmed.is_empty() {
+                    parts.push(trimmed);
+                }
+                current.clear();
+            }
+        }
+    } else if delimiter == " " {
+        for token in input.split_inclusive(' ') {
+            let line_start = current.rsplit('\n').next().unwrap_or_default().is_empty();
+            if line_start && token.trim_start().starts_with("```") {
+                in_fence = !in_fence;
+            }
+            current.push_str(token);
+            if !in_fence {
+                let trimmed = current.trim().to_string();
+                if !trimmed.is_empty() {
+                    parts.push(trimmed);
+                }
+                current.clear();
+            }
+        }
+    }
+
+    let trimmed = current.trim().to_string();
+    if !trimmed.is_empty() {
+        parts.push(trimmed);
+    }
+
+    parts
+}
+
 fn split_markdown_by_headings(content: &str) -> Vec<String> {
     let processed = preprocess_for_chunking(content);
     let mut out = Vec::new();
@@ -1753,6 +1806,36 @@ fn chunk_markdown_page(content: &str) -> Vec<String> {
     topped
 }
 
+fn split_children_recursively(content: &str, max_chars: usize, level: usize) -> Vec<String> {
+    let trimmed = content.trim();
+    if trimmed.is_empty() {
+        return Vec::new();
+    }
+    if trimmed.chars().count() <= max_chars {
+        return vec![trimmed.to_string()];
+    }
+
+    let parts = match level {
+        0 => split_markdown_by_headings(trimmed),
+        1 => split_by_delimiter_outside_fences(trimmed, "\n\n"),
+        2 => split_by_delimiter_outside_fences(trimmed, "\n"),
+        3 => split_by_delimiter_outside_fences(trimmed, " "),
+        _ => {
+            return split_by_char_upper_bound(vec![trimmed.to_string()], max_chars);
+        }
+    };
+
+    if parts.len() <= 1 {
+        return split_children_recursively(trimmed, max_chars, level + 1);
+    }
+
+    let mut out = Vec::new();
+    for part in parts {
+        out.extend(split_children_recursively(&part, max_chars, level + 1));
+    }
+    out
+}
+
 fn chunk_parent_into_children(parent_content: &str) -> Vec<String> {
     let trimmed = parent_content.trim();
     if trimmed.is_empty() {
@@ -1762,11 +1845,7 @@ fn chunk_parent_into_children(parent_content: &str) -> Vec<String> {
         return vec![trimmed.to_string()];
     }
 
-    let mut children = split_markdown_by_headings(trimmed);
-    children = split_by_paragraph_upper_bound(children, MAX_CHILD_LENGTH);
-    children = split_by_newline_upper_bound(children, MAX_CHILD_LENGTH);
-    children = split_by_char_upper_bound(children, MAX_CHILD_LENGTH);
-    children
+    split_children_recursively(trimmed, MAX_CHILD_LENGTH, 0)
         .into_iter()
         .map(|chunk| chunk.trim().to_string())
         .filter(|chunk| !chunk.is_empty())
