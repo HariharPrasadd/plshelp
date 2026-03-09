@@ -26,6 +26,11 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use termios::{ECHO, TCSANOW, Termios, tcsetattr};
 use url::Url;
 
+// ============================================================================
+// Core Constants
+// Future module: `lib.rs` / `runtime.rs`
+// ============================================================================
+
 const DEFAULT_TOP_K: usize = 1;
 const DEFAULT_CONTEXT_WINDOW: usize = 0;
 const DEFAULT_EMBEDDING_MODEL: EmbeddingModel = EmbeddingModel::AllMiniLML6V2Q;
@@ -36,6 +41,11 @@ const DEFAULT_EMBED_BATCH_SIZE: usize = 128;
 const SQLITE_BUSY_TIMEOUT_MS: u64 = 5_000;
 const APP_NAME: &str = "plshelp";
 const CONFIG_FILE_NAME: &str = "config.toml";
+
+// ============================================================================
+// Crawl / Cleanup Selectors and Regexes
+// Future module: `crawl.rs`
+// ============================================================================
 
 static CONTENT_SELECTORS: LazyLock<Vec<Selector>> = LazyLock::new(|| {
     [
@@ -126,6 +136,11 @@ static MARKDOWN_HINTS: &[&str] = &[
 
 static RUNTIME_PATHS: OnceLock<RuntimePaths> = OnceLock::new();
 
+// ============================================================================
+// Runtime Config Models
+// Future module: `runtime.rs`
+// ============================================================================
+
 #[derive(Debug, Clone)]
 struct RuntimePaths {
     config_dir: PathBuf,
@@ -133,6 +148,7 @@ struct RuntimePaths {
     data_dir: PathBuf,
     db_path: PathBuf,
     artifacts_dir: PathBuf,
+    models_dir: PathBuf,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -146,7 +162,13 @@ struct PathsConfig {
     data_dir: Option<PathBuf>,
     db_path: Option<PathBuf>,
     artifacts_dir: Option<PathBuf>,
+    models_dir: Option<PathBuf>,
 }
+
+// ============================================================================
+// Terminal / Progress UI Helpers
+// Future module: `ui.rs`
+// ============================================================================
 
 struct TerminalEchoGuard {
     fd: i32,
@@ -234,6 +256,11 @@ impl Drop for ProgressSpinner {
     }
 }
 
+// ============================================================================
+// Search Models
+// Future module: `models.rs`
+// ============================================================================
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 enum SearchMode {
     Hybrid,
@@ -291,6 +318,11 @@ struct ScoredChunk {
     bm25_score: f32,
     final_score: f32,
 }
+
+// ============================================================================
+// CLI Entrypoint and Dispatch
+// Future modules: `main.rs` + `lib.rs`
+// ============================================================================
 
 #[tokio::main]
 async fn main() {
@@ -620,6 +652,11 @@ async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+// ============================================================================
+// CLI Parsing / JSON Output Helpers
+// Future module: `cli.rs`
+// ============================================================================
+
 fn print_help() {
     println!("plshelp <command>");
     println!("  add <library_name> <source_url> [--include-artifacts[=/path]] [--json]");
@@ -650,6 +687,11 @@ fn print_help() {
     );
 }
 
+// ============================================================================
+// Runtime Paths / Config Bootstrap
+// Future module: `runtime.rs`
+// ============================================================================
+
 fn configure_onnx_runtime_env() {
     let num_cpus = std::thread::available_parallelism()
         .map(|n| n.get())
@@ -677,6 +719,10 @@ fn artifacts_root() -> PathBuf {
     runtime_paths().artifacts_dir.clone()
 }
 
+fn models_dir() -> PathBuf {
+    runtime_paths().models_dir.clone()
+}
+
 fn compiled_dir(library_name: &str) -> PathBuf {
     artifacts_root().join(library_name)
 }
@@ -694,11 +740,13 @@ fn initialize_runtime_paths() -> Result<&'static RuntimePaths, Box<dyn Error>> {
         data_dir: default_data_dir.clone(),
         db_path: default_data_dir.join("plshelp.db"),
         artifacts_dir: default_data_dir.join("artifacts"),
+        models_dir: default_data_dir.join("models"),
     };
 
     fs::create_dir_all(&default_paths.config_dir)?;
     fs::create_dir_all(&default_paths.data_dir)?;
     fs::create_dir_all(&default_paths.artifacts_dir)?;
+    fs::create_dir_all(&default_paths.models_dir)?;
 
     if !default_paths.config_file.exists() {
         write_default_config(&default_paths)?;
@@ -720,12 +768,18 @@ fn initialize_runtime_paths() -> Result<&'static RuntimePaths, Box<dyn Error>> {
         &data_dir.join("artifacts"),
         &default_paths.config_dir,
     );
+    let models_dir = resolve_config_path(
+        config.paths.models_dir.as_ref(),
+        &data_dir.join("models"),
+        &default_paths.config_dir,
+    );
 
     fs::create_dir_all(&data_dir)?;
     if let Some(parent) = db_path.parent() {
         fs::create_dir_all(parent)?;
     }
     fs::create_dir_all(&artifacts_dir)?;
+    fs::create_dir_all(&models_dir)?;
 
     let runtime = RuntimePaths {
         config_dir: default_paths.config_dir,
@@ -733,6 +787,7 @@ fn initialize_runtime_paths() -> Result<&'static RuntimePaths, Box<dyn Error>> {
         data_dir,
         db_path,
         artifacts_dir,
+        models_dir,
     };
     let _ = RUNTIME_PATHS.set(runtime);
     Ok(runtime_paths())
@@ -744,6 +799,7 @@ fn write_default_config(defaults: &RuntimePaths) -> Result<(), Box<dyn Error>> {
             data_dir: Some(defaults.data_dir.clone()),
             db_path: Some(defaults.db_path.clone()),
             artifacts_dir: Some(defaults.artifacts_dir.clone()),
+            models_dir: Some(defaults.models_dir.clone()),
         },
     };
     let serialized = toml::to_string_pretty(&config)?;
@@ -861,6 +917,11 @@ fn human_time(epoch: &str) -> String {
     }
     epoch.to_string()
 }
+
+// ============================================================================
+// Database Initialization / Schema / Jobs
+// Future module: `db.rs`
+// ============================================================================
 
 fn configure_sqlite_connection(conn: &Connection) -> Result<(), Box<dyn Error>> {
     conn.pragma_update(None, "journal_mode", "WAL")?;
@@ -1090,6 +1151,11 @@ fn finish_job(
     )?;
     Ok(())
 }
+
+// ============================================================================
+// Artifact Export Helpers
+// Future module: `artifacts.rs`
+// ============================================================================
 
 fn parse_query_flags(flags: &[String]) -> Result<(SearchMode, usize, usize), Box<dyn Error>> {
     let mut mode = SearchMode::Hybrid;
@@ -1364,6 +1430,11 @@ fn export_library(
     spinner.finish();
     Ok(())
 }
+
+// ============================================================================
+// Library Resolution / Rollups / Shared DB Helpers
+// Future module: `libraries.rs`
+// ============================================================================
 
 fn resolve_library_name(conn: &Connection, input: &str) -> Result<String, Box<dyn Error>> {
     if let Ok(name) = conn.query_row(
@@ -1689,6 +1760,11 @@ fn update_library_rollups(conn: &Connection, library_name: &str) -> Result<(), B
     Ok(())
 }
 
+// ============================================================================
+// High-Level Command Orchestration
+// Future module: `commands.rs`
+// ============================================================================
+
 fn merge_libraries(
     conn: &Connection,
     group_name: &str,
@@ -1856,6 +1932,11 @@ fn refresh_stats(conn: &Connection, input_names: &[String]) -> Result<(), Box<dy
     spinner.finish();
     Ok(())
 }
+
+// ============================================================================
+// Crawl Pipeline
+// Future module: `crawl.rs`
+// ============================================================================
 
 // ---- Crawl pipeline: restored to your original behavior ----
 fn normalize_seed_url(seed_url: &str) -> Result<String, String> {
@@ -2076,6 +2157,11 @@ async fn crawl_library(
         }
     }
 }
+
+// ============================================================================
+// Parent / Child Chunking
+// Future module: `chunk.rs`
+// ============================================================================
 
 fn strip_front_matter(input: &str) -> &str {
     if !input.starts_with("---\n") {
@@ -2353,6 +2439,11 @@ fn chunk_parent_into_children(parent_content: &str) -> Vec<String> {
 
     children
 }
+
+// ============================================================================
+// Indexing / Embedding Pipeline
+// Future modules: `chunk.rs` + `embed.rs`
+// ============================================================================
 
 fn embedding_to_bytes(embedding: &[f32]) -> Vec<u8> {
     embedding.iter().flat_map(|v| v.to_le_bytes()).collect()
@@ -2747,7 +2838,9 @@ fn embed_library(
         }
 
         let mut model = TextEmbedding::try_new(
-            InitOptions::new(DEFAULT_EMBEDDING_MODEL).with_show_download_progress(true),
+            InitOptions::new(DEFAULT_EMBEDDING_MODEL)
+                .with_cache_dir(models_dir())
+                .with_show_download_progress(true),
         )?;
         let batch_size = DEFAULT_EMBED_BATCH_SIZE;
         let tx = conn.unchecked_transaction()?;
@@ -2974,7 +3067,9 @@ fn embed_query(mode: SearchMode, question: &str) -> Result<Option<Vec<f32>>, Box
         return Ok(None);
     }
     let mut model = TextEmbedding::try_new(
-        InitOptions::new(DEFAULT_EMBEDDING_MODEL).with_show_download_progress(false),
+        InitOptions::new(DEFAULT_EMBEDDING_MODEL)
+            .with_cache_dir(models_dir())
+            .with_show_download_progress(false),
     )?;
     let embedding = model.embed([question], None)?;
     Ok(embedding.first().cloned())
@@ -2993,6 +3088,11 @@ fn embedding_readiness(
     )?;
     Ok((total, embedded))
 }
+
+// ============================================================================
+// Search / BM25 / Query Execution
+// Future module: `search.rs`
+// ============================================================================
 
 fn bm25_readiness(conn: &Connection, library_name: &str) -> Result<i64, Box<dyn Error>> {
     let count = conn.query_row(
@@ -3423,6 +3523,11 @@ fn ask_libraries(
     }
     Ok(())
 }
+
+// ============================================================================
+// Library Metadata / Read Commands
+// Future module: `libraries.rs`
+// ============================================================================
 
 fn add_alias(conn: &Connection, input_name: &str, alias: &str) -> Result<(), Box<dyn Error>> {
     let library_name = resolve_library_name(conn, input_name)?;
