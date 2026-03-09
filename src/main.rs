@@ -9,7 +9,7 @@ use spider::configuration::Configuration;
 use spider::tokio;
 use spider::website::Website;
 use std::cmp::Ordering as CmpOrdering;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::env;
 use std::error::Error;
 use std::fs;
@@ -19,15 +19,18 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::thread;
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use termios::{ECHO, TCSANOW, Termios, tcsetattr};
 use url::Url;
 
 const BASE_PATH: &str = "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider";
-const DEFAULT_TOP_K: usize = 5;
+const DEFAULT_TOP_K: usize = 1;
 const DEFAULT_CONTEXT_WINDOW: usize = 0;
-const DEFAULT_EMBEDDING_MODEL: EmbeddingModel = EmbeddingModel::MxbaiEmbedLargeV1Q;
-const MAX_CHILD_LENGTH: usize = 1200;
+const DEFAULT_EMBEDDING_MODEL: EmbeddingModel = EmbeddingModel::AllMiniLML6V2Q;
+const MIN_CHILD_LENGTH: usize = 700;
+const MAX_CHILD_LENGTH: usize = 1400;
+const CHILD_SPLIT_WINDOW: usize = 50;
 
 static CONTENT_SELECTORS: LazyLock<Vec<Selector>> = LazyLock::new(|| {
     [
@@ -138,7 +141,71 @@ impl Drop for TerminalEchoGuard {
     }
 }
 
-#[derive(Clone, Copy, Debug)]
+struct ProgressSpinner {
+    done: Arc<AtomicBool>,
+    stage: Arc<Mutex<String>>,
+    handle: Option<thread::JoinHandle<()>>,
+}
+
+impl ProgressSpinner {
+    fn new(initial_stage: impl Into<String>) -> Self {
+        let done = Arc::new(AtomicBool::new(false));
+        let stage = Arc::new(Mutex::new(initial_stage.into()));
+        let done_for_spinner = Arc::clone(&done);
+        let stage_for_spinner = Arc::clone(&stage);
+        let handle = thread::spawn(move || {
+            let frames = ["|", "/", "-", "\\"];
+            let mut idx = 0usize;
+            let mut last_len = 0usize;
+            while !done_for_spinner.load(Ordering::Relaxed) {
+                let current_stage = stage_for_spinner
+                    .lock()
+                    .map(|s| s.clone())
+                    .unwrap_or_else(|_| String::from("Working"));
+                let line = format!("{}... {}", current_stage, frames[idx % frames.len()]);
+                let padding = " ".repeat(last_len.saturating_sub(line.len()));
+                print!("\r{}{}", line, padding);
+                let _ = stdout().flush();
+                last_len = line.len();
+                idx += 1;
+                thread::sleep(Duration::from_millis(150));
+            }
+        });
+        Self {
+            done,
+            stage,
+            handle: Some(handle),
+        }
+    }
+
+    fn set_stage(&self, message: impl Into<String>) {
+        if let Ok(mut stage) = self.stage.lock() {
+            *stage = message.into();
+        }
+    }
+
+    fn finish(mut self) {
+        self.done.store(true, Ordering::Relaxed);
+        if let Some(handle) = self.handle.take() {
+            let _ = handle.join();
+        }
+        print!("\r{}\r", " ".repeat(80));
+        let _ = stdout().flush();
+    }
+}
+
+impl Drop for ProgressSpinner {
+    fn drop(&mut self) {
+        self.done.store(true, Ordering::Relaxed);
+        if let Some(handle) = self.handle.take() {
+            let _ = handle.join();
+        }
+        print!("\r{}\r", " ".repeat(80));
+        let _ = stdout().flush();
+    }
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 enum SearchMode {
     Hybrid,
     Vector,
@@ -171,12 +238,10 @@ struct ChunkRecord {
     id: i64,
     parent_id: i64,
     library_name: String,
-    source_url: String,
     source_page_order: i64,
     parent_index_in_page: i64,
     child_index_in_parent: i64,
     global_chunk_index: i64,
-    content: String,
     embedding: Vec<f32>,
 }
 
@@ -184,7 +249,7 @@ struct ChunkRecord {
 struct ScoredChunk {
     chunk: ChunkRecord,
     vector_score: f32,
-    keyword_score: f32,
+    bm25_score: f32,
     final_score: f32,
 }
 
@@ -198,6 +263,7 @@ async fn main() {
 
 async fn run() -> Result<(), Box<dyn Error>> {
     let _echo_guard = TerminalEchoGuard::new();
+    configure_onnx_runtime_env();
 
     let args: Vec<String> = env::args().skip(1).collect();
     if args.is_empty() {
@@ -378,12 +444,26 @@ fn print_help() {
     );
     println!("  <library_name> \"<question>\"   # query alias");
     println!("  ask \"<question>\" [--libraries a,b,c] [--mode ...] [--top-k N] [--context N]");
+    println!("  note: quote questions in the shell, especially if they contain ? or *");
     println!("  alias <library_name> <alias>");
     println!("  list");
     println!("  show <library_name>");
     println!("  remove <library_name>");
     println!("  open <chunk_id>");
     println!("  trace <library_name> \"<question>\" [--mode ...] [--top-k N] [--context N]");
+}
+
+fn configure_onnx_runtime_env() {
+    let num_cpus = std::thread::available_parallelism()
+        .map(|n| n.get())
+        .unwrap_or(4);
+
+    // These must be set before ONNX Runtime initializes.
+    unsafe {
+        env::set_var("OMP_NUM_THREADS", num_cpus.to_string());
+        env::set_var("ORT_NUM_INTRA_THREADS", num_cpus.to_string());
+        env::set_var("ORT_NUM_INTER_THREADS", "1");
+    }
 }
 
 fn app_root() -> PathBuf {
@@ -462,6 +542,10 @@ fn init_db(db_path: &Path) -> Result<Connection, Box<dyn Error>> {
             embedding BLOB NOT NULL,
             token_count INTEGER NOT NULL,
             created_at TEXT NOT NULL
+        );
+        CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts USING fts5(
+            library_name UNINDEXED,
+            content
         );
         CREATE TABLE IF NOT EXISTS pages (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -596,6 +680,10 @@ fn run_db_migrations(conn: &Connection) -> Result<(), Box<dyn Error>> {
             embedding BLOB NOT NULL,
             token_count INTEGER NOT NULL,
             created_at TEXT NOT NULL
+        );
+        CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts USING fts5(
+            library_name UNINDEXED,
+            content
         );
         CREATE INDEX IF NOT EXISTS idx_parents_library_name ON parents(library_name);
         CREATE INDEX IF NOT EXISTS idx_parents_library_page ON parents(library_name, source_url, parent_index_in_page);
@@ -786,12 +874,14 @@ fn export_library(
     input_name: &str,
     output_dir: Option<&Path>,
 ) -> Result<(), Box<dyn Error>> {
+    let spinner = ProgressSpinner::new("Preparing export");
     let members = resolve_target_libraries(conn, input_name)?;
     let output_dir = output_dir
         .map(|p| p.to_path_buf())
         .unwrap_or_else(|| compiled_dir(input_name));
     let mut compiled_parts = Vec::new();
     for member in &members {
+        spinner.set_stage(format!("Collecting {}", member));
         compiled_parts.push(compiled_text_for_library(conn, member)?);
     }
     let mut compiled = compiled_parts.join("\n\n");
@@ -799,7 +889,9 @@ fn export_library(
         compiled.push_str("\n\n");
     }
 
+    spinner.set_stage("Writing export artifacts");
     write_artifacts(&output_dir, &compiled)?;
+    spinner.finish();
     Ok(())
 }
 
@@ -1134,6 +1226,7 @@ fn merge_libraries(
     replace: bool,
     include_artifacts: Option<&Path>,
 ) -> Result<(), Box<dyn Error>> {
+    let spinner = ProgressSpinner::new("Preparing merge");
     if resolve_library_name(conn, group_name).is_ok() {
         return Err(format!("'{}' already exists as a library/alias.", group_name).into());
     }
@@ -1141,6 +1234,7 @@ fn merge_libraries(
     let mut resolved_members = Vec::new();
     let mut seen = HashSet::new();
     for input in member_inputs {
+        spinner.set_stage(format!("Resolving {}", input));
         for name in resolve_target_libraries(conn, input)? {
             if seen.insert(name.clone()) {
                 resolved_members.push(name);
@@ -1184,15 +1278,18 @@ fn merge_libraries(
     if let Some(path) = include_artifacts {
         let mut compiled_parts = Vec::new();
         for member in &resolved_members {
+            spinner.set_stage(format!("Compiling {}", member));
             compiled_parts.push(compiled_text_for_library(conn, member)?);
         }
         let mut compiled = compiled_parts.join("\n\n");
         if !compiled.is_empty() {
             compiled.push_str("\n\n");
         }
+        spinner.set_stage("Writing merged artifacts");
         write_artifacts(path, &compiled)?;
     }
 
+    spinner.finish();
     Ok(())
 }
 
@@ -1238,6 +1335,7 @@ async fn add_library(
 }
 
 fn refresh_stats(conn: &Connection, input_names: &[String]) -> Result<(), Box<dyn Error>> {
+    let spinner = ProgressSpinner::new("Preparing refresh");
     let mut targets = Vec::new();
     let mut seen = HashSet::new();
     if input_names.is_empty() {
@@ -1266,8 +1364,11 @@ fn refresh_stats(conn: &Connection, input_names: &[String]) -> Result<(), Box<dy
 
     let now = now_epoch();
     for library_name in &targets {
+        spinner.set_stage(format!("Refreshing {}", library_name));
         backfill_pages_from_parents(conn, library_name, &now)?;
+        spinner.set_stage(format!("Rebuilding text for {}", library_name));
         backfill_library_text(conn, library_name, &now)?;
+        spinner.set_stage(format!("Updating stats for {}", library_name));
         update_library_rollups(conn, library_name)?;
         conn.execute(
             "UPDATE libraries SET last_refreshed_at = ?1 WHERE library_name = ?2",
@@ -1282,6 +1383,7 @@ fn refresh_stats(conn: &Connection, input_names: &[String]) -> Result<(), Box<dy
         "success",
         &format!("Refreshed {} libraries.", targets.len()),
     )?;
+    spinner.finish();
     Ok(())
 }
 
@@ -1380,6 +1482,7 @@ async fn crawl_library(
     let job_id = start_job(conn, library_name, job_type)?;
 
     let run_result = async {
+        let spinner = ProgressSpinner::new("Preparing crawl");
         let normalized_seed_url =
             normalize_seed_url(source_url).map_err(|e| format!("URL error: {e}"))?;
         let whitelist =
@@ -1398,52 +1501,19 @@ async fn crawl_library(
             .with_config(config)
             .build()
             .map_err(|e| format!("Failed to build website: {e}"))?;
-
-        let done = Arc::new(AtomicBool::new(false));
-        let stage = Arc::new(Mutex::new(String::from("Downloading")));
-        let done_for_spinner = Arc::clone(&done);
-        let stage_for_spinner = Arc::clone(&stage);
-        let spinner_handle = tokio::spawn(async move {
-            let frames = ["|", "/", "-", "\\"];
-            let mut idx = 0usize;
-            let mut last_len = 0usize;
-            while !done_for_spinner.load(Ordering::Relaxed) {
-                let current_stage = stage_for_spinner
-                    .lock()
-                    .map(|s| s.clone())
-                    .unwrap_or_else(|_| String::from("Working"));
-                let line = format!("{}... {}", current_stage, frames[idx % frames.len()]);
-                let padding = " ".repeat(last_len.saturating_sub(line.len()));
-                print!("\r{}{}", line, padding);
-                let _ = stdout().flush();
-                last_len = line.len();
-                idx += 1;
-                tokio::time::sleep(std::time::Duration::from_millis(150)).await;
-            }
-        });
-
-        if let Ok(mut s) = stage.lock() {
-            *s = String::from("Downloading files");
-        }
+        spinner.set_stage("Downloading files");
         website.scrape().await;
 
-        if let Ok(mut s) = stage.lock() {
-            *s = String::from("Converting files");
-        }
+        spinner.set_stage("Converting files");
         let pages = match website.get_pages() {
             Some(p) => p,
             None => {
-                done.store(true, Ordering::Relaxed);
-                let _ = spinner_handle.await;
-                print!("\r                    \r");
-                let _ = stdout().flush();
+                spinner.finish();
                 return Err("No pages collected".into());
             }
         };
 
-        if let Ok(mut s) = stage.lock() {
-            *s = String::from("Writing files");
-        }
+        spinner.set_stage("Writing files");
         let page_inputs: Vec<(String, String)> = pages
             .iter()
             .map(|p| (p.get_url().to_string(), p.get_html()))
@@ -1497,13 +1567,7 @@ async fn crawl_library(
         }
         tx.commit()?;
 
-        if let Ok(mut s) = stage.lock() {
-            *s = String::from("Finalizing");
-        }
-        done.store(true, Ordering::Relaxed);
-        let _ = spinner_handle.await;
-        print!("\r                    \r");
-        let _ = stdout().flush();
+        spinner.set_stage("Finalizing");
 
         conn.execute(
             "INSERT OR REPLACE INTO libraries (
@@ -1523,6 +1587,8 @@ async fn crawl_library(
              )",
             params![library_name, source_url, now, total_chars, converted.len() as i64],
         )?;
+
+        spinner.finish();
 
         Ok::<String, Box<dyn Error>>(format!("Crawled {} pages.", pages.len()))
     }
@@ -1561,7 +1627,7 @@ fn preprocess_for_chunking(input: &str) -> String {
     setext_h2.replace_all(&out, "## $1").into_owned()
 }
 
-const CHUNK_MIN_CHARS: usize = 600;
+const CHUNK_MIN_CHARS: usize = 1400;
 const CHUNK_MAX_CHARS: usize = 3000;
 
 fn split_by_paragraph_upper_bound(chunks: Vec<String>, max_chars: usize) -> Vec<String> {
@@ -1677,59 +1743,6 @@ fn split_by_char_upper_bound(chunks: Vec<String>, max_chars: usize) -> Vec<Strin
     out
 }
 
-fn split_by_delimiter_outside_fences(input: &str, delimiter: &str) -> Vec<String> {
-    if delimiter.is_empty() {
-        return input.chars().map(|c| c.to_string()).collect();
-    }
-
-    let mut parts = Vec::new();
-    let mut current = String::new();
-    let mut in_fence = false;
-
-    if delimiter == "\n\n" || delimiter == "\n" {
-        for line in input.split_inclusive('\n') {
-            let line_no_nl = line.trim_end_matches('\n').trim_end_matches('\r');
-            let starts_fence = line_no_nl.trim_start().starts_with("```");
-            current.push_str(line);
-            if starts_fence {
-                in_fence = !in_fence;
-            }
-            let should_split = !in_fence
-                && ((delimiter == "\n\n" && line_no_nl.trim().is_empty())
-                    || delimiter == "\n");
-            if should_split {
-                let trimmed = current.trim().to_string();
-                if !trimmed.is_empty() {
-                    parts.push(trimmed);
-                }
-                current.clear();
-            }
-        }
-    } else if delimiter == " " {
-        for token in input.split_inclusive(' ') {
-            let line_start = current.rsplit('\n').next().unwrap_or_default().is_empty();
-            if line_start && token.trim_start().starts_with("```") {
-                in_fence = !in_fence;
-            }
-            current.push_str(token);
-            if !in_fence {
-                let trimmed = current.trim().to_string();
-                if !trimmed.is_empty() {
-                    parts.push(trimmed);
-                }
-                current.clear();
-            }
-        }
-    }
-
-    let trimmed = current.trim().to_string();
-    if !trimmed.is_empty() {
-        parts.push(trimmed);
-    }
-
-    parts
-}
-
 fn split_markdown_by_headings(content: &str) -> Vec<String> {
     let processed = preprocess_for_chunking(content);
     let mut out = Vec::new();
@@ -1806,50 +1819,69 @@ fn chunk_markdown_page(content: &str) -> Vec<String> {
     topped
 }
 
-fn split_children_recursively(content: &str, max_chars: usize, level: usize) -> Vec<String> {
-    let trimmed = content.trim();
-    if trimmed.is_empty() {
-        return Vec::new();
-    }
-    if trimmed.chars().count() <= max_chars {
-        return vec![trimmed.to_string()];
-    }
-
-    let parts = match level {
-        0 => split_markdown_by_headings(trimmed),
-        1 => split_by_delimiter_outside_fences(trimmed, "\n\n"),
-        2 => split_by_delimiter_outside_fences(trimmed, "\n"),
-        3 => split_by_delimiter_outside_fences(trimmed, " "),
-        _ => {
-            return split_by_char_upper_bound(vec![trimmed.to_string()], max_chars);
-        }
-    };
-
-    if parts.len() <= 1 {
-        return split_children_recursively(trimmed, max_chars, level + 1);
-    }
-
-    let mut out = Vec::new();
-    for part in parts {
-        out.extend(split_children_recursively(&part, max_chars, level + 1));
-    }
-    out
-}
-
 fn chunk_parent_into_children(parent_content: &str) -> Vec<String> {
     let trimmed = parent_content.trim();
     if trimmed.is_empty() {
         return Vec::new();
     }
-    if trimmed.chars().count() <= MAX_CHILD_LENGTH {
+    let chars: Vec<char> = trimmed.chars().collect();
+    let total_len = chars.len();
+    if total_len <= MAX_CHILD_LENGTH {
         return vec![trimmed.to_string()];
     }
 
-    split_children_recursively(trimmed, MAX_CHILD_LENGTH, 0)
-        .into_iter()
-        .map(|chunk| chunk.trim().to_string())
-        .filter(|chunk| !chunk.is_empty())
-        .collect()
+    let target_children = total_len.div_ceil(MAX_CHILD_LENGTH).max(1);
+    let mut children = Vec::with_capacity(target_children);
+    let mut start = 0usize;
+
+    for part_idx in 0..target_children {
+        let remaining_parts = target_children - part_idx;
+        let remaining_len = total_len - start;
+        if remaining_parts == 1 {
+            let chunk: String = chars[start..].iter().collect();
+            let trimmed_chunk = chunk.trim().to_string();
+            if !trimmed_chunk.is_empty() {
+                children.push(trimmed_chunk);
+            }
+            break;
+        }
+
+        let ideal_end = start + remaining_len.div_ceil(remaining_parts);
+        let search_start = ideal_end.saturating_sub(CHILD_SPLIT_WINDOW).max(start + MIN_CHILD_LENGTH);
+        let search_end = (ideal_end + CHILD_SPLIT_WINDOW)
+            .min(total_len)
+            .min(start + MAX_CHILD_LENGTH);
+
+        let mut best_split = None;
+        let mut best_distance = usize::MAX;
+        for idx in search_start..search_end {
+            if chars[idx].is_whitespace() {
+                let distance = idx.abs_diff(ideal_end);
+                if distance < best_distance {
+                    best_distance = distance;
+                    best_split = Some(idx);
+                }
+            }
+        }
+
+        let end = best_split.unwrap_or_else(|| {
+            ideal_end
+                .max(start + MIN_CHILD_LENGTH)
+                .min(start + MAX_CHILD_LENGTH)
+                .min(total_len)
+        });
+        let chunk: String = chars[start..end].iter().collect();
+        let trimmed_chunk = chunk.trim().to_string();
+        if !trimmed_chunk.is_empty() {
+            children.push(trimmed_chunk);
+        }
+        start = end;
+        while start < total_len && chars[start].is_whitespace() {
+            start += 1;
+        }
+    }
+
+    children
 }
 
 fn embedding_to_bytes(embedding: &[f32]) -> Vec<u8> {
@@ -1876,24 +1908,6 @@ fn cosine_similarity(a: &[f32], b: &[f32]) -> f32 {
         return 0.0;
     }
     dot / (a_norm.sqrt() * b_norm.sqrt())
-}
-
-fn keyword_overlap_score(query: &str, text: &str) -> f32 {
-    let query_terms: HashSet<String> = query
-        .split(|c: char| !c.is_alphanumeric())
-        .map(|t| t.trim().to_ascii_lowercase())
-        .filter(|t| !t.is_empty())
-        .collect();
-    if query_terms.is_empty() {
-        return 0.0;
-    }
-    let text_terms: HashSet<String> = text
-        .split(|c: char| !c.is_alphanumeric())
-        .map(|t| t.trim().to_ascii_lowercase())
-        .filter(|t| !t.is_empty())
-        .collect();
-    let hits = query_terms.intersection(&text_terms).count() as f32;
-    hits / query_terms.len() as f32
 }
 
 fn resolve_or_create_library_for_index(
@@ -2018,13 +2032,16 @@ fn chunk_library(
     let (library_name, source_url) =
         resolve_or_create_library_for_index(conn, input_name, custom_file)?;
     let job_id = start_job(conn, &library_name, job_type)?;
+    let spinner = ProgressSpinner::new(format!("Preparing chunks for {}", library_name));
     let result = (|| -> Result<String, Box<dyn Error>> {
+        spinner.set_stage(format!("Loading pages for {}", library_name));
         let page_inputs = load_page_inputs(conn, &library_name, &source_url, custom_file)?;
         if page_inputs.is_empty() {
             return Err("No pages available for chunking.".into());
         }
 
         if custom_file.is_some() {
+            spinner.set_stage(format!("Writing pages for {}", library_name));
             let tx = conn.unchecked_transaction()?;
             tx.execute(
                 "DELETE FROM pages WHERE library_name = ?1",
@@ -2054,6 +2071,7 @@ fn chunk_library(
         let mut per_page_chunk_counts: Vec<i64> = Vec::with_capacity(page_inputs.len());
         let mut global_parent_index = 0i64;
         for (page_order, page_url, page_content) in &page_inputs {
+            spinner.set_stage(format!("Chunking page {}", page_order + 1));
             let page_parents = chunk_markdown_page(page_content);
             let mut child_count_for_page = 0i64;
             for (parent_index_in_page, parent) in page_parents.into_iter().enumerate() {
@@ -2088,6 +2106,7 @@ fn chunk_library(
             return Err("No child chunks generated from input.".into());
         }
 
+        spinner.set_stage(format!("Saving chunks for {}", library_name));
         let tx = conn.unchecked_transaction()?;
         tx.execute(
             "DELETE FROM parents WHERE library_name = ?1",
@@ -2181,6 +2200,9 @@ fn chunk_library(
                 library_name
             ],
         )?;
+        spinner.set_stage(format!("Building BM25 index for {}", library_name));
+        rebuild_bm25_index_for_library(conn, &library_name)?;
+        spinner.finish();
         Ok(format!(
             "Chunked {} parents into {} child chunks.",
             parent_rows.len(),
@@ -2237,7 +2259,9 @@ fn embed_library(
     }
 
     let job_id = start_job(conn, &library_name, job_type)?;
+    let spinner = ProgressSpinner::new(format!("Preparing embeddings for {}", library_name));
     let result = (|| -> Result<String, Box<dyn Error>> {
+        spinner.set_stage(format!("Loading chunks for {}", library_name));
         let mut stmt = conn.prepare(
             "SELECT id, content FROM chunks WHERE library_name = ?1 AND LENGTH(embedding) = 0 ORDER BY id ASC",
         )?;
@@ -2257,8 +2281,18 @@ fn embed_library(
         )?;
         let batch_size = 128usize;
         let tx = conn.unchecked_transaction()?;
-        for batch in pending.chunks(batch_size) {
-            let texts: Vec<String> = batch.iter().map(|(_, content)| content.clone()).collect();
+        let total_batches = pending.len().div_ceil(batch_size);
+        for (batch_idx, batch) in pending.chunks(batch_size).enumerate() {
+            spinner.set_stage(format!(
+                "Embedding batch {} of {} for {}",
+                batch_idx + 1,
+                total_batches,
+                library_name
+            ));
+            let texts: Vec<String> = batch
+                .iter()
+                .map(|(_, content)| format!("passage: {}", content))
+                .collect();
             let embeds = model.embed(&texts, None)?;
             if embeds.len() != batch.len() {
                 return Err("Embedding count mismatch.".into());
@@ -2271,7 +2305,9 @@ fn embed_library(
             }
         }
         tx.commit()?;
+        spinner.set_stage(format!("Updating stats for {}", library_name));
         update_library_rollups(conn, &library_name)?;
+        spinner.finish();
         Ok(format!("Embedded {} chunks.", pending.len()))
     })();
 
@@ -2321,23 +2357,21 @@ fn load_chunks_for_library(
     library_name: &str,
 ) -> Result<Vec<ChunkRecord>, Box<dyn Error>> {
     let mut stmt = conn.prepare(
-        "SELECT id, parent_id, library_name, source_url, source_page_order, parent_index_in_page,
-                child_index_in_parent, global_chunk_index, content, embedding
+        "SELECT id, parent_id, library_name, source_page_order, parent_index_in_page,
+                child_index_in_parent, global_chunk_index, embedding
          FROM chunks
-         WHERE library_name = ?1 AND LENGTH(embedding) > 0",
+         WHERE library_name = ?1",
     )?;
     let rows = stmt.query_map(params![library_name], |row| {
-        let bytes: Vec<u8> = row.get(9)?;
+        let bytes: Vec<u8> = row.get(7)?;
         Ok(ChunkRecord {
             id: row.get(0)?,
             parent_id: row.get(1)?,
             library_name: row.get(2)?,
-            source_url: row.get(3)?,
-            source_page_order: row.get(4)?,
-            parent_index_in_page: row.get(5)?,
-            child_index_in_parent: row.get(6)?,
-            global_chunk_index: row.get(7)?,
-            content: row.get(8)?,
+            source_page_order: row.get(3)?,
+            parent_index_in_page: row.get(4)?,
+            child_index_in_parent: row.get(5)?,
+            global_chunk_index: row.get(6)?,
             embedding: bytes_to_embedding(&bytes),
         })
     })?;
@@ -2371,30 +2405,52 @@ fn load_parent_by_id(conn: &Connection, parent_id: i64) -> Result<ParentRecord, 
 
 fn score_chunks(
     chunks: &[ChunkRecord],
-    query: &str,
     mode: SearchMode,
     query_embedding: Option<&[f32]>,
+    bm25_scores: &HashMap<i64, f32>,
+    use_vector_scores: bool,
 ) -> Vec<ScoredChunk> {
+    let vector_scores_raw = if use_vector_scores {
+        chunks
+            .iter()
+            .map(|chunk| {
+                let score = match (mode, query_embedding) {
+                    (SearchMode::Keyword, _) => 0.0,
+                    (_, Some(embed)) if !chunk.embedding.is_empty() => {
+                        cosine_similarity(embed, &chunk.embedding)
+                    }
+                    _ => 0.0,
+                };
+                (chunk.id, score)
+            })
+            .collect::<HashMap<_, _>>()
+    } else {
+        HashMap::new()
+    };
+    let normalized_vector_scores = normalized_scores(&vector_scores_raw);
+    let normalized_bm25_scores = normalized_scores(bm25_scores);
     let mut scored = Vec::with_capacity(chunks.len());
     for chunk in chunks {
-        let vector_score = match (mode, query_embedding) {
-            (SearchMode::Keyword, _) => 0.0,
-            (_, Some(embed)) => cosine_similarity(embed, &chunk.embedding),
-            _ => 0.0,
-        };
-        let keyword_score = match mode {
-            SearchMode::Vector => 0.0,
-            _ => keyword_overlap_score(query, &chunk.content),
-        };
+        let vector_score = normalized_vector_scores
+            .get(&chunk.id)
+            .copied()
+            .unwrap_or(0.0);
+        let bm25_score = normalized_bm25_scores.get(&chunk.id).copied().unwrap_or(0.0);
         let final_score = match mode {
             SearchMode::Vector => vector_score,
-            SearchMode::Keyword => keyword_score,
-            SearchMode::Hybrid => 0.85 * vector_score + 0.15 * keyword_score,
+            SearchMode::Keyword => bm25_score,
+            SearchMode::Hybrid => {
+                if use_vector_scores {
+                    0.90 * vector_score + 0.10 * bm25_score
+                } else {
+                    bm25_score
+                }
+            }
         };
         scored.push(ScoredChunk {
             chunk: chunk.clone(),
             vector_score,
-            keyword_score,
+            bm25_score,
             final_score,
         });
     }
@@ -2450,8 +2506,8 @@ fn embed_query(mode: SearchMode, question: &str) -> Result<Option<Vec<f32>>, Box
     let mut model = TextEmbedding::try_new(
         InitOptions::new(DEFAULT_EMBEDDING_MODEL).with_show_download_progress(false),
     )?;
-    let prompt = format!("Represent this sentence for searching relevant passages: {question}");
-    let embedding = model.embed([prompt], None)?;
+    let prefixed = format!("query: {}", question);
+    let embedding = model.embed([prefixed], None)?;
     Ok(embedding.first().cloned())
 }
 
@@ -2469,6 +2525,106 @@ fn embedding_readiness(
     Ok((total, embedded))
 }
 
+fn bm25_readiness(conn: &Connection, library_name: &str) -> Result<i64, Box<dyn Error>> {
+    let count = conn.query_row(
+        "SELECT COUNT(*) FROM chunks_fts WHERE library_name = ?1",
+        params![library_name],
+        |row| row.get(0),
+    )?;
+    Ok(count)
+}
+
+fn rebuild_bm25_index_for_library(
+    conn: &Connection,
+    library_name: &str,
+) -> Result<(), Box<dyn Error>> {
+    conn.execute(
+        "DELETE FROM chunks_fts WHERE library_name = ?1",
+        params![library_name],
+    )?;
+    let mut stmt = conn.prepare(
+        "SELECT id, content
+         FROM chunks
+         WHERE library_name = ?1
+         ORDER BY id ASC",
+    )?;
+    let rows = stmt.query_map(params![library_name], |row| {
+        Ok((row.get::<_, i64>(0)?, row.get::<_, String>(1)?))
+    })?;
+    for row in rows {
+        let (chunk_id, content) = row?;
+        conn.execute(
+            "INSERT INTO chunks_fts(rowid, library_name, content) VALUES (?1, ?2, ?3)",
+            params![chunk_id, library_name, content],
+        )?;
+    }
+    Ok(())
+}
+
+fn tokenize_fts_query(question: &str) -> String {
+    let mut seen = HashSet::new();
+    let terms = question
+        .split(|c: char| !(c.is_alphanumeric() || c == '_'))
+        .map(str::trim)
+        .filter(|term| !term.is_empty())
+        .map(|term| term.to_ascii_lowercase())
+        .filter(|term| seen.insert(term.clone()))
+        .map(|term| format!("\"{term}\""))
+        .collect::<Vec<_>>();
+    terms.join(" OR ")
+}
+
+fn bm25_scores_for_library(
+    conn: &Connection,
+    library_name: &str,
+    question: &str,
+    limit: usize,
+) -> Result<HashMap<i64, f32>, Box<dyn Error>> {
+    let fts_query = tokenize_fts_query(question);
+    if fts_query.is_empty() || limit == 0 {
+        return Ok(HashMap::new());
+    }
+
+    let mut stmt = conn.prepare(
+        "SELECT rowid, -bm25(chunks_fts) AS score
+         FROM chunks_fts
+         WHERE chunks_fts MATCH ?1 AND library_name = ?2
+         ORDER BY bm25(chunks_fts)
+         LIMIT ?3",
+    )?;
+    let rows = stmt.query_map(params![fts_query, library_name, limit as i64], |row| {
+        Ok((row.get::<_, i64>(0)?, row.get::<_, f32>(1)?))
+    })?;
+    let mut scores = HashMap::new();
+    for row in rows {
+        let (chunk_id, score) = row?;
+        scores.insert(chunk_id, score);
+    }
+    Ok(scores)
+}
+
+fn normalized_scores(scores: &HashMap<i64, f32>) -> HashMap<i64, f32> {
+    if scores.is_empty() {
+        return HashMap::new();
+    }
+    let min = scores.values().copied().fold(f32::INFINITY, f32::min);
+    let max = scores
+        .values()
+        .copied()
+        .fold(f32::NEG_INFINITY, f32::max);
+    if (max - min).abs() < f32::EPSILON {
+        return scores
+            .keys()
+            .copied()
+            .map(|id| (id, 1.0))
+            .collect::<HashMap<_, _>>();
+    }
+    scores
+        .iter()
+        .map(|(id, score)| (*id, (*score - min) / (max - min)))
+        .collect()
+}
+
 fn query_library(
     conn: &Connection,
     input_name: &str,
@@ -2478,37 +2634,74 @@ fn query_library(
     context: usize,
     trace: bool,
 ) -> Result<(), Box<dyn Error>> {
+    let spinner = ProgressSpinner::new(format!("Preparing query for {}", input_name));
     let target_libraries = resolve_target_libraries(conn, input_name)?;
+    let mut all_chunks = Vec::new();
+    let mut all_bm25_scores = HashMap::new();
+    let mut use_vector_scores = mode != SearchMode::Keyword;
     for library_name in &target_libraries {
+        spinner.set_stage(format!("Checking readiness for {}", library_name));
         let (total, embedded) = embedding_readiness(conn, library_name)?;
-        if total == 0 || embedded == 0 {
+        let bm25_count = bm25_readiness(conn, library_name)?;
+        if total == 0 || bm25_count == 0 {
+            spinner.finish();
             println!(
-                "Library '{}' is not embedded yet. Run `plshelp add {}` (or `plshelp index {}`) first.",
+                "Library '{}' is not indexed yet. Run `plshelp chunk {}` (or `plshelp add {}`) first.",
                 library_name, library_name, library_name
             );
             return Ok(());
         }
-        if embedded < total {
+        if matches!(mode, SearchMode::Vector) && embedded < total {
+            spinner.finish();
             println!(
                 "Library '{}' has partial embeddings ({}/{}). Run `plshelp embed {}`.",
                 library_name, embedded, total, library_name
             );
             return Ok(());
         }
+        spinner.set_stage(format!("Loading chunks for {}", library_name));
+        all_chunks.extend(load_chunks_for_library(conn, library_name)?);
+        spinner.set_stage(format!("Loading BM25 scores for {}", library_name));
+        all_bm25_scores.extend(bm25_scores_for_library(
+            conn,
+            library_name,
+            question,
+            top_k.saturating_mul(10).max(50),
+        )?);
+        if embedded < total {
+            use_vector_scores = false;
+        }
     }
-    let mut chunks = Vec::new();
-    for library_name in &target_libraries {
-        chunks.extend(load_chunks_for_library(conn, library_name)?);
-    }
-    if chunks.is_empty() {
+    if all_chunks.is_empty() {
+        spinner.finish();
         println!("No chunks indexed for '{}'.", input_name);
         return Ok(());
     }
-    let query_embedding = embed_query(mode, question)?;
-    let scored = score_chunks(&chunks, question, mode, query_embedding.as_deref());
+    let effective_mode = if matches!(mode, SearchMode::Hybrid) && !use_vector_scores {
+        SearchMode::Keyword
+    } else {
+        mode
+    };
+    let query_embedding = if use_vector_scores {
+        spinner.set_stage("Embedding query");
+        embed_query(effective_mode, question)?
+    } else {
+        None
+    };
+    spinner.set_stage("Ranking results");
+    let scored = score_chunks(
+        &all_chunks,
+        effective_mode,
+        query_embedding.as_deref(),
+        &all_bm25_scores,
+        use_vector_scores,
+    );
     let mut top_hits = Vec::new();
     let mut seen_parents = HashSet::new();
     for hit in scored {
+        if hit.final_score <= 0.0 {
+            continue;
+        }
         if seen_parents.insert(hit.chunk.parent_id) {
             top_hits.push(hit);
         }
@@ -2517,16 +2710,24 @@ fn query_library(
         }
     }
 
+    spinner.finish();
+
+    if top_hits.is_empty() {
+        println!("No results for '{}'.", question);
+        return Ok(());
+    }
+
     for (rank, hit) in top_hits.iter().enumerate() {
         let parent = load_parent_by_id(conn, hit.chunk.parent_id)?;
-        println!("{}. [{}] {}", rank + 1, hit.chunk.id, hit.chunk.source_url);
+        println!("{}. [{}]", rank + 1, hit.chunk.id);
+        println!("source: {}", parent.source_url);
         if target_libraries.len() > 1 {
             println!("   library: {}", hit.chunk.library_name);
         }
         if trace {
             println!(
-                "   scores: final={:.4} vector={:.4} keyword={:.4}",
-                hit.final_score, hit.vector_score, hit.keyword_score
+                "   scores: final={:.4} vector={:.4} bm25={:.4}",
+                hit.final_score, hit.vector_score, hit.bm25_score
             );
             println!(
                 "   child location: page_order={} parent_in_page={} child_in_parent={} global_child_index={}",
@@ -2569,6 +2770,7 @@ fn ask_libraries(
     question: &str,
     flags: &[String],
 ) -> Result<(), Box<dyn Error>> {
+    let spinner = ProgressSpinner::new("Preparing multi-library query");
     let (mode, top_k, context, filter) = ask_flags(flags)?;
     let libraries = if let Some(libs) = filter {
         let mut out = Vec::new();
@@ -2592,22 +2794,44 @@ fn ask_libraries(
         out
     };
     if libraries.is_empty() {
+        spinner.finish();
         println!("No libraries indexed.");
         return Ok(());
     }
 
-    let query_embedding = embed_query(mode, question)?;
+    let query_embedding = if mode != SearchMode::Keyword {
+        spinner.set_stage("Embedding query");
+        embed_query(mode, question)?
+    } else {
+        None
+    };
     let mut combined = Vec::new();
     for lib in libraries {
+        spinner.set_stage(format!("Scoring {}", lib));
         let (total, embedded) = embedding_readiness(conn, &lib)?;
-        if total == 0 || embedded == 0 || embedded < total {
+        let bm25_count = bm25_readiness(conn, &lib)?;
+        if total == 0 || bm25_count == 0 {
             continue;
         }
         let chunks = load_chunks_for_library(conn, &lib)?;
         if chunks.is_empty() {
             continue;
         }
-        combined.extend(score_chunks(&chunks, question, mode, query_embedding.as_deref()));
+        let bm25_scores =
+            bm25_scores_for_library(conn, &lib, question, top_k.saturating_mul(10).max(50))?;
+        let library_use_vector = mode != SearchMode::Keyword && embedded == total;
+        let effective_mode = if matches!(mode, SearchMode::Hybrid) && !library_use_vector {
+            SearchMode::Keyword
+        } else {
+            mode
+        };
+        combined.extend(score_chunks(
+            &chunks,
+            effective_mode,
+            query_embedding.as_deref(),
+            &bm25_scores,
+            library_use_vector,
+        ));
     }
     combined.sort_by(|a, b| {
         b.final_score
@@ -2617,6 +2841,9 @@ fn ask_libraries(
     let mut top_hits = Vec::new();
     let mut seen_parents = HashSet::new();
     for hit in combined {
+        if hit.final_score <= 0.0 {
+            continue;
+        }
         if seen_parents.insert(hit.chunk.parent_id) {
             top_hits.push(hit);
         }
@@ -2625,15 +2852,17 @@ fn ask_libraries(
         }
     }
 
+    spinner.finish();
+
+    if top_hits.is_empty() {
+        println!("No results for '{}'.", question);
+        return Ok(());
+    }
+
     for (rank, hit) in top_hits.iter().enumerate() {
         let parent = load_parent_by_id(conn, hit.chunk.parent_id)?;
-        println!(
-            "{}. [{}] {} ({})",
-            rank + 1,
-            hit.chunk.id,
-            hit.chunk.source_url,
-            hit.chunk.library_name
-        );
+        println!("{}. [{}] ({})", rank + 1, hit.chunk.id, hit.chunk.library_name);
+        println!("source: {}", parent.source_url);
         println!("{}", parent.content);
         if context > 0 {
             let around = parent_neighbors(
@@ -2728,6 +2957,10 @@ fn parent_count_for_library(conn: &Connection, library_name: &str) -> Result<i64
     Ok(count)
 }
 
+fn bm25_count_for_library(conn: &Connection, library_name: &str) -> Result<i64, Box<dyn Error>> {
+    bm25_readiness(conn, library_name)
+}
+
 fn library_rollups(
     conn: &Connection,
     library_name: &str,
@@ -2802,6 +3035,7 @@ fn aggregate_rollups_for_libraries(
 }
 
 fn list_libraries(conn: &Connection) -> Result<(), Box<dyn Error>> {
+    let spinner = ProgressSpinner::new("Loading libraries");
     let mut stmt = conn.prepare(
         "SELECT library_name, source_url, last_refreshed_at FROM libraries ORDER BY library_name ASC",
     )?;
@@ -2817,17 +3051,21 @@ fn list_libraries(conn: &Connection) -> Result<(), Box<dyn Error>> {
         libraries.push(row?);
     }
 
+    let mut lines = Vec::new();
     for (library_name, source_url, refreshed) in libraries {
+        spinner.set_stage(format!("Reading {}", library_name));
         let (chars, pages, chunks, _embedded, _empty, _min, _max) =
             library_rollups(conn, &library_name)?;
+        let bm25_chunks = bm25_count_for_library(conn, &library_name)?;
         let status = library_status(conn, &library_name)?;
-        println!("{library_name}");
-        println!("  source: {source_url}");
-        println!("  pages: {pages}");
-        println!("  chunks: {chunks}");
-        println!("  chars: {chars}");
-        println!("  status: {status}");
-        println!("  last refreshed: {}", human_time(&refreshed));
+        lines.push(format!("{library_name}"));
+        lines.push(format!("  source: {source_url}"));
+        lines.push(format!("  pages: {pages}"));
+        lines.push(format!("  chunks: {chunks}"));
+        lines.push(format!("  bm25 chunks: {bm25_chunks}"));
+        lines.push(format!("  chars: {chars}"));
+        lines.push(format!("  status: {status}"));
+        lines.push(format!("  last refreshed: {}", human_time(&refreshed)));
     }
 
     let mut group_stmt =
@@ -2838,22 +3076,29 @@ fn list_libraries(conn: &Connection) -> Result<(), Box<dyn Error>> {
         group_names.push(row?);
     }
     for group_name in group_names {
+        spinner.set_stage(format!("Reading {}", group_name));
         let members = group_members(conn, &group_name)?;
         let (content_size_chars, pages, chunks, _empty, _min, _max) =
             aggregate_rollups_for_libraries(conn, &members)?;
-        println!("{group_name}");
-        println!("  source: merged group");
-        println!("  pages: {pages}");
-        println!("  chunks: {chunks}");
-        println!("  chars: {content_size_chars}");
-        println!("  status: merged");
-        println!("  last refreshed: n/a");
+        lines.push(format!("{group_name}"));
+        lines.push("  source: merged group".to_string());
+        lines.push(format!("  pages: {pages}"));
+        lines.push(format!("  chunks: {chunks}"));
+        lines.push(format!("  chars: {content_size_chars}"));
+        lines.push("  status: merged".to_string());
+        lines.push("  last refreshed: n/a".to_string());
+    }
+    spinner.finish();
+    for line in lines {
+        println!("{line}");
     }
     Ok(())
 }
 
 fn show_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Error>> {
+    let spinner = ProgressSpinner::new(format!("Loading {}", input_name));
     if let Ok(library_name) = resolve_library_name(conn, input_name) {
+        spinner.set_stage(format!("Reading {}", library_name));
         let (source_url, refreshed): (String, String) = conn.query_row(
             "SELECT source_url, last_refreshed_at FROM libraries WHERE library_name = ?1",
             params![library_name],
@@ -2869,6 +3114,7 @@ fn show_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Error
             max_chunks,
         ) = library_rollups(conn, &library_name)?;
         let parent_count = parent_count_for_library(conn, &library_name)?;
+        let bm25_chunks = bm25_count_for_library(conn, &library_name)?;
         let avg_chunks = if pages > 0 {
             chunks as f64 / pages as f64
         } else {
@@ -2879,38 +3125,6 @@ fn show_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Error
         let last_indexed_at = latest_success_time_by_kind(conn, &library_name, "index")?;
         let latest_error = latest_failed_message(conn, &library_name)?;
 
-        println!("library_name: {library_name}");
-        println!("source_url: {source_url}");
-        println!("page_count: {pages}");
-        println!("parent_count: {parent_count}");
-        println!("chunk_count: {chunks}");
-        println!("embedded_chunk_count: {embedded_chunks}");
-        println!("avg_chunks_per_page: {:.2}", avg_chunks);
-        println!("min_chunks_per_page: {min_chunks}");
-        println!("max_chunks_per_page: {max_chunks}");
-        println!("pages_with_no_chunks: {empty_pages}");
-        println!("content_size_chars: {content_size_chars}");
-        println!("indexed_model: {:?}", DEFAULT_EMBEDDING_MODEL);
-        println!("embedding_dim: 1024");
-        println!("latest_job_status: {latest_status}");
-        println!(
-            "last_crawled_at: {}",
-            last_crawled_at
-                .as_deref()
-                .map(human_time)
-                .unwrap_or_else(|| "n/a".to_string())
-        );
-        println!(
-            "last_indexed_at: {}",
-            last_indexed_at
-                .as_deref()
-                .map(human_time)
-                .unwrap_or_else(|| "n/a".to_string())
-        );
-        if let Some(err) = latest_error {
-            println!("latest_error: {err}");
-        }
-        println!("last_refreshed_at: {}", human_time(&refreshed));
         let mut alias_stmt = conn.prepare(
             "SELECT alias FROM library_aliases WHERE library_name = ?1 ORDER BY alias ASC",
         )?;
@@ -2920,12 +3134,51 @@ fn show_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Error
         for row in alias_rows {
             aliases.push(row?);
         }
+        let mut lines = Vec::new();
+        lines.push(format!("library_name: {library_name}"));
+        lines.push(format!("source_url: {source_url}"));
+        lines.push(format!("page_count: {pages}"));
+        lines.push(format!("parent_count: {parent_count}"));
+        lines.push(format!("chunk_count: {chunks}"));
+        lines.push(format!("embedded_chunk_count: {embedded_chunks}"));
+        lines.push(format!("bm25_indexed_chunk_count: {bm25_chunks}"));
+        lines.push(format!("avg_chunks_per_page: {:.2}", avg_chunks));
+        lines.push(format!("min_chunks_per_page: {min_chunks}"));
+        lines.push(format!("max_chunks_per_page: {max_chunks}"));
+        lines.push(format!("pages_with_no_chunks: {empty_pages}"));
+        lines.push(format!("content_size_chars: {content_size_chars}"));
+        lines.push(format!("indexed_model: {:?}", DEFAULT_EMBEDDING_MODEL));
+        lines.push("embedding_dim: 1024".to_string());
+        lines.push(format!("latest_job_status: {latest_status}"));
+        lines.push(format!(
+            "last_crawled_at: {}",
+            last_crawled_at
+                .as_deref()
+                .map(human_time)
+                .unwrap_or_else(|| "n/a".to_string())
+        ));
+        lines.push(format!(
+            "last_indexed_at: {}",
+            last_indexed_at
+                .as_deref()
+                .map(human_time)
+                .unwrap_or_else(|| "n/a".to_string())
+        ));
+        if let Some(err) = latest_error {
+            lines.push(format!("latest_error: {err}"));
+        }
+        lines.push(format!("last_refreshed_at: {}", human_time(&refreshed)));
         if !aliases.is_empty() {
-            println!("aliases: {}", aliases.join(", "));
+            lines.push(format!("aliases: {}", aliases.join(", ")));
+        }
+        spinner.finish();
+        for line in lines {
+            println!("{line}");
         }
         return Ok(());
     }
 
+    spinner.set_stage(format!("Reading {}", input_name));
     let members = group_members(conn, input_name)?;
     if members.is_empty() {
         return Err(format!("Unknown library or merged group '{}'.", input_name).into());
@@ -2934,8 +3187,10 @@ fn show_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Error
         aggregate_rollups_for_libraries(conn, &members)?;
     let mut parent_count = 0i64;
     let mut embedded_chunks = 0i64;
+    let mut bm25_chunks = 0i64;
     for member in &members {
         parent_count += parent_count_for_library(conn, member)?;
+        bm25_chunks += bm25_count_for_library(conn, member)?;
         let (_, _, _, embedded, _, _, _) = library_rollups(conn, member)?;
         embedded_chunks += embedded;
     }
@@ -2944,24 +3199,31 @@ fn show_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Error
     } else {
         0.0
     };
-    println!("library_name: {input_name}");
-    println!("source_url: merged group");
-    println!("page_count: {pages}");
-    println!("parent_count: {parent_count}");
-    println!("chunk_count: {chunks}");
-    println!("embedded_chunk_count: {embedded_chunks}");
-    println!("avg_chunks_per_page: {:.2}", avg_chunks);
-    println!("min_chunks_per_page: {min_chunks}");
-    println!("max_chunks_per_page: {max_chunks}");
-    println!("pages_with_no_chunks: {empty_pages}");
-    println!("content_size_chars: {content_size_chars}");
-    println!("indexed_model: {:?}", DEFAULT_EMBEDDING_MODEL);
-    println!("embedding_dim: 1024");
-    println!("latest_job_status: merged");
-    println!("last_crawled_at: n/a");
-    println!("last_indexed_at: n/a");
-    println!("last_refreshed_at: n/a");
-    println!("members: {}", members.join(", "));
+    let lines = vec![
+        format!("library_name: {input_name}"),
+        "source_url: merged group".to_string(),
+        format!("page_count: {pages}"),
+        format!("parent_count: {parent_count}"),
+        format!("chunk_count: {chunks}"),
+        format!("embedded_chunk_count: {embedded_chunks}"),
+        format!("bm25_indexed_chunk_count: {bm25_chunks}"),
+        format!("avg_chunks_per_page: {:.2}", avg_chunks),
+        format!("min_chunks_per_page: {min_chunks}"),
+        format!("max_chunks_per_page: {max_chunks}"),
+        format!("pages_with_no_chunks: {empty_pages}"),
+        format!("content_size_chars: {content_size_chars}"),
+        format!("indexed_model: {:?}", DEFAULT_EMBEDDING_MODEL),
+        "embedding_dim: 1024".to_string(),
+        "latest_job_status: merged".to_string(),
+        "last_crawled_at: n/a".to_string(),
+        "last_indexed_at: n/a".to_string(),
+        "last_refreshed_at: n/a".to_string(),
+        format!("members: {}", members.join(", ")),
+    ];
+    spinner.finish();
+    for line in lines {
+        println!("{line}");
+    }
     Ok(())
 }
 
@@ -2985,6 +3247,10 @@ fn remove_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Err
     )?;
     conn.execute(
         "DELETE FROM chunks WHERE library_name = ?1",
+        params![library_name],
+    )?;
+    conn.execute(
+        "DELETE FROM chunks_fts WHERE library_name = ?1",
         params![library_name],
     )?;
     conn.execute(
