@@ -820,28 +820,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "deep-spider"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "fastembed",
- "hashbrown 0.16.1",
- "html2md",
- "rayon",
- "regex",
- "rusqlite",
- "scraper",
- "sentencex",
- "serde",
- "serde_json",
- "spider",
- "termios",
- "tokio",
- "toml 0.8.23",
- "url",
-]
-
-[[package]]
 name = "der"
 version = "0.7.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2824,6 +2802,28 @@ name = "pkg-config"
 version = "0.3.32"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7edddbd0b52d732b21ad9a5fab5c704c14cd949e5e9a1ec5929a24fded1b904c"
+
+[[package]]
+name = "plshelp"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "fastembed",
+ "hashbrown 0.16.1",
+ "html2md",
+ "rayon",
+ "regex",
+ "rusqlite",
+ "scraper",
+ "sentencex",
+ "serde",
+ "serde_json",
+ "spider",
+ "termios",
+ "tokio",
+ "toml 0.8.23",
+ "url",
+]
 
 [[package]]
 name = "png"
