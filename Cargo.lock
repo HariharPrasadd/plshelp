@@ -832,6 +832,7 @@ dependencies = [
  "rusqlite",
  "scraper",
  "sentencex",
+ "serde_json",
  "spider",
  "termios",
  "url",

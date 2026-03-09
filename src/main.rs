@@ -4,6 +4,7 @@ use rayon::prelude::*;
 use regex::Regex;
 use rusqlite::{Connection, OptionalExtension, params};
 use scraper::{Html, Selector};
+use serde_json::{Value, json};
 use spider::compact_str::CompactString;
 use spider::configuration::Configuration;
 use spider::tokio;
@@ -20,7 +21,7 @@ use std::sync::LazyLock;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use std::thread;
-use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use termios::{ECHO, TCSANOW, Termios, tcsetattr};
 use url::Url;
 
@@ -31,12 +32,8 @@ const DEFAULT_EMBEDDING_MODEL: EmbeddingModel = EmbeddingModel::AllMiniLML6V2Q;
 const MIN_CHILD_LENGTH: usize = 700;
 const MAX_CHILD_LENGTH: usize = 1400;
 const CHILD_SPLIT_WINDOW: usize = 50;
-const EMBED_BATCH_SIZE_OVERRIDE: Option<usize> = Some(128);
-const EMBED_PROBE_SAMPLE_SIZE: usize = 64;
-const EMBED_PROBE_BATCH_SIZE: usize = 64;
-const EMBED_TARGET_BATCH_SECONDS: f32 = 2.0;
-const EMBED_BATCH_SIZE_MIN: usize = 32;
-const EMBED_BATCH_SIZE_MAX: usize = 1024;
+const DEFAULT_EMBED_BATCH_SIZE: usize = 128;
+const SQLITE_BUSY_TIMEOUT_MS: u64 = 5_000;
 
 static CONTENT_SELECTORS: LazyLock<Vec<Selector>> = LazyLock::new(|| {
     [
@@ -228,6 +225,16 @@ impl SearchMode {
     }
 }
 
+impl SearchMode {
+    fn as_str(self) -> &'static str {
+        match self {
+            Self::Hybrid => "hybrid",
+            Self::Vector => "vector",
+            Self::Keyword => "keyword",
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 struct ParentRecord {
     id: i64,
@@ -261,17 +268,30 @@ struct ScoredChunk {
 
 #[tokio::main]
 async fn main() {
-    if let Err(err) = run().await {
-        eprintln!("Error: {err}");
+    let args: Vec<String> = env::args().skip(1).collect();
+    let output_json = args.iter().any(|arg| arg == "--json");
+    if let Err(err) = run(args).await {
+        if output_json {
+            let payload = json!({
+                "status": "error",
+                "error": format!("{err}"),
+            });
+            eprintln!(
+                "{}",
+                serde_json::to_string_pretty(&payload)
+                    .unwrap_or_else(|_| format!(r#"{{"status":"error","error":"{}"}}"#, err))
+            );
+        } else {
+            eprintln!("Error: {err}");
+        }
         std::process::exit(1);
     }
 }
 
-async fn run() -> Result<(), Box<dyn Error>> {
+async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
     let _echo_guard = TerminalEchoGuard::new();
     configure_onnx_runtime_env();
 
-    let args: Vec<String> = env::args().skip(1).collect();
     if args.is_empty() {
         print_help();
         return Ok(());
@@ -288,9 +308,18 @@ async fn run() -> Result<(), Box<dyn Error>> {
                         .into(),
                 );
             }
-            let include_artifacts = parse_include_artifacts_flag(&args[3..], &args[1]);
+            let (output_json, flags) = extract_json_flag(&args[3..]);
+            let include_artifacts = parse_include_artifacts_flag(&flags, &args[1]);
             add_library(&conn, &args[1], &args[2], include_artifacts).await?;
-            println!("Done.");
+            print_command_result(
+                "add",
+                output_json,
+                json!({
+                    "library_name": args[1],
+                    "source_url": args[2],
+                    "artifacts_path": flags.iter().find_map(|f| f.strip_prefix("--include-artifacts=").map(|s| s.to_string())),
+                }),
+            )?;
         }
         "crawl" => {
             if args.len() < 3 {
@@ -299,42 +328,84 @@ async fn run() -> Result<(), Box<dyn Error>> {
                         .into(),
                 );
             }
-            let include_artifacts = parse_include_artifacts_flag(&args[3..], &args[1]);
+            let (output_json, flags) = extract_json_flag(&args[3..]);
+            let include_artifacts = parse_include_artifacts_flag(&flags, &args[1]);
             crawl_library(&conn, &args[1], &args[2], "crawl", include_artifacts).await?;
-            println!("Done.");
+            print_command_result(
+                "crawl",
+                output_json,
+                json!({
+                    "library_name": args[1],
+                    "source_url": args[2],
+                }),
+            )?;
         }
         "index" => {
             if args.len() < 2 {
                 return Err("Usage: plshelp index <library_name> [--file /path/to/file]".into());
             }
-            let file = parse_index_file_flag(&args[2..]);
+            let (output_json, flags) = extract_json_flag(&args[2..]);
+            let file = parse_index_file_flag(&flags);
             index_library(&conn, &args[1], file.as_deref())?;
-            println!("Done.");
+            print_command_result(
+                "index",
+                output_json,
+                json!({
+                    "input_name": args[1],
+                    "file": file,
+                }),
+            )?;
         }
         "chunk" => {
             if args.len() < 2 {
                 return Err("Usage: plshelp chunk <library_name> [--file /path/to/file]".into());
             }
-            let file = parse_index_file_flag(&args[2..]);
+            let (output_json, flags) = extract_json_flag(&args[2..]);
+            let file = parse_index_file_flag(&flags);
             chunk_targets(&conn, &args[1], file.as_deref(), "chunk")?;
-            println!("Done.");
+            print_command_result(
+                "chunk",
+                output_json,
+                json!({
+                    "input_name": args[1],
+                    "file": file,
+                }),
+            )?;
         }
         "embed" => {
             if args.len() < 2 {
                 return Err("Usage: plshelp embed <library_name>".into());
             }
+            let (output_json, flags) = extract_json_flag(&args[2..]);
+            if !flags.is_empty() {
+                return Err("Usage: plshelp embed <library_name> [--json]".into());
+            }
             embed_library(&conn, &args[1], "embed")?;
-            println!("Done.");
+            print_command_result(
+                "embed",
+                output_json,
+                json!({
+                    "input_name": args[1],
+                }),
+            )?;
         }
         "refresh" => {
-            refresh_stats(&conn, &args[1..])?;
-            println!("Done.");
+            let (output_json, flags) = extract_json_flag(&args[1..]);
+            refresh_stats(&conn, &flags)?;
+            print_command_result(
+                "refresh",
+                output_json,
+                json!({
+                    "targets": flags,
+                }),
+            )?;
         }
         "merge" => {
             if args.len() < 4 {
                 return Err("Usage: plshelp merge <new_library_name> <library1> <library2> [library3 ...] [--replace] [--include-artifacts[=/path]]".into());
             }
-            let (members, replace, include_artifacts) = parse_merge_args(&args[2..], &args[1])?;
+            let (output_json, flags) = extract_json_flag(&args[2..]);
+            let (members, replace, include_artifacts) = parse_merge_args(&flags, &args[1])?;
             merge_libraries(
                 &conn,
                 &args[1],
@@ -342,19 +413,36 @@ async fn run() -> Result<(), Box<dyn Error>> {
                 replace,
                 include_artifacts.as_deref(),
             )?;
-            println!("Done.");
+            print_command_result(
+                "merge",
+                output_json,
+                json!({
+                    "group_name": args[1],
+                    "members": members,
+                    "replace": replace,
+                    "artifacts_path": include_artifacts,
+                }),
+            )?;
         }
         "export" => {
             if args.len() < 2 {
                 return Err("Usage: plshelp export <library_name> [path]".into());
             }
-            let output_dir = if args.len() >= 3 {
-                Some(PathBuf::from(args[2].clone()))
+            let (output_json, flags) = extract_json_flag(&args[2..]);
+            let output_dir = if !flags.is_empty() {
+                Some(PathBuf::from(flags[0].clone()))
             } else {
                 None
             };
             export_library(&conn, &args[1], output_dir.as_deref())?;
-            println!("Done.");
+            print_command_result(
+                "export",
+                output_json,
+                json!({
+                    "input_name": args[1],
+                    "output_dir": output_dir,
+                }),
+            )?;
         }
         "query" => {
             if args.len() < 3 {
@@ -367,8 +455,18 @@ async fn run() -> Result<(), Box<dyn Error>> {
             if question.is_empty() {
                 return Err("Usage: plshelp query <library_name> <question> [--mode ...]".into());
             }
+            let (output_json, flags) = extract_json_flag(&flags);
             let (mode, top_k, context) = parse_query_flags(&flags)?;
-            query_library(&conn, &args[1], &question, mode, top_k, context, false)?;
+            query_library(
+                &conn,
+                &args[1],
+                &question,
+                mode,
+                top_k,
+                context,
+                false,
+                output_json,
+            )?;
         }
         "trace" => {
             if args.len() < 3 {
@@ -381,8 +479,18 @@ async fn run() -> Result<(), Box<dyn Error>> {
             if question.is_empty() {
                 return Err("Usage: plshelp trace <library_name> <question> [--mode ...]".into());
             }
+            let (output_json, flags) = extract_json_flag(&flags);
             let (mode, top_k, context) = parse_query_flags(&flags)?;
-            query_library(&conn, &args[1], &question, mode, top_k, context, true)?;
+            query_library(
+                &conn,
+                &args[1],
+                &question,
+                mode,
+                top_k,
+                context,
+                true,
+                output_json,
+            )?;
         }
         "ask" => {
             if args.len() < 2 {
@@ -395,35 +503,68 @@ async fn run() -> Result<(), Box<dyn Error>> {
             if question.is_empty() {
                 return Err("Usage: plshelp ask <question> [--libraries ...] [--mode ...]".into());
             }
-            ask_libraries(&conn, &question, &flags)?;
+            let (output_json, flags) = extract_json_flag(&flags);
+            ask_libraries(&conn, &question, &flags, output_json)?;
         }
         "alias" => {
             if args.len() < 3 {
                 return Err("Usage: plshelp alias <library_name> <alias>".into());
             }
+            let (output_json, flags) = extract_json_flag(&args[3..]);
+            if !flags.is_empty() {
+                return Err("Usage: plshelp alias <library_name> <alias> [--json]".into());
+            }
             add_alias(&conn, &args[1], &args[2])?;
-            println!("Done.");
+            print_command_result(
+                "alias",
+                output_json,
+                json!({
+                    "input_name": args[1],
+                    "alias": args[2],
+                }),
+            )?;
         }
-        "list" => list_libraries(&conn)?,
+        "list" => {
+            let (output_json, _flags) = extract_json_flag(&args[1..]);
+            list_libraries(&conn, output_json)?;
+        }
         "show" => {
             if args.len() < 2 {
                 return Err("Usage: plshelp show <library_name>".into());
             }
-            show_library(&conn, &args[1])?;
+            let (output_json, flags) = extract_json_flag(&args[2..]);
+            if !flags.is_empty() {
+                return Err("Usage: plshelp show <library_name> [--json]".into());
+            }
+            show_library(&conn, &args[1], output_json)?;
         }
         "remove" => {
             if args.len() < 2 {
                 return Err("Usage: plshelp remove <library_name>".into());
             }
+            let (output_json, flags) = extract_json_flag(&args[2..]);
+            if !flags.is_empty() {
+                return Err("Usage: plshelp remove <library_name> [--json]".into());
+            }
             remove_library(&conn, &args[1])?;
-            println!("Done.");
+            print_command_result(
+                "remove",
+                output_json,
+                json!({
+                    "input_name": args[1],
+                }),
+            )?;
         }
         "open" => {
             if args.len() < 2 {
                 return Err("Usage: plshelp open <chunk_id>".into());
             }
             let chunk_id: i64 = args[1].parse()?;
-            open_chunk(&conn, chunk_id)?;
+            let (output_json, flags) = extract_json_flag(&args[2..]);
+            if !flags.is_empty() {
+                return Err("Usage: plshelp open <chunk_id> [--json]".into());
+            }
+            open_chunk(&conn, chunk_id, output_json)?;
         }
         "help" | "--help" | "-h" => print_help(),
         _ => {
@@ -434,6 +575,7 @@ async fn run() -> Result<(), Box<dyn Error>> {
             if question.is_empty() {
                 return Err("Usage: plshelp <library_name> <question> [--mode ...]".into());
             }
+            let (output_json, flags) = extract_json_flag(&flags);
             let (mode, top_k, context) = parse_query_flags(&flags)?;
             query_library(
                 &conn,
@@ -443,6 +585,7 @@ async fn run() -> Result<(), Box<dyn Error>> {
                 top_k,
                 context,
                 false,
+                output_json,
             )?;
         }
     }
@@ -452,28 +595,32 @@ async fn run() -> Result<(), Box<dyn Error>> {
 
 fn print_help() {
     println!("plshelp <command>");
-    println!("  add <library_name> <source_url> [--include-artifacts[=/path]]");
-    println!("  crawl <library_name> <source_url> [--include-artifacts[=/path]]");
-    println!("  index <library_name> [--file /path/to/file]");
-    println!("  chunk <library_name> [--file /path/to/file]");
-    println!("  embed <library_name>");
-    println!("  refresh [library_name ...]   # recompute/backfill stats; no crawl");
+    println!("  add <library_name> <source_url> [--include-artifacts[=/path]] [--json]");
+    println!("  crawl <library_name> <source_url> [--include-artifacts[=/path]] [--json]");
+    println!("  index <library_name> [--file /path/to/file] [--json]");
+    println!("  chunk <library_name> [--file /path/to/file] [--json]");
+    println!("  embed <library_name> [--json]");
+    println!("  refresh [library_name ...] [--json]   # recompute/backfill stats; no crawl");
     println!(
-        "  merge <new_library_name> <library1> <library2> [library3 ...] [--replace] [--include-artifacts[=/path]]"
+        "  merge <new_library_name> <library1> <library2> [library3 ...] [--replace] [--include-artifacts[=/path]] [--json]"
     );
-    println!("  export <library_name> [path]");
+    println!("  export <library_name> [path] [--json]");
     println!(
-        "  query <library_name> \"<question>\" [--mode hybrid|vector|keyword] [--top-k N] [--context N]"
+        "  query <library_name> \"<question>\" [--mode hybrid|vector|keyword] [--top-k N] [--context N] [--json]"
     );
     println!("  <library_name> \"<question>\"   # query alias");
-    println!("  ask \"<question>\" [--libraries a,b,c] [--mode ...] [--top-k N] [--context N]");
+    println!(
+        "  ask \"<question>\" [--libraries a,b,c] [--mode ...] [--top-k N] [--context N] [--json]"
+    );
     println!("  note: quote questions in the shell, especially if they contain ? or *");
     println!("  alias <library_name> <alias>");
-    println!("  list");
-    println!("  show <library_name>");
-    println!("  remove <library_name>");
-    println!("  open <chunk_id>");
-    println!("  trace <library_name> \"<question>\" [--mode ...] [--top-k N] [--context N]");
+    println!("  list [--json]");
+    println!("  show <library_name> [--json]");
+    println!("  remove <library_name> [--json]");
+    println!("  open <chunk_id> [--json]");
+    println!(
+        "  trace <library_name> \"<question>\" [--mode ...] [--top-k N] [--context N] [--json]"
+    );
 }
 
 fn configure_onnx_runtime_env() {
@@ -518,8 +665,15 @@ fn human_time(epoch: &str) -> String {
     epoch.to_string()
 }
 
+fn configure_sqlite_connection(conn: &Connection) -> Result<(), Box<dyn Error>> {
+    conn.pragma_update(None, "journal_mode", "WAL")?;
+    conn.busy_timeout(Duration::from_millis(SQLITE_BUSY_TIMEOUT_MS))?;
+    Ok(())
+}
+
 fn init_db(db_path: &Path) -> Result<Connection, Box<dyn Error>> {
     let conn = Connection::open(db_path)?;
+    configure_sqlite_connection(&conn)?;
     conn.execute_batch(
         "
         CREATE TABLE IF NOT EXISTS libraries (
@@ -765,6 +919,19 @@ fn parse_query_flags(flags: &[String]) -> Result<(SearchMode, usize, usize), Box
     Ok((mode, top_k, context))
 }
 
+fn extract_json_flag(flags: &[String]) -> (bool, Vec<String>) {
+    let mut output_json = false;
+    let mut out = Vec::with_capacity(flags.len());
+    for flag in flags {
+        if flag == "--json" {
+            output_json = true;
+        } else {
+            out.push(flag.clone());
+        }
+    }
+    (output_json, out)
+}
+
 fn split_query_and_flags(args: &[String]) -> (String, Vec<String>) {
     let first_flag = args
         .iter()
@@ -773,6 +940,79 @@ fn split_query_and_flags(args: &[String]) -> (String, Vec<String>) {
     let query = args[..first_flag].join(" ").trim().to_string();
     let flags = args[first_flag..].to_vec();
     (query, flags)
+}
+
+fn print_json(value: &Value) -> Result<(), Box<dyn Error>> {
+    println!("{}", serde_json::to_string_pretty(value)?);
+    Ok(())
+}
+
+fn print_command_result(
+    command: &str,
+    output_json: bool,
+    payload: Value,
+) -> Result<(), Box<dyn Error>> {
+    if output_json {
+        print_json(&json!({
+            "command": command,
+            "status": "success",
+            "result": payload,
+        }))
+    } else {
+        println!("Done.");
+        Ok(())
+    }
+}
+
+fn context_to_json(context: &[ParentRecord], active_parent_id: i64) -> Vec<Value> {
+    context
+        .iter()
+        .filter(|parent| parent.id != active_parent_id)
+        .map(|parent| {
+            json!({
+                "parent_id": parent.id,
+                "library_name": parent.library_name,
+                "source_url": parent.source_url,
+                "source_page_order": parent.source_page_order,
+                "parent_index_in_page": parent.parent_index_in_page,
+                "global_parent_index": parent.global_parent_index,
+                "content": parent.content,
+            })
+        })
+        .collect()
+}
+
+fn query_hit_to_json(
+    rank: usize,
+    hit: &ScoredChunk,
+    parent: &ParentRecord,
+    context: &[ParentRecord],
+) -> Value {
+    json!({
+        "rank": rank,
+        "chunk_id": hit.chunk.id,
+        "parent_id": hit.chunk.parent_id,
+        "library_name": hit.chunk.library_name,
+        "source_url": parent.source_url,
+        "content": parent.content,
+        "scores": {
+            "final": hit.final_score,
+            "vector": hit.vector_score,
+            "bm25": hit.bm25_score,
+        },
+        "child_location": {
+            "source_page_order": hit.chunk.source_page_order,
+            "parent_index_in_page": hit.chunk.parent_index_in_page,
+            "child_index_in_parent": hit.chunk.child_index_in_parent,
+            "global_chunk_index": hit.chunk.global_chunk_index,
+        },
+        "parent_location": {
+            "source_page_order": parent.source_page_order,
+            "parent_index_in_page": parent.parent_index_in_page,
+            "global_parent_index": parent.global_parent_index,
+        },
+        "context": context_to_json(context, parent.id),
+    })
 }
 
 fn ask_flags(
@@ -2312,9 +2552,7 @@ fn embed_library(
         let mut model = TextEmbedding::try_new(
             InitOptions::new(DEFAULT_EMBEDDING_MODEL).with_show_download_progress(true),
         )?;
-        let batch_size = EMBED_BATCH_SIZE_OVERRIDE
-            .map(|size| size.max(1))
-            .unwrap_or_else(|| calibrate_batch_size(&mut model, &pending));
+        let batch_size = DEFAULT_EMBED_BATCH_SIZE;
         let tx = conn.unchecked_transaction()?;
         let total_batches = pending.len().div_ceil(batch_size);
         for (batch_idx, batch) in pending.chunks(batch_size).enumerate() {
@@ -2357,35 +2595,6 @@ fn embed_library(
             Err(err)
         }
     }
-}
-
-fn calibrate_batch_size(model: &mut TextEmbedding, pending: &[(i64, String)]) -> usize {
-    if pending.is_empty() {
-        return EMBED_BATCH_SIZE_MIN;
-    }
-
-    let probe_size = pending.len().min(EMBED_PROBE_SAMPLE_SIZE);
-    let probe: Vec<String> = pending
-        .iter()
-        .take(probe_size)
-        .map(|(_, content)| format!("passage: {}", content))
-        .collect();
-
-    let probe_batch_size = probe.len().min(EMBED_PROBE_BATCH_SIZE).max(1);
-    let start = Instant::now();
-    let _ = model.embed(&probe, Some(probe_batch_size));
-    let elapsed = start.elapsed().as_secs_f32().max(0.001);
-    let chunks_per_second = probe_size as f32 / elapsed;
-    let target_batch_size = (chunks_per_second * EMBED_TARGET_BATCH_SECONDS) as usize;
-    let clamped = target_batch_size.clamp(EMBED_BATCH_SIZE_MIN, EMBED_BATCH_SIZE_MAX);
-    prev_power_of_two(clamped).max(EMBED_BATCH_SIZE_MIN)
-}
-
-fn prev_power_of_two(n: usize) -> usize {
-    if n <= 1 {
-        return 1;
-    }
-    1usize << (usize::BITS - n.leading_zeros() - 1) as usize
 }
 
 fn index_library(
@@ -2696,6 +2905,7 @@ fn query_library(
     top_k: usize,
     context: usize,
     trace: bool,
+    output_json: bool,
 ) -> Result<(), Box<dyn Error>> {
     let spinner = ProgressSpinner::new(format!("Preparing query for {}", input_name));
     let target_libraries = resolve_target_libraries(conn, input_name)?;
@@ -2776,12 +2986,42 @@ fn query_library(
     spinner.finish();
 
     if top_hits.is_empty() {
-        println!("No results for '{}'.", question);
+        if output_json {
+            print_json(&json!({
+                "command": if trace { "trace" } else { "query" },
+                "input_name": input_name,
+                "question": question,
+                "mode": mode.as_str(),
+                "effective_mode": effective_mode.as_str(),
+                "top_k": top_k,
+                "context_window": context,
+                "libraries": target_libraries,
+                "results": [],
+            }))?;
+        } else {
+            println!("No results for '{}'.", question);
+        }
         return Ok(());
     }
 
+    let mut json_results = Vec::new();
     for (rank, hit) in top_hits.iter().enumerate() {
         let parent = load_parent_by_id(conn, hit.chunk.parent_id)?;
+        let around = if context > 0 {
+            parent_neighbors(
+                conn,
+                &parent.library_name,
+                &parent.source_url,
+                parent.parent_index_in_page,
+                context,
+            )?
+        } else {
+            Vec::new()
+        };
+        if output_json {
+            json_results.push(query_hit_to_json(rank + 1, hit, &parent, &around));
+            continue;
+        }
         println!("{}. [{}]", rank + 1, hit.chunk.id);
         println!("source: {}", parent.source_url);
         if target_libraries.len() > 1 {
@@ -2807,13 +3047,6 @@ fn query_library(
         }
         println!("{}", parent.content);
         if context > 0 {
-            let around = parent_neighbors(
-                conn,
-                &parent.library_name,
-                &parent.source_url,
-                parent.parent_index_in_page,
-                context,
-            )?;
             if !around.is_empty() {
                 println!("--- context ---");
                 for c in around {
@@ -2825,6 +3058,19 @@ fn query_library(
         }
         println!();
     }
+    if output_json {
+        print_json(&json!({
+            "command": if trace { "trace" } else { "query" },
+            "input_name": input_name,
+            "question": question,
+            "mode": mode.as_str(),
+            "effective_mode": effective_mode.as_str(),
+            "top_k": top_k,
+            "context_window": context,
+            "libraries": target_libraries,
+            "results": json_results,
+        }))?;
+    }
     Ok(())
 }
 
@@ -2832,6 +3078,7 @@ fn ask_libraries(
     conn: &Connection,
     question: &str,
     flags: &[String],
+    output_json: bool,
 ) -> Result<(), Box<dyn Error>> {
     let spinner = ProgressSpinner::new("Preparing multi-library query");
     let (mode, top_k, context, filter) = ask_flags(flags)?;
@@ -2918,23 +3165,44 @@ fn ask_libraries(
     spinner.finish();
 
     if top_hits.is_empty() {
-        println!("No results for '{}'.", question);
+        if output_json {
+            print_json(&json!({
+                "command": "ask",
+                "question": question,
+                "mode": mode.as_str(),
+                "top_k": top_k,
+                "context_window": context,
+                "libraries": [],
+                "results": [],
+            }))?;
+        } else {
+            println!("No results for '{}'.", question);
+        }
         return Ok(());
     }
 
+    let mut json_results = Vec::new();
     for (rank, hit) in top_hits.iter().enumerate() {
         let parent = load_parent_by_id(conn, hit.chunk.parent_id)?;
-        println!("{}. [{}] ({})", rank + 1, hit.chunk.id, hit.chunk.library_name);
-        println!("source: {}", parent.source_url);
-        println!("{}", parent.content);
-        if context > 0 {
-            let around = parent_neighbors(
+        let around = if context > 0 {
+            parent_neighbors(
                 conn,
                 &parent.library_name,
                 &parent.source_url,
                 parent.parent_index_in_page,
                 context,
-            )?;
+            )?
+        } else {
+            Vec::new()
+        };
+        if output_json {
+            json_results.push(query_hit_to_json(rank + 1, hit, &parent, &around));
+            continue;
+        }
+        println!("{}. [{}] ({})", rank + 1, hit.chunk.id, hit.chunk.library_name);
+        println!("source: {}", parent.source_url);
+        println!("{}", parent.content);
+        if context > 0 {
             if !around.is_empty() {
                 println!("--- context ---");
                 for c in around {
@@ -2945,6 +3213,16 @@ fn ask_libraries(
             }
         }
         println!();
+    }
+    if output_json {
+        print_json(&json!({
+            "command": "ask",
+            "question": question,
+            "mode": mode.as_str(),
+            "top_k": top_k,
+            "context_window": context,
+            "results": json_results,
+        }))?;
     }
     Ok(())
 }
@@ -3097,7 +3375,7 @@ fn aggregate_rollups_for_libraries(
     ))
 }
 
-fn list_libraries(conn: &Connection) -> Result<(), Box<dyn Error>> {
+fn list_libraries(conn: &Connection, output_json: bool) -> Result<(), Box<dyn Error>> {
     let spinner = ProgressSpinner::new("Loading libraries");
     let mut stmt = conn.prepare(
         "SELECT library_name, source_url, last_refreshed_at FROM libraries ORDER BY library_name ASC",
@@ -3115,12 +3393,24 @@ fn list_libraries(conn: &Connection) -> Result<(), Box<dyn Error>> {
     }
 
     let mut lines = Vec::new();
+    let mut json_libraries = Vec::new();
     for (library_name, source_url, refreshed) in libraries {
         spinner.set_stage(format!("Reading {}", library_name));
         let (chars, pages, chunks, _embedded, _empty, _min, _max) =
             library_rollups(conn, &library_name)?;
         let bm25_chunks = bm25_count_for_library(conn, &library_name)?;
         let status = library_status(conn, &library_name)?;
+        json_libraries.push(json!({
+            "kind": "library",
+            "library_name": library_name,
+            "source_url": source_url,
+            "page_count": pages,
+            "chunk_count": chunks,
+            "bm25_indexed_chunk_count": bm25_chunks,
+            "content_size_chars": chars,
+            "status": status,
+            "last_refreshed_at": refreshed,
+        }));
         lines.push(format!("{library_name}"));
         lines.push(format!("  source: {source_url}"));
         lines.push(format!("  pages: {pages}"));
@@ -3138,11 +3428,23 @@ fn list_libraries(conn: &Connection) -> Result<(), Box<dyn Error>> {
     for row in group_rows {
         group_names.push(row?);
     }
+    let mut json_groups = Vec::new();
     for group_name in group_names {
         spinner.set_stage(format!("Reading {}", group_name));
         let members = group_members(conn, &group_name)?;
         let (content_size_chars, pages, chunks, _empty, _min, _max) =
             aggregate_rollups_for_libraries(conn, &members)?;
+        json_groups.push(json!({
+            "kind": "group",
+            "library_name": group_name,
+            "source_url": "merged group",
+            "page_count": pages,
+            "chunk_count": chunks,
+            "content_size_chars": content_size_chars,
+            "status": "merged",
+            "last_refreshed_at": Value::Null,
+            "members": members,
+        }));
         lines.push(format!("{group_name}"));
         lines.push("  source: merged group".to_string());
         lines.push(format!("  pages: {pages}"));
@@ -3152,13 +3454,21 @@ fn list_libraries(conn: &Connection) -> Result<(), Box<dyn Error>> {
         lines.push("  last refreshed: n/a".to_string());
     }
     spinner.finish();
+    if output_json {
+        let mut entries = json_libraries;
+        entries.extend(json_groups);
+        return print_json(&json!({
+            "command": "list",
+            "libraries": entries,
+        }));
+    }
     for line in lines {
         println!("{line}");
     }
     Ok(())
 }
 
-fn show_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Error>> {
+fn show_library(conn: &Connection, input_name: &str, output_json: bool) -> Result<(), Box<dyn Error>> {
     let spinner = ProgressSpinner::new(format!("Loading {}", input_name));
     if let Ok(library_name) = resolve_library_name(conn, input_name) {
         spinner.set_stage(format!("Reading {}", library_name));
@@ -3227,7 +3537,7 @@ fn show_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Error
                 .map(human_time)
                 .unwrap_or_else(|| "n/a".to_string())
         ));
-        if let Some(err) = latest_error {
+        if let Some(ref err) = latest_error {
             lines.push(format!("latest_error: {err}"));
         }
         lines.push(format!("last_refreshed_at: {}", human_time(&refreshed)));
@@ -3235,6 +3545,32 @@ fn show_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Error
             lines.push(format!("aliases: {}", aliases.join(", ")));
         }
         spinner.finish();
+        if output_json {
+            return print_json(&json!({
+                "command": "show",
+                "kind": "library",
+                "library_name": library_name,
+                "source_url": source_url,
+                "page_count": pages,
+                "parent_count": parent_count,
+                "chunk_count": chunks,
+                "embedded_chunk_count": embedded_chunks,
+                "bm25_indexed_chunk_count": bm25_chunks,
+                "avg_chunks_per_page": avg_chunks,
+                "min_chunks_per_page": min_chunks,
+                "max_chunks_per_page": max_chunks,
+                "pages_with_no_chunks": empty_pages,
+                "content_size_chars": content_size_chars,
+                "indexed_model": format!("{:?}", DEFAULT_EMBEDDING_MODEL),
+                "embedding_dim": 1024,
+                "latest_job_status": latest_status,
+                "last_crawled_at": last_crawled_at,
+                "last_indexed_at": last_indexed_at,
+                "latest_error": latest_error,
+                "last_refreshed_at": refreshed,
+                "aliases": aliases,
+            }));
+        }
         for line in lines {
             println!("{line}");
         }
@@ -3284,6 +3620,31 @@ fn show_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Error
         format!("members: {}", members.join(", ")),
     ];
     spinner.finish();
+    if output_json {
+        return print_json(&json!({
+            "command": "show",
+            "kind": "group",
+            "library_name": input_name,
+            "source_url": "merged group",
+            "page_count": pages,
+            "parent_count": parent_count,
+            "chunk_count": chunks,
+            "embedded_chunk_count": embedded_chunks,
+            "bm25_indexed_chunk_count": bm25_chunks,
+            "avg_chunks_per_page": avg_chunks,
+            "min_chunks_per_page": min_chunks,
+            "max_chunks_per_page": max_chunks,
+            "pages_with_no_chunks": empty_pages,
+            "content_size_chars": content_size_chars,
+            "indexed_model": format!("{:?}", DEFAULT_EMBEDDING_MODEL),
+            "embedding_dim": 1024,
+            "latest_job_status": "merged",
+            "last_crawled_at": Value::Null,
+            "last_indexed_at": Value::Null,
+            "last_refreshed_at": Value::Null,
+            "members": members,
+        }));
+    }
     for line in lines {
         println!("{line}");
     }
@@ -3343,7 +3704,7 @@ fn remove_library(conn: &Connection, input_name: &str) -> Result<(), Box<dyn Err
     Ok(())
 }
 
-fn open_chunk(conn: &Connection, chunk_id: i64) -> Result<(), Box<dyn Error>> {
+fn open_chunk(conn: &Connection, chunk_id: i64, output_json: bool) -> Result<(), Box<dyn Error>> {
     let (parent_id, library_name, source_url, content, child_index_in_parent): (
         i64,
         String,
@@ -3356,6 +3717,28 @@ fn open_chunk(conn: &Connection, chunk_id: i64) -> Result<(), Box<dyn Error>> {
         |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?, row.get(4)?)),
     )?;
     let parent = load_parent_by_id(conn, parent_id)?;
+    if output_json {
+        return print_json(&json!({
+            "command": "open",
+            "chunk": {
+                "chunk_id": chunk_id,
+                "parent_id": parent_id,
+                "library_name": library_name,
+                "source_url": source_url,
+                "child_index_in_parent": child_index_in_parent,
+                "content": content,
+            },
+            "parent": {
+                "parent_id": parent.id,
+                "library_name": parent.library_name,
+                "source_url": parent.source_url,
+                "source_page_order": parent.source_page_order,
+                "parent_index_in_page": parent.parent_index_in_page,
+                "global_parent_index": parent.global_parent_index,
+                "content": parent.content,
+            }
+        }));
+    }
     println!("chunk_id: {chunk_id}");
     println!("parent_id: {parent_id}");
     println!("library_name: {library_name}");
