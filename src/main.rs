@@ -27,7 +27,7 @@ use url::Url;
 const BASE_PATH: &str = "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider";
 const DEFAULT_TOP_K: usize = 1;
 const DEFAULT_CONTEXT_WINDOW: usize = 0;
-const DEFAULT_EMBEDDING_MODEL: EmbeddingModel = EmbeddingModel::BGESmallENV15;
+const DEFAULT_EMBEDDING_MODEL: EmbeddingModel = EmbeddingModel::AllMiniLML6V2Q;
 const MIN_CHILD_LENGTH: usize = 700;
 const MAX_CHILD_LENGTH: usize = 1400;
 const CHILD_SPLIT_WINDOW: usize = 50;
@@ -2570,11 +2570,7 @@ fn embed_query(mode: SearchMode, question: &str) -> Result<Option<Vec<f32>>, Box
     let mut model = TextEmbedding::try_new(
         InitOptions::new(DEFAULT_EMBEDDING_MODEL).with_show_download_progress(false),
     )?;
-    let prefixed = format!(
-        "Represent this sentence for searching relevant passages: {}",
-        question
-    );
-    let embedding = model.embed([prefixed], None)?;
+    let embedding = model.embed([question], None)?;
     Ok(embedding.first().cloned())
 }
 
