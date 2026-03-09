@@ -4,6 +4,7 @@ use rayon::prelude::*;
 use regex::Regex;
 use rusqlite::{Connection, OptionalExtension, params};
 use scraper::{Html, Selector};
+use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use spider::compact_str::CompactString;
 use spider::configuration::Configuration;
@@ -19,13 +20,12 @@ use std::os::fd::AsRawFd;
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, Mutex, OnceLock};
 use std::thread;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use termios::{ECHO, TCSANOW, Termios, tcsetattr};
 use url::Url;
 
-const BASE_PATH: &str = "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider";
 const DEFAULT_TOP_K: usize = 1;
 const DEFAULT_CONTEXT_WINDOW: usize = 0;
 const DEFAULT_EMBEDDING_MODEL: EmbeddingModel = EmbeddingModel::AllMiniLML6V2Q;
@@ -34,6 +34,8 @@ const MAX_CHILD_LENGTH: usize = 1400;
 const CHILD_SPLIT_WINDOW: usize = 50;
 const DEFAULT_EMBED_BATCH_SIZE: usize = 128;
 const SQLITE_BUSY_TIMEOUT_MS: u64 = 5_000;
+const APP_NAME: &str = "plshelp";
+const CONFIG_FILE_NAME: &str = "config.toml";
 
 static CONTENT_SELECTORS: LazyLock<Vec<Selector>> = LazyLock::new(|| {
     [
@@ -121,6 +123,30 @@ static MARKDOWN_HINTS: &[&str] = &[
     "latest version",
     "supported.",
 ];
+
+static RUNTIME_PATHS: OnceLock<RuntimePaths> = OnceLock::new();
+
+#[derive(Debug, Clone)]
+struct RuntimePaths {
+    config_dir: PathBuf,
+    config_file: PathBuf,
+    data_dir: PathBuf,
+    db_path: PathBuf,
+    artifacts_dir: PathBuf,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+struct AppConfigFile {
+    #[serde(default)]
+    paths: PathsConfig,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+struct PathsConfig {
+    data_dir: Option<PathBuf>,
+    db_path: Option<PathBuf>,
+    artifacts_dir: Option<PathBuf>,
+}
 
 struct TerminalEchoGuard {
     fd: i32,
@@ -291,13 +317,14 @@ async fn main() {
 async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
     let _echo_guard = TerminalEchoGuard::new();
     configure_onnx_runtime_env();
+    initialize_runtime_paths()?;
 
     if args.is_empty() {
         print_help();
         return Ok(());
     }
 
-    let conn = init_db(&app_root().join("plshelp.db"))?;
+    let conn = init_db(&db_path())?;
     let command = args[0].as_str();
 
     match command {
@@ -636,16 +663,186 @@ fn configure_onnx_runtime_env() {
     }
 }
 
-fn app_root() -> PathBuf {
-    PathBuf::from(BASE_PATH)
+fn runtime_paths() -> &'static RuntimePaths {
+    RUNTIME_PATHS
+        .get()
+        .expect("runtime paths must be initialized before use")
+}
+
+fn db_path() -> PathBuf {
+    runtime_paths().db_path.clone()
 }
 
 fn artifacts_root() -> PathBuf {
-    app_root().join("artifacts")
+    runtime_paths().artifacts_dir.clone()
 }
 
 fn compiled_dir(library_name: &str) -> PathBuf {
     artifacts_root().join(library_name)
+}
+
+fn initialize_runtime_paths() -> Result<&'static RuntimePaths, Box<dyn Error>> {
+    if let Some(paths) = RUNTIME_PATHS.get() {
+        return Ok(paths);
+    }
+
+    let default_config_dir = default_config_dir()?;
+    let default_data_dir = default_data_dir()?;
+    let default_paths = RuntimePaths {
+        config_file: default_config_dir.join(CONFIG_FILE_NAME),
+        config_dir: default_config_dir,
+        data_dir: default_data_dir.clone(),
+        db_path: default_data_dir.join("plshelp.db"),
+        artifacts_dir: default_data_dir.join("artifacts"),
+    };
+
+    fs::create_dir_all(&default_paths.config_dir)?;
+    fs::create_dir_all(&default_paths.data_dir)?;
+    fs::create_dir_all(&default_paths.artifacts_dir)?;
+
+    if !default_paths.config_file.exists() {
+        write_default_config(&default_paths)?;
+    }
+
+    let config = load_config_file(&default_paths.config_file)?;
+    let data_dir = resolve_config_path(
+        config.paths.data_dir.as_ref(),
+        &default_paths.data_dir,
+        &default_paths.config_dir,
+    );
+    let db_path = resolve_config_path(
+        config.paths.db_path.as_ref(),
+        &data_dir.join("plshelp.db"),
+        &default_paths.config_dir,
+    );
+    let artifacts_dir = resolve_config_path(
+        config.paths.artifacts_dir.as_ref(),
+        &data_dir.join("artifacts"),
+        &default_paths.config_dir,
+    );
+
+    fs::create_dir_all(&data_dir)?;
+    if let Some(parent) = db_path.parent() {
+        fs::create_dir_all(parent)?;
+    }
+    fs::create_dir_all(&artifacts_dir)?;
+
+    let runtime = RuntimePaths {
+        config_dir: default_paths.config_dir,
+        config_file: default_paths.config_file,
+        data_dir,
+        db_path,
+        artifacts_dir,
+    };
+    let _ = RUNTIME_PATHS.set(runtime);
+    Ok(runtime_paths())
+}
+
+fn write_default_config(defaults: &RuntimePaths) -> Result<(), Box<dyn Error>> {
+    let config = AppConfigFile {
+        paths: PathsConfig {
+            data_dir: Some(defaults.data_dir.clone()),
+            db_path: Some(defaults.db_path.clone()),
+            artifacts_dir: Some(defaults.artifacts_dir.clone()),
+        },
+    };
+    let serialized = toml::to_string_pretty(&config)?;
+    fs::write(&defaults.config_file, serialized)?;
+    Ok(())
+}
+
+fn load_config_file(path: &Path) -> Result<AppConfigFile, Box<dyn Error>> {
+    let raw = fs::read_to_string(path)?;
+    let config = toml::from_str::<AppConfigFile>(&raw)?;
+    Ok(config)
+}
+
+fn resolve_config_path(value: Option<&PathBuf>, fallback: &Path, base_dir: &Path) -> PathBuf {
+    match value {
+        Some(path) => {
+            let expanded = expand_home(path);
+            if expanded.is_absolute() {
+                expanded
+            } else {
+                base_dir.join(expanded)
+            }
+        }
+        None => fallback.to_path_buf(),
+    }
+}
+
+fn expand_home(path: &Path) -> PathBuf {
+    let raw = path.to_string_lossy();
+    if raw == "~" {
+        return home_dir().unwrap_or_else(|| path.to_path_buf());
+    }
+    if let Some(rest) = raw.strip_prefix("~/") {
+        if let Some(home) = home_dir() {
+            return home.join(rest);
+        }
+    }
+    path.to_path_buf()
+}
+
+fn home_dir() -> Option<PathBuf> {
+    if let Some(home) = env::var_os("HOME") {
+        return Some(PathBuf::from(home));
+    }
+    if let Some(profile) = env::var_os("USERPROFILE") {
+        return Some(PathBuf::from(profile));
+    }
+    let drive = env::var_os("HOMEDRIVE");
+    let path = env::var_os("HOMEPATH");
+    match (drive, path) {
+        (Some(drive), Some(path)) => {
+            let mut buf = PathBuf::from(drive);
+            buf.push(path);
+            Some(buf)
+        }
+        _ => None,
+    }
+}
+
+fn default_config_dir() -> Result<PathBuf, Box<dyn Error>> {
+    if cfg!(target_os = "macos") {
+        let home = home_dir().ok_or("Unable to resolve home directory for config path.")?;
+        return Ok(home
+            .join("Library")
+            .join("Application Support")
+            .join(APP_NAME));
+    }
+    if cfg!(target_os = "windows") {
+        let appdata = env::var_os("APPDATA")
+            .map(PathBuf::from)
+            .ok_or("APPDATA is not set.")?;
+        return Ok(appdata.join(APP_NAME));
+    }
+    if let Some(xdg) = env::var_os("XDG_CONFIG_HOME") {
+        return Ok(PathBuf::from(xdg).join(APP_NAME));
+    }
+    let home = home_dir().ok_or("Unable to resolve home directory for config path.")?;
+    Ok(home.join(".config").join(APP_NAME))
+}
+
+fn default_data_dir() -> Result<PathBuf, Box<dyn Error>> {
+    if cfg!(target_os = "macos") {
+        let home = home_dir().ok_or("Unable to resolve home directory for data path.")?;
+        return Ok(home
+            .join("Library")
+            .join("Application Support")
+            .join(APP_NAME));
+    }
+    if cfg!(target_os = "windows") {
+        let appdata = env::var_os("APPDATA")
+            .map(PathBuf::from)
+            .ok_or("APPDATA is not set.")?;
+        return Ok(appdata.join(APP_NAME));
+    }
+    if let Some(xdg) = env::var_os("XDG_DATA_HOME") {
+        return Ok(PathBuf::from(xdg).join(APP_NAME));
+    }
+    let home = home_dir().ok_or("Unable to resolve home directory for data path.")?;
+    Ok(home.join(".local").join("share").join(APP_NAME))
 }
 
 fn now_epoch() -> String {
