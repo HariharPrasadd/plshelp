@@ -20,17 +20,23 @@ use std::sync::LazyLock;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use std::thread;
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 use termios::{ECHO, TCSANOW, Termios, tcsetattr};
 use url::Url;
 
 const BASE_PATH: &str = "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider";
 const DEFAULT_TOP_K: usize = 1;
 const DEFAULT_CONTEXT_WINDOW: usize = 0;
-const DEFAULT_EMBEDDING_MODEL: EmbeddingModel = EmbeddingModel::AllMiniLML6V2Q;
+const DEFAULT_EMBEDDING_MODEL: EmbeddingModel = EmbeddingModel::BGESmallENV15;
 const MIN_CHILD_LENGTH: usize = 700;
 const MAX_CHILD_LENGTH: usize = 1400;
 const CHILD_SPLIT_WINDOW: usize = 50;
+const EMBED_BATCH_SIZE_OVERRIDE: Option<usize> = Some(128);
+const EMBED_PROBE_SAMPLE_SIZE: usize = 64;
+const EMBED_PROBE_BATCH_SIZE: usize = 64;
+const EMBED_TARGET_BATCH_SECONDS: f32 = 2.0;
+const EMBED_BATCH_SIZE_MIN: usize = 32;
+const EMBED_BATCH_SIZE_MAX: usize = 1024;
 
 static CONTENT_SELECTORS: LazyLock<Vec<Selector>> = LazyLock::new(|| {
     [
@@ -357,8 +363,12 @@ async fn run() -> Result<(), Box<dyn Error>> {
                         .into(),
                 );
             }
-            let (mode, top_k, context) = parse_query_flags(&args[3..])?;
-            query_library(&conn, &args[1], &args[2], mode, top_k, context, false)?;
+            let (question, flags) = split_query_and_flags(&args[2..]);
+            if question.is_empty() {
+                return Err("Usage: plshelp query <library_name> <question> [--mode ...]".into());
+            }
+            let (mode, top_k, context) = parse_query_flags(&flags)?;
+            query_library(&conn, &args[1], &question, mode, top_k, context, false)?;
         }
         "trace" => {
             if args.len() < 3 {
@@ -367,8 +377,12 @@ async fn run() -> Result<(), Box<dyn Error>> {
                         .into(),
                 );
             }
-            let (mode, top_k, context) = parse_query_flags(&args[3..])?;
-            query_library(&conn, &args[1], &args[2], mode, top_k, context, true)?;
+            let (question, flags) = split_query_and_flags(&args[2..]);
+            if question.is_empty() {
+                return Err("Usage: plshelp trace <library_name> <question> [--mode ...]".into());
+            }
+            let (mode, top_k, context) = parse_query_flags(&flags)?;
+            query_library(&conn, &args[1], &question, mode, top_k, context, true)?;
         }
         "ask" => {
             if args.len() < 2 {
@@ -377,7 +391,11 @@ async fn run() -> Result<(), Box<dyn Error>> {
                         .into(),
                 );
             }
-            ask_libraries(&conn, &args[1], &args[2..])?;
+            let (question, flags) = split_query_and_flags(&args[1..]);
+            if question.is_empty() {
+                return Err("Usage: plshelp ask <question> [--libraries ...] [--mode ...]".into());
+            }
+            ask_libraries(&conn, &question, &flags)?;
         }
         "alias" => {
             if args.len() < 3 {
@@ -412,13 +430,18 @@ async fn run() -> Result<(), Box<dyn Error>> {
             if args.len() < 2 {
                 return Err("Usage: plshelp <library_name> \"<question>\"".into());
             }
+            let (question, flags) = split_query_and_flags(&args[1..]);
+            if question.is_empty() {
+                return Err("Usage: plshelp <library_name> <question> [--mode ...]".into());
+            }
+            let (mode, top_k, context) = parse_query_flags(&flags)?;
             query_library(
                 &conn,
                 &args[0],
-                &args[1],
-                SearchMode::Hybrid,
-                DEFAULT_TOP_K,
-                DEFAULT_CONTEXT_WINDOW,
+                &question,
+                mode,
+                top_k,
+                context,
                 false,
             )?;
         }
@@ -740,6 +763,16 @@ fn parse_query_flags(flags: &[String]) -> Result<(SearchMode, usize, usize), Box
         }
     }
     Ok((mode, top_k, context))
+}
+
+fn split_query_and_flags(args: &[String]) -> (String, Vec<String>) {
+    let first_flag = args
+        .iter()
+        .position(|arg| arg.starts_with("--"))
+        .unwrap_or(args.len());
+    let query = args[..first_flag].join(" ").trim().to_string();
+    let flags = args[first_flag..].to_vec();
+    (query, flags)
 }
 
 fn ask_flags(
@@ -2279,7 +2312,9 @@ fn embed_library(
         let mut model = TextEmbedding::try_new(
             InitOptions::new(DEFAULT_EMBEDDING_MODEL).with_show_download_progress(true),
         )?;
-        let batch_size = 128usize;
+        let batch_size = EMBED_BATCH_SIZE_OVERRIDE
+            .map(|size| size.max(1))
+            .unwrap_or_else(|| calibrate_batch_size(&mut model, &pending));
         let tx = conn.unchecked_transaction()?;
         let total_batches = pending.len().div_ceil(batch_size);
         for (batch_idx, batch) in pending.chunks(batch_size).enumerate() {
@@ -2291,9 +2326,9 @@ fn embed_library(
             ));
             let texts: Vec<String> = batch
                 .iter()
-                .map(|(_, content)| format!("passage: {}", content))
+                .map(|(_, content)| content.clone())
                 .collect();
-            let embeds = model.embed(&texts, None)?;
+            let embeds = model.embed(&texts, Some(batch_size))?;
             if embeds.len() != batch.len() {
                 return Err("Embedding count mismatch.".into());
             }
@@ -2322,6 +2357,35 @@ fn embed_library(
             Err(err)
         }
     }
+}
+
+fn calibrate_batch_size(model: &mut TextEmbedding, pending: &[(i64, String)]) -> usize {
+    if pending.is_empty() {
+        return EMBED_BATCH_SIZE_MIN;
+    }
+
+    let probe_size = pending.len().min(EMBED_PROBE_SAMPLE_SIZE);
+    let probe: Vec<String> = pending
+        .iter()
+        .take(probe_size)
+        .map(|(_, content)| format!("passage: {}", content))
+        .collect();
+
+    let probe_batch_size = probe.len().min(EMBED_PROBE_BATCH_SIZE).max(1);
+    let start = Instant::now();
+    let _ = model.embed(&probe, Some(probe_batch_size));
+    let elapsed = start.elapsed().as_secs_f32().max(0.001);
+    let chunks_per_second = probe_size as f32 / elapsed;
+    let target_batch_size = (chunks_per_second * EMBED_TARGET_BATCH_SECONDS) as usize;
+    let clamped = target_batch_size.clamp(EMBED_BATCH_SIZE_MIN, EMBED_BATCH_SIZE_MAX);
+    prev_power_of_two(clamped).max(EMBED_BATCH_SIZE_MIN)
+}
+
+fn prev_power_of_two(n: usize) -> usize {
+    if n <= 1 {
+        return 1;
+    }
+    1usize << (usize::BITS - n.leading_zeros() - 1) as usize
 }
 
 fn index_library(
@@ -2506,7 +2570,10 @@ fn embed_query(mode: SearchMode, question: &str) -> Result<Option<Vec<f32>>, Box
     let mut model = TextEmbedding::try_new(
         InitOptions::new(DEFAULT_EMBEDDING_MODEL).with_show_download_progress(false),
     )?;
-    let prefixed = format!("query: {}", question);
+    let prefixed = format!(
+        "Represent this sentence for searching relevant passages: {}",
+        question
+    );
     let embedding = model.embed([prefixed], None)?;
     Ok(embedding.first().cloned())
 }
