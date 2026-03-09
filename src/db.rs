@@ -1,8 +1,8 @@
 use crate::*;
 
 pub(crate) fn configure_sqlite_connection(conn: &Connection) -> Result<(), Box<dyn Error>> {
-    conn.pragma_update(None, "journal_mode", "WAL")?;
-    conn.busy_timeout(Duration::from_millis(SQLITE_BUSY_TIMEOUT_MS))?;
+    conn.pragma_update(None, "journal_mode", sqlite_journal_mode())?;
+    conn.busy_timeout(Duration::from_millis(sqlite_busy_timeout_ms()))?;
     Ok(())
 }
 
@@ -228,4 +228,3 @@ pub(crate) fn finish_job(
     )?;
     Ok(())
 }
-

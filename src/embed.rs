@@ -393,11 +393,11 @@ pub(crate) fn embed_library(
         }
 
         let mut model = TextEmbedding::try_new(
-            InitOptions::new(DEFAULT_EMBEDDING_MODEL)
+            InitOptions::new(embedding_model())
                 .with_cache_dir(models_dir())
                 .with_show_download_progress(true),
         )?;
-        let batch_size = DEFAULT_EMBED_BATCH_SIZE;
+        let batch_size = embed_batch_size();
         let tx = conn.unchecked_transaction()?;
         let total_batches = pending.len().div_ceil(batch_size);
         for (batch_idx, batch) in pending.chunks(batch_size).enumerate() {
@@ -559,7 +559,7 @@ pub(crate) fn score_chunks(
             SearchMode::Keyword => bm25_score,
             SearchMode::Hybrid => {
                 if use_vector_scores {
-                    0.90 * vector_score + 0.10 * bm25_score
+                    hybrid_vector_weight() * vector_score + hybrid_bm25_weight() * bm25_score
                 } else {
                     bm25_score
                 }
@@ -622,7 +622,7 @@ pub(crate) fn embed_query(mode: SearchMode, question: &str) -> Result<Option<Vec
         return Ok(None);
     }
     let mut model = TextEmbedding::try_new(
-        InitOptions::new(DEFAULT_EMBEDDING_MODEL)
+        InitOptions::new(embedding_model())
             .with_cache_dir(models_dir())
             .with_show_download_progress(false),
     )?;

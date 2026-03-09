@@ -618,7 +618,7 @@ pub(crate) fn show_library(conn: &Connection, input_name: &str, output_json: boo
         lines.push(format!("max_chunks_per_page: {max_chunks}"));
         lines.push(format!("pages_with_no_chunks: {empty_pages}"));
         lines.push(format!("content_size_chars: {content_size_chars}"));
-        lines.push(format!("indexed_model: {:?}", DEFAULT_EMBEDDING_MODEL));
+        lines.push(format!("indexed_model: {:?}", embedding_model()));
         lines.push("embedding_dim: 1024".to_string());
         lines.push(format!("latest_job_status: {latest_status}"));
         lines.push(format!(
@@ -659,7 +659,7 @@ pub(crate) fn show_library(conn: &Connection, input_name: &str, output_json: boo
                 "max_chunks_per_page": max_chunks,
                 "pages_with_no_chunks": empty_pages,
                 "content_size_chars": content_size_chars,
-                "indexed_model": format!("{:?}", DEFAULT_EMBEDDING_MODEL),
+                "indexed_model": format!("{:?}", embedding_model()),
                 "embedding_dim": 1024,
                 "latest_job_status": latest_status,
                 "last_crawled_at": last_crawled_at,
@@ -709,7 +709,7 @@ pub(crate) fn show_library(conn: &Connection, input_name: &str, output_json: boo
         format!("max_chunks_per_page: {max_chunks}"),
         format!("pages_with_no_chunks: {empty_pages}"),
         format!("content_size_chars: {content_size_chars}"),
-        format!("indexed_model: {:?}", DEFAULT_EMBEDDING_MODEL),
+        format!("indexed_model: {:?}", embedding_model()),
         "embedding_dim: 1024".to_string(),
         "latest_job_status: merged".to_string(),
         "last_crawled_at: n/a".to_string(),
@@ -734,7 +734,7 @@ pub(crate) fn show_library(conn: &Connection, input_name: &str, output_json: boo
             "max_chunks_per_page": max_chunks,
             "pages_with_no_chunks": empty_pages,
             "content_size_chars": content_size_chars,
-            "indexed_model": format!("{:?}", DEFAULT_EMBEDDING_MODEL),
+            "indexed_model": format!("{:?}", embedding_model()),
             "embedding_dim": 1024,
             "latest_job_status": "merged",
             "last_crawled_at": Value::Null,

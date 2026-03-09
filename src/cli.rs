@@ -32,9 +32,9 @@ pub(crate) fn print_help() {
 
 // ============================================================================
 pub(crate) fn parse_query_flags(flags: &[String]) -> Result<(SearchMode, usize, usize), Box<dyn Error>> {
-    let mut mode = SearchMode::Hybrid;
-    let mut top_k = DEFAULT_TOP_K;
-    let mut context = DEFAULT_CONTEXT_WINDOW;
+    let mut mode = default_search_mode();
+    let mut top_k = default_top_k();
+    let mut context = default_context_window();
     let mut i = 0usize;
     while i < flags.len() {
         match flags[i].as_str() {
@@ -155,9 +155,9 @@ pub(crate) fn query_hit_to_json(
 pub(crate) fn ask_flags(
     flags: &[String],
 ) -> Result<(SearchMode, usize, usize, Option<Vec<String>>), Box<dyn Error>> {
-    let mut mode = SearchMode::Hybrid;
-    let mut top_k = DEFAULT_TOP_K;
-    let mut context = DEFAULT_CONTEXT_WINDOW;
+    let mut mode = default_search_mode();
+    let mut top_k = default_top_k();
+    let mut context = default_context_window();
     let mut libraries: Option<Vec<String>> = None;
     let mut i = 0usize;
     while i < flags.len() {

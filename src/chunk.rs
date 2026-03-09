@@ -20,9 +20,6 @@ pub(crate) fn preprocess_for_chunking(input: &str) -> String {
     setext_h2.replace_all(&out, "## $1").into_owned()
 }
 
-const CHUNK_MIN_CHARS: usize = 1400;
-const CHUNK_MAX_CHARS: usize = 3000;
-
 pub(crate) fn split_by_paragraph_upper_bound(chunks: Vec<String>, max_chars: usize) -> Vec<String> {
     let mut out = Vec::new();
     for chunk in chunks {
@@ -170,9 +167,9 @@ pub(crate) fn chunk_markdown_page(content: &str) -> Vec<String> {
             cleaned.push(t);
         }
     }
-    cleaned = split_by_paragraph_upper_bound(cleaned, CHUNK_MAX_CHARS);
-    cleaned = split_by_newline_upper_bound(cleaned, CHUNK_MAX_CHARS);
-    cleaned = split_by_char_upper_bound(cleaned, CHUNK_MAX_CHARS);
+    cleaned = split_by_paragraph_upper_bound(cleaned, parent_max_chars());
+    cleaned = split_by_newline_upper_bound(cleaned, parent_max_chars());
+    cleaned = split_by_char_upper_bound(cleaned, parent_max_chars());
 
     // Lower-bound only top-up: merge tiny chunks forward until min size.
     let mut topped = Vec::new();
@@ -183,7 +180,7 @@ pub(crate) fn chunk_markdown_page(content: &str) -> Vec<String> {
                 pending = Some(chunk);
             }
             Some(prev) => {
-                if prev.chars().count() >= CHUNK_MIN_CHARS {
+                if prev.chars().count() >= parent_min_chars() {
                     topped.push(prev);
                     pending = Some(chunk);
                 } else {
@@ -199,7 +196,7 @@ pub(crate) fn chunk_markdown_page(content: &str) -> Vec<String> {
     // Tail fix: if the final chunk is below min size, append it to previous.
     if topped.len() >= 2 {
         let last_len = topped.last().map(|s| s.chars().count()).unwrap_or(0);
-        if last_len < CHUNK_MIN_CHARS {
+        if last_len < parent_min_chars() {
             if let Some(last_chunk) = topped.pop() {
                 if let Some(prev) = topped.last_mut() {
                     prev.push_str("\n\n");
@@ -219,11 +216,11 @@ pub(crate) fn chunk_parent_into_children(parent_content: &str) -> Vec<String> {
     }
     let chars: Vec<char> = trimmed.chars().collect();
     let total_len = chars.len();
-    if total_len <= MAX_CHILD_LENGTH {
+    if total_len <= child_max_chars() {
         return vec![trimmed.to_string()];
     }
 
-    let target_children = total_len.div_ceil(MAX_CHILD_LENGTH).max(1);
+    let target_children = total_len.div_ceil(child_max_chars()).max(1);
     let mut children = Vec::with_capacity(target_children);
     let mut start = 0usize;
 
@@ -240,10 +237,12 @@ pub(crate) fn chunk_parent_into_children(parent_content: &str) -> Vec<String> {
         }
 
         let ideal_end = start + remaining_len.div_ceil(remaining_parts);
-        let search_start = ideal_end.saturating_sub(CHILD_SPLIT_WINDOW).max(start + MIN_CHILD_LENGTH);
-        let search_end = (ideal_end + CHILD_SPLIT_WINDOW)
+        let search_start = ideal_end
+            .saturating_sub(child_split_window_chars())
+            .max(start + child_min_chars());
+        let search_end = (ideal_end + child_split_window_chars())
             .min(total_len)
-            .min(start + MAX_CHILD_LENGTH);
+            .min(start + child_max_chars());
 
         let mut best_split = None;
         let mut best_distance = usize::MAX;
@@ -259,8 +258,8 @@ pub(crate) fn chunk_parent_into_children(parent_content: &str) -> Vec<String> {
 
         let end = best_split.unwrap_or_else(|| {
             ideal_end
-                .max(start + MIN_CHILD_LENGTH)
-                .min(start + MAX_CHILD_LENGTH)
+                .max(start + child_min_chars())
+                .min(start + child_max_chars())
                 .min(total_len)
         });
         let chunk: String = chars[start..end].iter().collect();

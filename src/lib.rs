@@ -27,13 +27,15 @@ pub(crate) use url::Url;
 pub(crate) const DEFAULT_TOP_K: usize = 1;
 pub(crate) const DEFAULT_CONTEXT_WINDOW: usize = 0;
 pub(crate) const DEFAULT_EMBEDDING_MODEL: EmbeddingModel = EmbeddingModel::AllMiniLML6V2Q;
-pub(crate) const MIN_CHILD_LENGTH: usize = 700;
-pub(crate) const MAX_CHILD_LENGTH: usize = 1400;
+pub(crate) const MIN_CHILD_LENGTH: usize = 400;
+pub(crate) const MAX_CHILD_LENGTH: usize = 800;
 pub(crate) const CHILD_SPLIT_WINDOW: usize = 50;
 pub(crate) const DEFAULT_EMBED_BATCH_SIZE: usize = 128;
 pub(crate) const SQLITE_BUSY_TIMEOUT_MS: u64 = 5_000;
 pub(crate) const APP_NAME: &str = "plshelp";
 pub(crate) const CONFIG_FILE_NAME: &str = "config.toml";
+pub(crate) const DEFAULT_PARENT_MIN_CHARS: usize = 1400;
+pub(crate) const DEFAULT_PARENT_MAX_CHARS: usize = 3000;
 
 pub(crate) static CONTENT_SELECTORS: LazyLock<Vec<Selector>> = LazyLock::new(|| {
     [
@@ -121,6 +123,7 @@ pub(crate) static MARKDOWN_HINTS: &[&str] = &[
 ];
 
 pub(crate) static RUNTIME_PATHS: OnceLock<RuntimePaths> = OnceLock::new();
+pub(crate) static RUNTIME_SETTINGS: OnceLock<RuntimeSettings> = OnceLock::new();
 
 #[derive(Debug, Clone)]
 pub(crate) struct RuntimePaths {
@@ -132,10 +135,40 @@ pub(crate) struct RuntimePaths {
     pub(crate) models_dir: PathBuf,
 }
 
+#[derive(Debug, Clone)]
+pub(crate) struct RuntimeSettings {
+    pub(crate) embedding_model: EmbeddingModel,
+    pub(crate) embed_batch_size: usize,
+    pub(crate) parent_min_chars: usize,
+    pub(crate) parent_max_chars: usize,
+    pub(crate) child_min_chars: usize,
+    pub(crate) child_max_chars: usize,
+    pub(crate) child_split_window_chars: usize,
+    pub(crate) default_mode: SearchMode,
+    pub(crate) default_top_k: usize,
+    pub(crate) default_context_window: usize,
+    pub(crate) hybrid_vector_weight: f32,
+    pub(crate) hybrid_bm25_weight: f32,
+    pub(crate) sqlite_journal_mode: String,
+    pub(crate) sqlite_busy_timeout_ms: u64,
+    pub(crate) onnx_intra_threads: usize,
+    pub(crate) onnx_inter_threads: usize,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub(crate) struct AppConfigFile {
     #[serde(default)]
     pub(crate) paths: PathsConfig,
+    #[serde(default)]
+    pub(crate) embedding: EmbeddingConfig,
+    #[serde(default)]
+    pub(crate) chunking: ChunkingConfig,
+    #[serde(default)]
+    pub(crate) retrieval: RetrievalConfig,
+    #[serde(default)]
+    pub(crate) sqlite: SqliteConfig,
+    #[serde(default)]
+    pub(crate) onnx: OnnxConfig,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -144,6 +177,42 @@ pub(crate) struct PathsConfig {
     pub(crate) db_path: Option<PathBuf>,
     pub(crate) artifacts_dir: Option<PathBuf>,
     pub(crate) models_dir: Option<PathBuf>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub(crate) struct EmbeddingConfig {
+    pub(crate) model: Option<String>,
+    pub(crate) batch_size: Option<usize>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub(crate) struct ChunkingConfig {
+    pub(crate) parent_min_chars: Option<usize>,
+    pub(crate) parent_max_chars: Option<usize>,
+    pub(crate) child_min_chars: Option<usize>,
+    pub(crate) child_max_chars: Option<usize>,
+    pub(crate) child_split_window_chars: Option<usize>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub(crate) struct RetrievalConfig {
+    pub(crate) default_mode: Option<String>,
+    pub(crate) default_top_k: Option<usize>,
+    pub(crate) default_context_window: Option<usize>,
+    pub(crate) hybrid_vector_weight: Option<f32>,
+    pub(crate) hybrid_bm25_weight: Option<f32>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub(crate) struct SqliteConfig {
+    pub(crate) journal_mode: Option<String>,
+    pub(crate) busy_timeout_ms: Option<u64>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub(crate) struct OnnxConfig {
+    pub(crate) intra_threads: Option<usize>,
+    pub(crate) inter_threads: Option<usize>,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -228,8 +297,8 @@ pub(crate) use ui::*;
 
 pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
     let _echo_guard = TerminalEchoGuard::new();
-    configure_onnx_runtime_env();
     initialize_runtime_paths()?;
+    configure_onnx_runtime_env();
 
     if args.is_empty() {
         print_help();
