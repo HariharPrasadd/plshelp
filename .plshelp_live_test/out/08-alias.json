@@ -1,0 +1,8 @@
+{
+  "command": "alias",
+  "result": {
+    "alias": "cli-test-np",
+    "input_name": "cli-test-numpyuser"
+  },
+  "status": "success"
+}

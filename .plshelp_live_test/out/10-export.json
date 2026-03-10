@@ -1,0 +1,8 @@
+Preparing export... |                                                                                                                                                                {
+  "command": "export",
+  "result": {
+    "input_name": "cli-test-numpyuser",
+    "output_dir": "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/.plshelp_live_test/out/export-numpyuser"
+  },
+  "status": "success"
+}

@@ -1,0 +1,13 @@
+Preparing merge... |                                                                                                                                                                {
+  "command": "merge",
+  "result": {
+    "artifacts_path": null,
+    "group_name": "cli-test-numpy",
+    "members": [
+      "cli-test-numpyuser",
+      "cli-test-numpyref"
+    ],
+    "replace": false
+  },
+  "status": "success"
+}

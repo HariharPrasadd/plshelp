@@ -1,0 +1,40 @@
+Preparing query for cli-test-numpy... |                                                                                                                                                                {
+  "command": "query",
+  "context_window": 0,
+  "effective_mode": "hybrid",
+  "input_name": "cli-test-numpy",
+  "libraries": [
+    "cli-test-numpyuser",
+    "cli-test-numpyref"
+  ],
+  "mode": "hybrid",
+  "question": "zeros",
+  "results": [
+    {
+      "child_location": {
+        "child_index_in_parent": 0,
+        "global_chunk_index": 0,
+        "parent_index_in_page": 0,
+        "source_page_order": 0
+      },
+      "chunk_id": 879,
+      "content": "NumPy Reference\n\nnumpy.array creates an array object.\n\nnumpy.zeros returns a new array of given shape and type, filled with zeros.\n\nnumpy.ones returns a new array of given shape and type, filled with ones.",
+      "context": [],
+      "library_name": "cli-test-numpyref",
+      "parent_id": 247,
+      "parent_location": {
+        "global_parent_index": 0,
+        "parent_index_in_page": 0,
+        "source_page_order": 0
+      },
+      "rank": 1,
+      "scores": {
+        "bm25": 1.0,
+        "final": 1.0,
+        "vector": 1.0
+      },
+      "source_url": "file:///Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/.plshelp_live_test/fixtures/numpy-ref.txt"
+    }
+  ],
+  "top_k": 1
+}

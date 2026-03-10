@@ -1,0 +1,8 @@
+Preparing chunks for cli-test-numpyref... |                                                                                                                                                                Loading chunks for cli-test-numpyref... |                                                                                                                                                                {
+  "command": "index",
+  "result": {
+    "file": "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/.plshelp_live_test/fixtures/numpy-ref.txt",
+    "input_name": "cli-test-numpyref"
+  },
+  "status": "success"
+}

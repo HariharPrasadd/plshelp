@@ -1,0 +1,10 @@
+Preparing refresh... |                                                                                                                                                                {
+  "command": "refresh",
+  "result": {
+    "targets": [
+      "cli-test-numpyuser",
+      "cli-test-numpyref"
+    ]
+  },
+  "status": "success"
+}

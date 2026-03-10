@@ -1,0 +1,39 @@
+Preparing query for cli-test-numpyuser... |                                                                                                                                                                {
+  "command": "trace",
+  "context_window": 0,
+  "effective_mode": "hybrid",
+  "input_name": "cli-test-numpyuser",
+  "libraries": [
+    "cli-test-numpyuser"
+  ],
+  "mode": "hybrid",
+  "question": "what is broadcasting",
+  "results": [
+    {
+      "child_location": {
+        "child_index_in_parent": 0,
+        "global_chunk_index": 0,
+        "parent_index_in_page": 0,
+        "source_page_order": 0
+      },
+      "chunk_id": 878,
+      "content": "# NumPy User Guide\n\nNumPy arrays are the central data structure of NumPy.\n\n## Broadcasting\n\nBroadcasting describes how NumPy treats arrays with different shapes during arithmetic operations.\nSmaller arrays can be stretched across larger arrays when the dimensions are compatible.\n\n## Array Creation\n\nYou can create arrays with numpy.array, numpy.zeros, and numpy.ones.",
+      "context": [],
+      "library_name": "cli-test-numpyuser",
+      "parent_id": 246,
+      "parent_location": {
+        "global_parent_index": 0,
+        "parent_index_in_page": 0,
+        "source_page_order": 0
+      },
+      "rank": 1,
+      "scores": {
+        "bm25": 1.0,
+        "final": 1.0,
+        "vector": 1.0
+      },
+      "source_url": "file:///Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/.plshelp_live_test/fixtures/numpy-user.md"
+    }
+  ],
+  "top_k": 2
+}

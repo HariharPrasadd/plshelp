@@ -1,0 +1,7 @@
+{
+  "command": "remove",
+  "result": {
+    "input_name": "cli-test-numpy"
+  },
+  "status": "success"
+}
