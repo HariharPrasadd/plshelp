@@ -1,0 +1,4655 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "name": "Python 3",
+      "slug": "python",
+      "source_url": "https://docs.python.org/3/",
+      "enabled": true
+    },
+    {
+      "name": "Python Standard Library",
+      "slug": "python-stdlib",
+      "source_url": "https://docs.python.org/3/library/index.html",
+      "enabled": true
+    },
+    {
+      "name": "Python Language Reference",
+      "slug": "python-reference",
+      "source_url": "https://docs.python.org/3/reference/index.html",
+      "enabled": true
+    },
+    {
+      "name": "Python Tutorial",
+      "slug": "python-tutorial",
+      "source_url": "https://docs.python.org/3/tutorial/index.html",
+      "enabled": true
+    },
+    {
+      "name": "The Rust Programming Language (Book)",
+      "slug": "rust",
+      "source_url": "https://doc.rust-lang.org/book/",
+      "enabled": true
+    },
+    {
+      "name": "Rust Standard Library",
+      "slug": "rust-std",
+      "source_url": "https://doc.rust-lang.org/std/",
+      "enabled": true
+    },
+    {
+      "name": "Rust Reference",
+      "slug": "rust-reference",
+      "source_url": "https://doc.rust-lang.org/reference/",
+      "enabled": true
+    },
+    {
+      "name": "The Rustonomicon",
+      "slug": "rust-nomicon",
+      "source_url": "https://doc.rust-lang.org/nomicon/",
+      "enabled": true
+    },
+    {
+      "name": "Async Rust Book",
+      "slug": "rust-async-book",
+      "source_url": "https://rust-lang.github.io/async-book/",
+      "enabled": true
+    },
+    {
+      "name": "Rust Edition Guide",
+      "slug": "rust-edition-guide",
+      "source_url": "https://doc.rust-lang.org/edition-guide/",
+      "enabled": true
+    },
+    {
+      "name": "rustc Book",
+      "slug": "rust-rustc",
+      "source_url": "https://doc.rust-lang.org/rustc/",
+      "enabled": true
+    },
+    {
+      "name": "Cargo Book",
+      "slug": "rust-cargo",
+      "source_url": "https://doc.rust-lang.org/cargo/",
+      "enabled": true
+    },
+    {
+      "name": "Clippy Documentation",
+      "slug": "rust-clippy",
+      "source_url": "https://doc.rust-lang.org/clippy/",
+      "enabled": true
+    },
+    {
+      "name": "MDN JavaScript Reference",
+      "slug": "javascript-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+      "enabled": true
+    },
+    {
+      "name": "TypeScript Documentation",
+      "slug": "typescript",
+      "source_url": "https://www.typescriptlang.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "TypeScript Handbook",
+      "slug": "typescript-handbook",
+      "source_url": "https://www.typescriptlang.org/docs/handbook/intro.html",
+      "enabled": true
+    },
+    {
+      "name": "Go Documentation",
+      "slug": "go",
+      "source_url": "https://go.dev/doc/",
+      "enabled": true
+    },
+    {
+      "name": "Go Standard Library",
+      "slug": "go-stdlib",
+      "source_url": "https://pkg.go.dev/std",
+      "enabled": true
+    },
+    {
+      "name": "Go Language Specification",
+      "slug": "go-spec",
+      "source_url": "https://go.dev/ref/spec",
+      "enabled": true
+    },
+    {
+      "name": "A Tour of Go",
+      "slug": "go-tour",
+      "source_url": "https://go.dev/tour/",
+      "enabled": true
+    },
+    {
+      "name": "Java SE 21 API",
+      "slug": "java-se21",
+      "source_url": "https://docs.oracle.com/en/java/javase/21/docs/api/",
+      "enabled": true
+    },
+    {
+      "name": "Java Tutorials",
+      "slug": "java-tutorial",
+      "source_url": "https://docs.oracle.com/javase/tutorial/",
+      "enabled": true
+    },
+    {
+      "name": "Kotlin Documentation",
+      "slug": "kotlin",
+      "source_url": "https://kotlinlang.org/docs/home.html",
+      "enabled": true
+    },
+    {
+      "name": "Kotlin Standard Library",
+      "slug": "kotlin-stdlib",
+      "source_url": "https://kotlinlang.org/api/latest/jvm/stdlib/",
+      "enabled": true
+    },
+    {
+      "name": "Swift Documentation",
+      "slug": "swift",
+      "source_url": "https://www.swift.org/documentation/",
+      "enabled": true
+    },
+    {
+      "name": "Swift Standard Library",
+      "slug": "swift-stdlib",
+      "source_url": "https://developer.apple.com/documentation/swift/swift-standard-library",
+      "enabled": true
+    },
+    {
+      "name": "The Swift Programming Language",
+      "slug": "swift-book",
+      "source_url": "https://docs.swift.org/swift-book/",
+      "enabled": true
+    },
+    {
+      "name": "C++ Reference",
+      "slug": "cpp-reference",
+      "source_url": "https://en.cppreference.com/w/cpp",
+      "enabled": true
+    },
+    {
+      "name": "C Reference",
+      "slug": "c-reference",
+      "source_url": "https://en.cppreference.com/w/c",
+      "enabled": true
+    },
+    {
+      "name": "C# Documentation",
+      "slug": "csharp",
+      "source_url": "https://learn.microsoft.com/en-us/dotnet/csharp/",
+      "enabled": true
+    },
+    {
+      "name": ".NET Documentation",
+      "slug": "dotnet",
+      "source_url": "https://learn.microsoft.com/en-us/dotnet/",
+      "enabled": true
+    },
+    {
+      "name": ".NET API Browser",
+      "slug": "dotnet-api",
+      "source_url": "https://learn.microsoft.com/en-us/dotnet/api/",
+      "enabled": true
+    },
+    {
+      "name": "Ruby Documentation",
+      "slug": "ruby",
+      "source_url": "https://www.ruby-lang.org/en/documentation/",
+      "enabled": true
+    },
+    {
+      "name": "Ruby Core API",
+      "slug": "ruby-core",
+      "source_url": "https://ruby-doc.org/core/",
+      "enabled": true
+    },
+    {
+      "name": "Ruby Standard Library",
+      "slug": "ruby-stdlib",
+      "source_url": "https://ruby-doc.org/stdlib/",
+      "enabled": true
+    },
+    {
+      "name": "PHP Manual",
+      "slug": "php",
+      "source_url": "https://www.php.net/manual/en/",
+      "enabled": true
+    },
+    {
+      "name": "PHP Function Reference",
+      "slug": "php-functions",
+      "source_url": "https://www.php.net/manual/en/funcref.php",
+      "enabled": true
+    },
+    {
+      "name": "Scala Documentation",
+      "slug": "scala",
+      "source_url": "https://docs.scala-lang.org/",
+      "enabled": true
+    },
+    {
+      "name": "Scala Standard Library API",
+      "slug": "scala-stdlib",
+      "source_url": "https://www.scala-lang.org/api/current/",
+      "enabled": true
+    },
+    {
+      "name": "Haskell Documentation",
+      "slug": "haskell",
+      "source_url": "https://www.haskell.org/documentation/",
+      "enabled": true
+    },
+    {
+      "name": "Haskell base package",
+      "slug": "haskell-base",
+      "source_url": "https://hackage.haskell.org/package/base",
+      "enabled": true
+    },
+    {
+      "name": "Elixir Documentation",
+      "slug": "elixir",
+      "source_url": "https://elixir-lang.org/docs.html",
+      "enabled": true
+    },
+    {
+      "name": "Elixir Standard Library",
+      "slug": "elixir-stdlib",
+      "source_url": "https://hexdocs.pm/elixir/",
+      "enabled": true
+    },
+    {
+      "name": "Erlang Documentation",
+      "slug": "erlang",
+      "source_url": "https://www.erlang.org/docs",
+      "enabled": true
+    },
+    {
+      "name": "Clojure Reference",
+      "slug": "clojure",
+      "source_url": "https://clojure.org/reference/documentation",
+      "enabled": true
+    },
+    {
+      "name": "Clojure API",
+      "slug": "clojure-api",
+      "source_url": "https://clojure.github.io/clojure/",
+      "enabled": true
+    },
+    {
+      "name": "OCaml Manual",
+      "slug": "ocaml",
+      "source_url": "https://v2.ocaml.org/manual/",
+      "enabled": true
+    },
+    {
+      "name": "OCaml Standard Library",
+      "slug": "ocaml-stdlib",
+      "source_url": "https://v2.ocaml.org/api/",
+      "enabled": true
+    },
+    {
+      "name": "Lua 5.4 Reference",
+      "slug": "lua",
+      "source_url": "https://www.lua.org/manual/5.4/",
+      "enabled": true
+    },
+    {
+      "name": "R Documentation",
+      "slug": "r",
+      "source_url": "https://www.r-project.org/other-docs.html",
+      "enabled": true
+    },
+    {
+      "name": "R CRAN Manuals",
+      "slug": "r-cran",
+      "source_url": "https://cran.r-project.org/manuals.html",
+      "enabled": true
+    },
+    {
+      "name": "Julia Documentation",
+      "slug": "julia",
+      "source_url": "https://docs.julialang.org/",
+      "enabled": true
+    },
+    {
+      "name": "Julia Standard Library",
+      "slug": "julia-stdlib",
+      "source_url": "https://docs.julialang.org/en/v1/stdlib/",
+      "enabled": true
+    },
+    {
+      "name": "Dart Documentation",
+      "slug": "dart",
+      "source_url": "https://dart.dev/guides",
+      "enabled": true
+    },
+    {
+      "name": "Dart Core Library",
+      "slug": "dart-core",
+      "source_url": "https://api.dart.dev/stable/dart-core/",
+      "enabled": true
+    },
+    {
+      "name": "Zig Documentation",
+      "slug": "zig",
+      "source_url": "https://ziglang.org/documentation/master/",
+      "enabled": true
+    },
+    {
+      "name": "Zig Standard Library",
+      "slug": "zig-stdlib",
+      "source_url": "https://ziglang.org/documentation/master/std/",
+      "enabled": true
+    },
+    {
+      "name": "Nim Manual",
+      "slug": "nim",
+      "source_url": "https://nim-lang.org/docs/manual.html",
+      "enabled": true
+    },
+    {
+      "name": "Nim Standard Library",
+      "slug": "nim-stdlib",
+      "source_url": "https://nim-lang.org/docs/lib.html",
+      "enabled": true
+    },
+    {
+      "name": "Perl Documentation",
+      "slug": "perl",
+      "source_url": "https://perldoc.perl.org/",
+      "enabled": true
+    },
+    {
+      "name": "Groovy Documentation",
+      "slug": "groovy",
+      "source_url": "https://groovy-lang.org/documentation.html",
+      "enabled": true
+    },
+    {
+      "name": "Groovy API",
+      "slug": "groovy-api",
+      "source_url": "https://docs.groovy-lang.org/latest/html/gapi/",
+      "enabled": true
+    },
+    {
+      "name": "PowerShell Documentation",
+      "slug": "powershell",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/",
+      "enabled": true
+    },
+    {
+      "name": "Bash Manual",
+      "slug": "bash",
+      "source_url": "https://www.gnu.org/software/bash/manual/",
+      "enabled": true
+    },
+    {
+      "name": "F# Documentation",
+      "slug": "fsharp",
+      "source_url": "https://learn.microsoft.com/en-us/dotnet/fsharp/",
+      "enabled": true
+    },
+    {
+      "name": "Racket Documentation",
+      "slug": "racket",
+      "source_url": "https://docs.racket-lang.org/",
+      "enabled": true
+    },
+    {
+      "name": "Crystal Documentation",
+      "slug": "crystal",
+      "source_url": "https://crystal-lang.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Crystal Standard Library",
+      "slug": "crystal-stdlib",
+      "source_url": "https://crystal-lang.org/api/",
+      "enabled": true
+    },
+    {
+      "name": "V Language Documentation",
+      "slug": "v-lang",
+      "source_url": "https://docs.vlang.io/",
+      "enabled": true
+    },
+    {
+      "name": "Odin Language Overview",
+      "slug": "odin",
+      "source_url": "https://odin-lang.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Gleam Documentation",
+      "slug": "gleam",
+      "source_url": "https://gleam.run/documentation/",
+      "enabled": true
+    },
+    {
+      "name": "Gleam Standard Library",
+      "slug": "gleam-stdlib",
+      "source_url": "https://hexdocs.pm/gleam_stdlib/",
+      "enabled": true
+    },
+    {
+      "name": "Mojo Documentation",
+      "slug": "mojo",
+      "source_url": "https://docs.modular.com/mojo/",
+      "enabled": true
+    },
+    {
+      "name": "Solidity Documentation",
+      "slug": "solidity",
+      "source_url": "https://docs.soliditylang.org/",
+      "enabled": true
+    },
+    {
+      "name": "WebAssembly Documentation",
+      "slug": "wasm",
+      "source_url": "https://webassembly.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "MDN WebAssembly",
+      "slug": "wasm-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/WebAssembly",
+      "enabled": true
+    },
+    {
+      "name": "MDN HTML Reference",
+      "slug": "html-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+      "enabled": true
+    },
+    {
+      "name": "MDN CSS Reference",
+      "slug": "css-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+      "enabled": true
+    },
+    {
+      "name": "MDN Web APIs",
+      "slug": "web-api-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/API",
+      "enabled": true
+    },
+    {
+      "name": "MDN HTTP Reference",
+      "slug": "http-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
+      "enabled": true
+    },
+    {
+      "name": "MDN SVG Reference",
+      "slug": "svg-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/SVG",
+      "enabled": true
+    },
+    {
+      "name": "MDN Canvas API",
+      "slug": "canvas-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API",
+      "enabled": true
+    },
+    {
+      "name": "MDN WebGL Reference",
+      "slug": "webgl-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API",
+      "enabled": true
+    },
+    {
+      "name": "MDN WebSockets",
+      "slug": "websockets-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API",
+      "enabled": true
+    },
+    {
+      "name": "MDN Service Workers",
+      "slug": "service-workers-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API",
+      "enabled": true
+    },
+    {
+      "name": "MDN Web Components",
+      "slug": "web-components-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_components",
+      "enabled": true
+    },
+    {
+      "name": "MDN Fetch API",
+      "slug": "fetch-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
+      "enabled": true
+    },
+    {
+      "name": "CSS-Tricks Almanac",
+      "slug": "css-tricks-almanac",
+      "source_url": "https://css-tricks.com/almanac/",
+      "enabled": true
+    },
+    {
+      "name": "Tailwind CSS",
+      "slug": "tailwind",
+      "source_url": "https://tailwindcss.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Tailwind CSS v4",
+      "slug": "tailwind-v4",
+      "source_url": "https://tailwindcss.com/docs/v4-beta",
+      "enabled": true
+    },
+    {
+      "name": "Bootstrap",
+      "slug": "bootstrap",
+      "source_url": "https://getbootstrap.com/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Bulma CSS",
+      "slug": "bulma",
+      "source_url": "https://bulma.io/documentation/",
+      "enabled": true
+    },
+    {
+      "name": "Sass Documentation",
+      "slug": "sass",
+      "source_url": "https://sass-lang.com/documentation/",
+      "enabled": true
+    },
+    {
+      "name": "PostCSS Documentation",
+      "slug": "postcss",
+      "source_url": "https://postcss.org/",
+      "enabled": true
+    },
+    {
+      "name": "styled-components",
+      "slug": "styled-components",
+      "source_url": "https://styled-components.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Emotion CSS-in-JS",
+      "slug": "emotion",
+      "source_url": "https://emotion.sh/docs/introduction",
+      "enabled": true
+    },
+    {
+      "name": "Open Props",
+      "slug": "open-props",
+      "source_url": "https://open-props.style/",
+      "enabled": true
+    },
+    {
+      "name": "DaisyUI",
+      "slug": "daisyui",
+      "source_url": "https://daisyui.com/docs/",
+      "enabled": true
+    },
+    {
+      "name": "shadcn/ui",
+      "slug": "shadcn",
+      "source_url": "https://ui.shadcn.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Radix UI",
+      "slug": "radix-ui",
+      "source_url": "https://www.radix-ui.com/docs/primitives/overview/introduction",
+      "enabled": true
+    },
+    {
+      "name": "Headless UI",
+      "slug": "headlessui",
+      "source_url": "https://headlessui.com/",
+      "enabled": true
+    },
+    {
+      "name": "Chakra UI",
+      "slug": "chakra-ui",
+      "source_url": "https://chakra-ui.com/docs/getting-started",
+      "enabled": true
+    },
+    {
+      "name": "Mantine",
+      "slug": "mantine",
+      "source_url": "https://mantine.dev/getting-started/",
+      "enabled": true
+    },
+    {
+      "name": "Material UI (MUI)",
+      "slug": "material-ui",
+      "source_url": "https://mui.com/material-ui/getting-started/",
+      "enabled": true
+    },
+    {
+      "name": "Ant Design",
+      "slug": "ant-design",
+      "source_url": "https://ant.design/docs/react/introduce",
+      "enabled": true
+    },
+    {
+      "name": "Flowbite",
+      "slug": "flowbite",
+      "source_url": "https://flowbite.com/docs/getting-started/introduction/",
+      "enabled": true
+    },
+    {
+      "name": "React",
+      "slug": "react",
+      "source_url": "https://react.dev/reference/react",
+      "enabled": true
+    },
+    {
+      "name": "React DOM",
+      "slug": "react-dom",
+      "source_url": "https://react.dev/reference/react-dom",
+      "enabled": true
+    },
+    {
+      "name": "Next.js",
+      "slug": "nextjs",
+      "source_url": "https://nextjs.org/docs",
+      "enabled": true
+    },
+    {
+      "name": "Vue.js 3",
+      "slug": "vue",
+      "source_url": "https://vuejs.org/guide/introduction.html",
+      "enabled": true
+    },
+    {
+      "name": "Vue.js 3 API Reference",
+      "slug": "vue-api",
+      "source_url": "https://vuejs.org/api/",
+      "enabled": true
+    },
+    {
+      "name": "Nuxt.js",
+      "slug": "nuxt",
+      "source_url": "https://nuxt.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Angular",
+      "slug": "angular",
+      "source_url": "https://angular.dev/overview",
+      "enabled": true
+    },
+    {
+      "name": "Angular API Reference",
+      "slug": "angular-api",
+      "source_url": "https://angular.dev/api",
+      "enabled": true
+    },
+    {
+      "name": "Svelte",
+      "slug": "svelte",
+      "source_url": "https://svelte.dev/docs",
+      "enabled": true
+    },
+    {
+      "name": "SvelteKit",
+      "slug": "sveltekit",
+      "source_url": "https://kit.svelte.dev/docs",
+      "enabled": true
+    },
+    {
+      "name": "SolidJS",
+      "slug": "solid",
+      "source_url": "https://docs.solidjs.com/",
+      "enabled": true
+    },
+    {
+      "name": "SolidStart",
+      "slug": "solidstart",
+      "source_url": "https://docs.solidjs.com/solid-start",
+      "enabled": true
+    },
+    {
+      "name": "Qwik",
+      "slug": "qwik",
+      "source_url": "https://qwik.dev/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Astro",
+      "slug": "astro",
+      "source_url": "https://docs.astro.build/",
+      "enabled": true
+    },
+    {
+      "name": "Remix",
+      "slug": "remix",
+      "source_url": "https://remix.run/docs/en/main",
+      "enabled": true
+    },
+    {
+      "name": "Gatsby",
+      "slug": "gatsby",
+      "source_url": "https://www.gatsbyjs.com/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Vite",
+      "slug": "vite",
+      "source_url": "https://vite.dev/guide/",
+      "enabled": true
+    },
+    {
+      "name": "Vitest",
+      "slug": "vitest",
+      "source_url": "https://vitest.dev/guide/",
+      "enabled": true
+    },
+    {
+      "name": "Webpack",
+      "slug": "webpack",
+      "source_url": "https://webpack.js.org/concepts/",
+      "enabled": true
+    },
+    {
+      "name": "esbuild",
+      "slug": "esbuild",
+      "source_url": "https://esbuild.github.io/",
+      "enabled": true
+    },
+    {
+      "name": "Rollup",
+      "slug": "rollup",
+      "source_url": "https://rollupjs.org/introduction/",
+      "enabled": true
+    },
+    {
+      "name": "Parcel",
+      "slug": "parcel",
+      "source_url": "https://parceljs.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Turbopack",
+      "slug": "turbopack",
+      "source_url": "https://turbo.build/pack/docs",
+      "enabled": true
+    },
+    {
+      "name": "Turborepo",
+      "slug": "turborepo",
+      "source_url": "https://turbo.build/repo/docs",
+      "enabled": true
+    },
+    {
+      "name": "Expo",
+      "slug": "expo",
+      "source_url": "https://docs.expo.dev/",
+      "enabled": true
+    },
+    {
+      "name": "React Native",
+      "slug": "react-native",
+      "source_url": "https://reactnative.dev/docs/getting-started",
+      "enabled": true
+    },
+    {
+      "name": "Electron",
+      "slug": "electron",
+      "source_url": "https://www.electronjs.org/docs/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Tauri",
+      "slug": "tauri",
+      "source_url": "https://tauri.app/v1/guides/",
+      "enabled": true
+    },
+    {
+      "name": "Tauri v2",
+      "slug": "tauri-v2",
+      "source_url": "https://v2.tauri.app/start/",
+      "enabled": true
+    },
+    {
+      "name": "Capacitor",
+      "slug": "capacitor",
+      "source_url": "https://capacitorjs.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Ionic Framework",
+      "slug": "ionic",
+      "source_url": "https://ionicframework.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Redux",
+      "slug": "redux",
+      "source_url": "https://redux.js.org/introduction/getting-started",
+      "enabled": true
+    },
+    {
+      "name": "Redux Toolkit",
+      "slug": "redux-toolkit",
+      "source_url": "https://redux-toolkit.js.org/introduction/getting-started",
+      "enabled": true
+    },
+    {
+      "name": "Zustand",
+      "slug": "zustand",
+      "source_url": "https://docs.pmnd.rs/zustand/getting-started/introduction",
+      "enabled": true
+    },
+    {
+      "name": "Jotai",
+      "slug": "jotai",
+      "source_url": "https://jotai.org/docs/introduction",
+      "enabled": true
+    },
+    {
+      "name": "MobX",
+      "slug": "mobx",
+      "source_url": "https://mobx.js.org/README.html",
+      "enabled": true
+    },
+    {
+      "name": "Recoil",
+      "slug": "recoil",
+      "source_url": "https://recoiljs.org/docs/introduction/getting-started",
+      "enabled": true
+    },
+    {
+      "name": "TanStack Query",
+      "slug": "tanstack-query",
+      "source_url": "https://tanstack.com/query/latest/docs/framework/react/overview",
+      "enabled": true
+    },
+    {
+      "name": "TanStack Router",
+      "slug": "tanstack-router",
+      "source_url": "https://tanstack.com/router/latest/docs/framework/react/overview",
+      "enabled": true
+    },
+    {
+      "name": "TanStack Table",
+      "slug": "tanstack-table",
+      "source_url": "https://tanstack.com/table/latest/docs/introduction",
+      "enabled": true
+    },
+    {
+      "name": "TanStack Form",
+      "slug": "tanstack-form",
+      "source_url": "https://tanstack.com/form/latest/docs/overview",
+      "enabled": true
+    },
+    {
+      "name": "React Router",
+      "slug": "react-router",
+      "source_url": "https://reactrouter.com/en/main",
+      "enabled": true
+    },
+    {
+      "name": "Wouter",
+      "slug": "wouter",
+      "source_url": "https://github.com/molefrog/wouter",
+      "enabled": true
+    },
+    {
+      "name": "XState",
+      "slug": "xstate",
+      "source_url": "https://statelyai.com/docs/xstate",
+      "enabled": true
+    },
+    {
+      "name": "Immer",
+      "slug": "immer",
+      "source_url": "https://immerjs.github.io/immer/",
+      "enabled": true
+    },
+    {
+      "name": "RxJS",
+      "slug": "rxjs",
+      "source_url": "https://rxjs.dev/guide/overview",
+      "enabled": true
+    },
+    {
+      "name": "Lodash",
+      "slug": "lodash",
+      "source_url": "https://lodash.com/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Ramda",
+      "slug": "ramda",
+      "source_url": "https://ramdajs.com/docs/",
+      "enabled": true
+    },
+    {
+      "name": "date-fns",
+      "slug": "date-fns",
+      "source_url": "https://date-fns.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Day.js",
+      "slug": "dayjs",
+      "source_url": "https://day.js.org/docs/en/installation/installation",
+      "enabled": true
+    },
+    {
+      "name": "Luxon",
+      "slug": "luxon",
+      "source_url": "https://moment.github.io/luxon/#/",
+      "enabled": true
+    },
+    {
+      "name": "Moment.js",
+      "slug": "moment",
+      "source_url": "https://momentjs.com/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Zod",
+      "slug": "zod",
+      "source_url": "https://zod.dev/",
+      "enabled": true
+    },
+    {
+      "name": "Yup",
+      "slug": "yup",
+      "source_url": "https://github.com/jquense/yup",
+      "enabled": true
+    },
+    {
+      "name": "Valibot",
+      "slug": "valibot",
+      "source_url": "https://valibot.dev/guides/introduction/",
+      "enabled": true
+    },
+    {
+      "name": "Axios",
+      "slug": "axios",
+      "source_url": "https://axios-http.com/docs/intro",
+      "enabled": true
+    },
+    {
+      "name": "SWR",
+      "slug": "swr",
+      "source_url": "https://swr.vercel.app/docs/getting-started",
+      "enabled": true
+    },
+    {
+      "name": "tRPC",
+      "slug": "trpc",
+      "source_url": "https://trpc.io/docs/",
+      "enabled": true
+    },
+    {
+      "name": "GraphQL.js",
+      "slug": "graphql-js",
+      "source_url": "https://graphql.org/graphql-js/",
+      "enabled": true
+    },
+    {
+      "name": "Apollo Client",
+      "slug": "apollo-client",
+      "source_url": "https://www.apollographql.com/docs/react/",
+      "enabled": true
+    },
+    {
+      "name": "urql",
+      "slug": "urql",
+      "source_url": "https://commerce.nearform.com/open-source/urql/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Socket.IO",
+      "slug": "socket-io",
+      "source_url": "https://socket.io/docs/v4/",
+      "enabled": true
+    },
+    {
+      "name": "ws (Node WebSocket)",
+      "slug": "ws",
+      "source_url": "https://github.com/websockets/ws",
+      "enabled": true
+    },
+    {
+      "name": "Jest",
+      "slug": "jest",
+      "source_url": "https://jestjs.io/docs/getting-started",
+      "enabled": true
+    },
+    {
+      "name": "Testing Library",
+      "slug": "testing-library",
+      "source_url": "https://testing-library.com/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Cypress",
+      "slug": "cypress",
+      "source_url": "https://docs.cypress.io/",
+      "enabled": true
+    },
+    {
+      "name": "Playwright",
+      "slug": "playwright",
+      "source_url": "https://playwright.dev/docs/intro",
+      "enabled": true
+    },
+    {
+      "name": "Puppeteer",
+      "slug": "puppeteer",
+      "source_url": "https://pptr.dev/",
+      "enabled": true
+    },
+    {
+      "name": "Storybook",
+      "slug": "storybook",
+      "source_url": "https://storybook.js.org/docs",
+      "enabled": true
+    },
+    {
+      "name": "Mock Service Worker",
+      "slug": "msw",
+      "source_url": "https://mswjs.io/docs/",
+      "enabled": true
+    },
+    {
+      "name": "SuperTest",
+      "slug": "supertest",
+      "source_url": "https://github.com/ladjs/supertest",
+      "enabled": true
+    },
+    {
+      "name": "Node.js",
+      "slug": "nodejs",
+      "source_url": "https://nodejs.org/en/docs",
+      "enabled": true
+    },
+    {
+      "name": "Node.js API Reference",
+      "slug": "nodejs-api",
+      "source_url": "https://nodejs.org/api/",
+      "enabled": true
+    },
+    {
+      "name": "Deno",
+      "slug": "deno",
+      "source_url": "https://docs.deno.com/",
+      "enabled": true
+    },
+    {
+      "name": "Deno Standard Library",
+      "slug": "deno-stdlib",
+      "source_url": "https://jsr.io/@std",
+      "enabled": true
+    },
+    {
+      "name": "Bun",
+      "slug": "bun",
+      "source_url": "https://bun.sh/docs",
+      "enabled": true
+    },
+    {
+      "name": "Express.js",
+      "slug": "express",
+      "source_url": "https://expressjs.com/en/4x/api.html",
+      "enabled": true
+    },
+    {
+      "name": "Fastify",
+      "slug": "fastify",
+      "source_url": "https://fastify.dev/docs/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Hono",
+      "slug": "hono",
+      "source_url": "https://hono.dev/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Koa",
+      "slug": "koa",
+      "source_url": "https://koajs.com/",
+      "enabled": true
+    },
+    {
+      "name": "NestJS",
+      "slug": "nestjs",
+      "source_url": "https://docs.nestjs.com/",
+      "enabled": true
+    },
+    {
+      "name": "Hapi.js",
+      "slug": "hapi",
+      "source_url": "https://hapi.dev/api/",
+      "enabled": true
+    },
+    {
+      "name": "Feathers",
+      "slug": "feathers",
+      "source_url": "https://feathersjs.com/api/",
+      "enabled": true
+    },
+    {
+      "name": "GraphQL Yoga",
+      "slug": "graphql-yoga",
+      "source_url": "https://the-guild.dev/graphql/yoga-server/docs",
+      "enabled": true
+    },
+    {
+      "name": "Apollo Server",
+      "slug": "apollo-server",
+      "source_url": "https://www.apollographql.com/docs/apollo-server/",
+      "enabled": true
+    },
+    {
+      "name": "ESLint",
+      "slug": "eslint",
+      "source_url": "https://eslint.org/docs/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Prettier",
+      "slug": "prettier",
+      "source_url": "https://prettier.io/docs/en/",
+      "enabled": true
+    },
+    {
+      "name": "Biome",
+      "slug": "biome",
+      "source_url": "https://biomejs.dev/guides/getting-started/",
+      "enabled": true
+    },
+    {
+      "name": "Oxlint",
+      "slug": "oxlint",
+      "source_url": "https://oxc.rs/docs/guide/usage/linter",
+      "enabled": true
+    },
+    {
+      "name": "Babel",
+      "slug": "babel",
+      "source_url": "https://babeljs.io/docs/",
+      "enabled": true
+    },
+    {
+      "name": "SWC",
+      "slug": "swc",
+      "source_url": "https://swc.rs/docs/getting-started",
+      "enabled": true
+    },
+    {
+      "name": "tsx (TypeScript execute)",
+      "slug": "tsx",
+      "source_url": "https://tsx.is/",
+      "enabled": true
+    },
+    {
+      "name": "ts-node",
+      "slug": "ts-node",
+      "source_url": "https://typestrong.org/ts-node/docs/",
+      "enabled": true
+    },
+    {
+      "name": "npm CLI",
+      "slug": "npm",
+      "source_url": "https://docs.npmjs.com/",
+      "enabled": true
+    },
+    {
+      "name": "pnpm",
+      "slug": "pnpm",
+      "source_url": "https://pnpm.io/motivation",
+      "enabled": true
+    },
+    {
+      "name": "Yarn",
+      "slug": "yarn",
+      "source_url": "https://yarnpkg.com/getting-started",
+      "enabled": true
+    },
+    {
+      "name": "Bun Package Manager",
+      "slug": "bun-pkg",
+      "source_url": "https://bun.sh/docs/cli/install",
+      "enabled": true
+    },
+    {
+      "name": "Django",
+      "slug": "django",
+      "source_url": "https://docs.djangoproject.com/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Django REST Framework",
+      "slug": "django-rest",
+      "source_url": "https://www.django-rest-framework.org/",
+      "enabled": true
+    },
+    {
+      "name": "FastAPI",
+      "slug": "fastapi",
+      "source_url": "https://fastapi.tiangolo.com/",
+      "enabled": true
+    },
+    {
+      "name": "Flask",
+      "slug": "flask",
+      "source_url": "https://flask.palletsprojects.com/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Starlette",
+      "slug": "starlette",
+      "source_url": "https://www.starlette.io/",
+      "enabled": true
+    },
+    {
+      "name": "Sanic",
+      "slug": "sanic",
+      "source_url": "https://sanic.dev/en/",
+      "enabled": true
+    },
+    {
+      "name": "Litestar",
+      "slug": "litestar",
+      "source_url": "https://docs.litestar.dev/",
+      "enabled": true
+    },
+    {
+      "name": "Tornado",
+      "slug": "tornado",
+      "source_url": "https://www.tornadoweb.org/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "aiohttp",
+      "slug": "aiohttp",
+      "source_url": "https://docs.aiohttp.org/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "HTTPX",
+      "slug": "httpx",
+      "source_url": "https://www.python-httpx.org/",
+      "enabled": true
+    },
+    {
+      "name": "Requests",
+      "slug": "requests",
+      "source_url": "https://requests.readthedocs.io/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Uvicorn",
+      "slug": "uvicorn",
+      "source_url": "https://www.uvicorn.org/",
+      "enabled": true
+    },
+    {
+      "name": "Gunicorn",
+      "slug": "gunicorn",
+      "source_url": "https://docs.gunicorn.org/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Django Channels",
+      "slug": "channels",
+      "source_url": "https://channels.readthedocs.io/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Pydantic",
+      "slug": "pydantic",
+      "source_url": "https://docs.pydantic.dev/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Pydantic Settings",
+      "slug": "pydantic-settings",
+      "source_url": "https://docs.pydantic.dev/latest/concepts/pydantic_settings/",
+      "enabled": true
+    },
+    {
+      "name": "NumPy",
+      "slug": "numpy",
+      "source_url": "https://numpy.org/doc/stable/",
+      "enabled": true
+    },
+    {
+      "name": "NumPy Reference",
+      "slug": "numpy-ref",
+      "source_url": "https://numpy.org/doc/stable/reference/",
+      "enabled": true
+    },
+    {
+      "name": "Pandas",
+      "slug": "pandas",
+      "source_url": "https://pandas.pydata.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Pandas API Reference",
+      "slug": "pandas-api",
+      "source_url": "https://pandas.pydata.org/docs/reference/index.html",
+      "enabled": true
+    },
+    {
+      "name": "SciPy",
+      "slug": "scipy",
+      "source_url": "https://docs.scipy.org/doc/scipy/",
+      "enabled": true
+    },
+    {
+      "name": "Matplotlib",
+      "slug": "matplotlib",
+      "source_url": "https://matplotlib.org/stable/contents.html",
+      "enabled": true
+    },
+    {
+      "name": "Matplotlib API",
+      "slug": "matplotlib-api",
+      "source_url": "https://matplotlib.org/stable/api/index.html",
+      "enabled": true
+    },
+    {
+      "name": "Seaborn",
+      "slug": "seaborn",
+      "source_url": "https://seaborn.pydata.org/",
+      "enabled": true
+    },
+    {
+      "name": "Plotly Python",
+      "slug": "plotly",
+      "source_url": "https://plotly.com/python/",
+      "enabled": true
+    },
+    {
+      "name": "Bokeh",
+      "slug": "bokeh",
+      "source_url": "https://docs.bokeh.org/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Altair",
+      "slug": "altair",
+      "source_url": "https://altair-viz.github.io/",
+      "enabled": true
+    },
+    {
+      "name": "scikit-learn",
+      "slug": "scikit-learn",
+      "source_url": "https://scikit-learn.org/stable/user_guide.html",
+      "enabled": true
+    },
+    {
+      "name": "scikit-learn API",
+      "slug": "scikit-learn-api",
+      "source_url": "https://scikit-learn.org/stable/modules/classes.html",
+      "enabled": true
+    },
+    {
+      "name": "XGBoost",
+      "slug": "xgboost",
+      "source_url": "https://xgboost.readthedocs.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "LightGBM",
+      "slug": "lightgbm",
+      "source_url": "https://lightgbm.readthedocs.io/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "CatBoost",
+      "slug": "catboost",
+      "source_url": "https://catboost.ai/en/docs/",
+      "enabled": true
+    },
+    {
+      "name": "statsmodels",
+      "slug": "statsmodels",
+      "source_url": "https://www.statsmodels.org/stable/index.html",
+      "enabled": true
+    },
+    {
+      "name": "PyTorch",
+      "slug": "pytorch",
+      "source_url": "https://pytorch.org/docs/stable/index.html",
+      "enabled": true
+    },
+    {
+      "name": "PyTorch API",
+      "slug": "pytorch-api",
+      "source_url": "https://pytorch.org/docs/stable/nn.html",
+      "enabled": true
+    },
+    {
+      "name": "Torchvision",
+      "slug": "torchvision",
+      "source_url": "https://pytorch.org/vision/stable/index.html",
+      "enabled": true
+    },
+    {
+      "name": "Torchaudio",
+      "slug": "torchaudio",
+      "source_url": "https://pytorch.org/audio/stable/index.html",
+      "enabled": true
+    },
+    {
+      "name": "TensorFlow",
+      "slug": "tensorflow",
+      "source_url": "https://www.tensorflow.org/api_docs",
+      "enabled": true
+    },
+    {
+      "name": "Keras",
+      "slug": "keras",
+      "source_url": "https://keras.io/api/",
+      "enabled": true
+    },
+    {
+      "name": "JAX",
+      "slug": "jax",
+      "source_url": "https://jax.readthedocs.io/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Flax",
+      "slug": "flax",
+      "source_url": "https://flax.readthedocs.io/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Hugging Face Transformers",
+      "slug": "huggingface-transformers",
+      "source_url": "https://huggingface.co/docs/transformers/index",
+      "enabled": true
+    },
+    {
+      "name": "Hugging Face Datasets",
+      "slug": "huggingface-datasets",
+      "source_url": "https://huggingface.co/docs/datasets/index",
+      "enabled": true
+    },
+    {
+      "name": "Hugging Face Hub",
+      "slug": "huggingface-hub",
+      "source_url": "https://huggingface.co/docs/huggingface_hub/index",
+      "enabled": true
+    },
+    {
+      "name": "Diffusers",
+      "slug": "diffusers",
+      "source_url": "https://huggingface.co/docs/diffusers/index",
+      "enabled": true
+    },
+    {
+      "name": "PEFT",
+      "slug": "peft",
+      "source_url": "https://huggingface.co/docs/peft/index",
+      "enabled": true
+    },
+    {
+      "name": "Accelerate",
+      "slug": "accelerate",
+      "source_url": "https://huggingface.co/docs/accelerate/index",
+      "enabled": true
+    },
+    {
+      "name": "Sentence Transformers",
+      "slug": "sentence-transformers",
+      "source_url": "https://www.sbert.net/docs/",
+      "enabled": true
+    },
+    {
+      "name": "LangChain",
+      "slug": "langchain",
+      "source_url": "https://python.langchain.com/docs/introduction/",
+      "enabled": true
+    },
+    {
+      "name": "LangChain API Reference",
+      "slug": "langchain-api",
+      "source_url": "https://python.langchain.com/api_reference/",
+      "enabled": true
+    },
+    {
+      "name": "LlamaIndex",
+      "slug": "llamaindex",
+      "source_url": "https://docs.llamaindex.ai/",
+      "enabled": true
+    },
+    {
+      "name": "OpenAI Python SDK",
+      "slug": "openai-python",
+      "source_url": "https://platform.openai.com/docs/api-reference",
+      "enabled": true
+    },
+    {
+      "name": "Anthropic Python SDK",
+      "slug": "anthropic-python",
+      "source_url": "https://docs.anthropic.com/en/api/",
+      "enabled": true
+    },
+    {
+      "name": "Ollama",
+      "slug": "ollama",
+      "source_url": "https://github.com/ollama/ollama/blob/main/docs/api.md",
+      "enabled": true
+    },
+    {
+      "name": "LiteLLM",
+      "slug": "litellm",
+      "source_url": "https://docs.litellm.ai/",
+      "enabled": true
+    },
+    {
+      "name": "Polars",
+      "slug": "polars",
+      "source_url": "https://docs.pola.rs/",
+      "enabled": true
+    },
+    {
+      "name": "Polars API Reference",
+      "slug": "polars-api",
+      "source_url": "https://docs.pola.rs/api/python/stable/reference/index.html",
+      "enabled": true
+    },
+    {
+      "name": "Dask",
+      "slug": "dask",
+      "source_url": "https://docs.dask.org/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Ray",
+      "slug": "ray",
+      "source_url": "https://docs.ray.io/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "PySpark",
+      "slug": "spark-python",
+      "source_url": "https://spark.apache.org/docs/latest/api/python/",
+      "enabled": true
+    },
+    {
+      "name": "SymPy",
+      "slug": "sympy",
+      "source_url": "https://docs.sympy.org/latest/index.html",
+      "enabled": true
+    },
+    {
+      "name": "NetworkX",
+      "slug": "networkx",
+      "source_url": "https://networkx.org/documentation/stable/",
+      "enabled": true
+    },
+    {
+      "name": "NLTK",
+      "slug": "nltk",
+      "source_url": "https://www.nltk.org/",
+      "enabled": true
+    },
+    {
+      "name": "spaCy",
+      "slug": "spacy",
+      "source_url": "https://spacy.io/api",
+      "enabled": true
+    },
+    {
+      "name": "Gensim",
+      "slug": "gensim",
+      "source_url": "https://radimrehurek.com/gensim/auto_examples/",
+      "enabled": true
+    },
+    {
+      "name": "OpenCV Python",
+      "slug": "opencv-python",
+      "source_url": "https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html",
+      "enabled": true
+    },
+    {
+      "name": "Pillow (PIL Fork)",
+      "slug": "pillow",
+      "source_url": "https://pillow.readthedocs.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Python asyncio",
+      "slug": "asyncio",
+      "source_url": "https://docs.python.org/3/library/asyncio.html",
+      "enabled": true
+    },
+    {
+      "name": "AnyIO",
+      "slug": "anyio",
+      "source_url": "https://anyio.readthedocs.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Trio",
+      "slug": "trio",
+      "source_url": "https://trio.readthedocs.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Python multiprocessing",
+      "slug": "multiprocessing",
+      "source_url": "https://docs.python.org/3/library/multiprocessing.html",
+      "enabled": true
+    },
+    {
+      "name": "Python threading",
+      "slug": "threading",
+      "source_url": "https://docs.python.org/3/library/threading.html",
+      "enabled": true
+    },
+    {
+      "name": "Python concurrent.futures",
+      "slug": "concurrent-futures",
+      "source_url": "https://docs.python.org/3/library/concurrent.futures.html",
+      "enabled": true
+    },
+    {
+      "name": "Python ctypes",
+      "slug": "ctypes",
+      "source_url": "https://docs.python.org/3/library/ctypes.html",
+      "enabled": true
+    },
+    {
+      "name": "CFFI",
+      "slug": "cffi",
+      "source_url": "https://cffi.readthedocs.io/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "SQLAlchemy",
+      "slug": "sqlalchemy",
+      "source_url": "https://docs.sqlalchemy.org/en/20/",
+      "enabled": true
+    },
+    {
+      "name": "SQLAlchemy ORM",
+      "slug": "sqlalchemy-orm",
+      "source_url": "https://docs.sqlalchemy.org/en/20/orm/",
+      "enabled": true
+    },
+    {
+      "name": "Alembic",
+      "slug": "alembic",
+      "source_url": "https://alembic.sqlalchemy.org/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Tortoise ORM",
+      "slug": "tortoise-orm",
+      "source_url": "https://tortoise.github.io/",
+      "enabled": true
+    },
+    {
+      "name": "Peewee ORM",
+      "slug": "peewee",
+      "source_url": "https://docs.peewee-orm.com/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "PyMongo",
+      "slug": "pymongo",
+      "source_url": "https://pymongo.readthedocs.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Motor (async MongoDB)",
+      "slug": "motor",
+      "source_url": "https://motor.readthedocs.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "redis-py",
+      "slug": "redis-py",
+      "source_url": "https://redis-py.readthedocs.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "psycopg2",
+      "slug": "psycopg2",
+      "source_url": "https://www.psycopg.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "psycopg3",
+      "slug": "psycopg3",
+      "source_url": "https://www.psycopg.org/psycopg3/docs/",
+      "enabled": true
+    },
+    {
+      "name": "aiomysql",
+      "slug": "aiomysql",
+      "source_url": "https://aiomysql.readthedocs.io/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Boto3 (AWS SDK Python)",
+      "slug": "boto3",
+      "source_url": "https://boto3.amazonaws.com/v1/documentation/api/latest/index.html",
+      "enabled": true
+    },
+    {
+      "name": "Python sqlite3",
+      "slug": "sqlite3-python",
+      "source_url": "https://docs.python.org/3/library/sqlite3.html",
+      "enabled": true
+    },
+    {
+      "name": "Click",
+      "slug": "click",
+      "source_url": "https://click.palletsprojects.com/en/8.x/",
+      "enabled": true
+    },
+    {
+      "name": "Typer",
+      "slug": "typer",
+      "source_url": "https://typer.tiangolo.com/",
+      "enabled": true
+    },
+    {
+      "name": "Python argparse",
+      "slug": "argparse",
+      "source_url": "https://docs.python.org/3/library/argparse.html",
+      "enabled": true
+    },
+    {
+      "name": "Rich",
+      "slug": "rich",
+      "source_url": "https://rich.readthedocs.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "tqdm",
+      "slug": "tqdm",
+      "source_url": "https://tqdm.github.io/",
+      "enabled": true
+    },
+    {
+      "name": "Loguru",
+      "slug": "loguru",
+      "source_url": "https://loguru.readthedocs.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "structlog",
+      "slug": "structlog",
+      "source_url": "https://www.structlog.org/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "python-dotenv",
+      "slug": "python-dotenv",
+      "source_url": "https://saurabh-kumar.com/python-dotenv/",
+      "enabled": true
+    },
+    {
+      "name": "PyYAML",
+      "slug": "pyyaml",
+      "source_url": "https://pyyaml.org/wiki/PyYAMLDocumentation",
+      "enabled": true
+    },
+    {
+      "name": "tomllib (Python stdlib)",
+      "slug": "toml-python",
+      "source_url": "https://docs.python.org/3/library/tomllib.html",
+      "enabled": true
+    },
+    {
+      "name": "attrs",
+      "slug": "attrs",
+      "source_url": "https://www.attrs.org/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Python dataclasses",
+      "slug": "dataclasses",
+      "source_url": "https://docs.python.org/3/library/dataclasses.html",
+      "enabled": true
+    },
+    {
+      "name": "Python pathlib",
+      "slug": "pathlib",
+      "source_url": "https://docs.python.org/3/library/pathlib.html",
+      "enabled": true
+    },
+    {
+      "name": "Python typing",
+      "slug": "typing",
+      "source_url": "https://docs.python.org/3/library/typing.html",
+      "enabled": true
+    },
+    {
+      "name": "Python abc",
+      "slug": "abc",
+      "source_url": "https://docs.python.org/3/library/abc.html",
+      "enabled": true
+    },
+    {
+      "name": "Python functools",
+      "slug": "functools",
+      "source_url": "https://docs.python.org/3/library/functools.html",
+      "enabled": true
+    },
+    {
+      "name": "Python itertools",
+      "slug": "itertools",
+      "source_url": "https://docs.python.org/3/library/itertools.html",
+      "enabled": true
+    },
+    {
+      "name": "Python collections",
+      "slug": "collections",
+      "source_url": "https://docs.python.org/3/library/collections.html",
+      "enabled": true
+    },
+    {
+      "name": "Python contextlib",
+      "slug": "contextlib",
+      "source_url": "https://docs.python.org/3/library/contextlib.html",
+      "enabled": true
+    },
+    {
+      "name": "pytest",
+      "slug": "pytest",
+      "source_url": "https://docs.pytest.org/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Python unittest",
+      "slug": "unittest",
+      "source_url": "https://docs.python.org/3/library/unittest.html",
+      "enabled": true
+    },
+    {
+      "name": "Hypothesis",
+      "slug": "hypothesis",
+      "source_url": "https://hypothesis.readthedocs.io/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Faker (Python)",
+      "slug": "faker-python",
+      "source_url": "https://faker.readthedocs.io/en/master/",
+      "enabled": true
+    },
+    {
+      "name": "Python unittest.mock",
+      "slug": "mock",
+      "source_url": "https://docs.python.org/3/library/unittest.mock.html",
+      "enabled": true
+    },
+    {
+      "name": "factory_boy",
+      "slug": "factory-boy",
+      "source_url": "https://factoryboy.readthedocs.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Coverage.py",
+      "slug": "coverage",
+      "source_url": "https://coverage.readthedocs.io/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "mypy",
+      "slug": "mypy",
+      "source_url": "https://mypy.readthedocs.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Pyright",
+      "slug": "pyright",
+      "source_url": "https://microsoft.github.io/pyright/",
+      "enabled": true
+    },
+    {
+      "name": "Ruff",
+      "slug": "ruff",
+      "source_url": "https://docs.astral.sh/ruff/",
+      "enabled": true
+    },
+    {
+      "name": "Black",
+      "slug": "black",
+      "source_url": "https://black.readthedocs.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "isort",
+      "slug": "isort",
+      "source_url": "https://pycqa.github.io/isort/",
+      "enabled": true
+    },
+    {
+      "name": "Tokio",
+      "slug": "tokio",
+      "source_url": "https://docs.rs/tokio/latest/tokio/",
+      "enabled": true
+    },
+    {
+      "name": "Tokio Tutorial",
+      "slug": "tokio-tutorial",
+      "source_url": "https://tokio.rs/tokio/tutorial",
+      "enabled": true
+    },
+    {
+      "name": "Axum",
+      "slug": "axum",
+      "source_url": "https://docs.rs/axum/latest/axum/",
+      "enabled": true
+    },
+    {
+      "name": "Actix Web",
+      "slug": "actix-web",
+      "source_url": "https://actix.rs/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Actix Web API",
+      "slug": "actix-web-api",
+      "source_url": "https://docs.rs/actix-web/latest/actix_web/",
+      "enabled": true
+    },
+    {
+      "name": "Warp",
+      "slug": "warp",
+      "source_url": "https://docs.rs/warp/latest/warp/",
+      "enabled": true
+    },
+    {
+      "name": "Hyper",
+      "slug": "hyper",
+      "source_url": "https://docs.rs/hyper/latest/hyper/",
+      "enabled": true
+    },
+    {
+      "name": "Reqwest",
+      "slug": "reqwest",
+      "source_url": "https://docs.rs/reqwest/latest/reqwest/",
+      "enabled": true
+    },
+    {
+      "name": "Serde",
+      "slug": "serde",
+      "source_url": "https://serde.rs/",
+      "enabled": true
+    },
+    {
+      "name": "serde_json",
+      "slug": "serde-json",
+      "source_url": "https://docs.rs/serde_json/latest/serde_json/",
+      "enabled": true
+    },
+    {
+      "name": "SQLx",
+      "slug": "sqlx",
+      "source_url": "https://docs.rs/sqlx/latest/sqlx/",
+      "enabled": true
+    },
+    {
+      "name": "Diesel",
+      "slug": "diesel",
+      "source_url": "https://diesel.rs/guides/",
+      "enabled": true
+    },
+    {
+      "name": "SeaORM",
+      "slug": "sea-orm",
+      "source_url": "https://www.sea-ql.org/SeaORM/docs/introduction/what-is-an-orm/",
+      "enabled": true
+    },
+    {
+      "name": "rusqlite",
+      "slug": "rusqlite",
+      "source_url": "https://docs.rs/rusqlite/latest/rusqlite/",
+      "enabled": true
+    },
+    {
+      "name": "Clap",
+      "slug": "clap",
+      "source_url": "https://docs.rs/clap/latest/clap/",
+      "enabled": true
+    },
+    {
+      "name": "Clap Book",
+      "slug": "clap-book",
+      "source_url": "https://docs.rs/clap/latest/clap/_derive/_tutorial/",
+      "enabled": true
+    },
+    {
+      "name": "anyhow",
+      "slug": "anyhow",
+      "source_url": "https://docs.rs/anyhow/latest/anyhow/",
+      "enabled": true
+    },
+    {
+      "name": "thiserror",
+      "slug": "thiserror",
+      "source_url": "https://docs.rs/thiserror/latest/thiserror/",
+      "enabled": true
+    },
+    {
+      "name": "tracing",
+      "slug": "tracing",
+      "source_url": "https://docs.rs/tracing/latest/tracing/",
+      "enabled": true
+    },
+    {
+      "name": "tracing-subscriber",
+      "slug": "tracing-subscriber",
+      "source_url": "https://docs.rs/tracing-subscriber/latest/tracing_subscriber/",
+      "enabled": true
+    },
+    {
+      "name": "Rayon",
+      "slug": "rayon",
+      "source_url": "https://docs.rs/rayon/latest/rayon/",
+      "enabled": true
+    },
+    {
+      "name": "Crossbeam",
+      "slug": "crossbeam",
+      "source_url": "https://docs.rs/crossbeam/latest/crossbeam/",
+      "enabled": true
+    },
+    {
+      "name": "parking_lot",
+      "slug": "parking-lot",
+      "source_url": "https://docs.rs/parking_lot/latest/parking_lot/",
+      "enabled": true
+    },
+    {
+      "name": "once_cell",
+      "slug": "once-cell",
+      "source_url": "https://docs.rs/once_cell/latest/once_cell/",
+      "enabled": true
+    },
+    {
+      "name": "DashMap",
+      "slug": "dashmap",
+      "source_url": "https://docs.rs/dashmap/latest/dashmap/",
+      "enabled": true
+    },
+    {
+      "name": "Bytes",
+      "slug": "bytes",
+      "source_url": "https://docs.rs/bytes/latest/bytes/",
+      "enabled": true
+    },
+    {
+      "name": "Tower",
+      "slug": "tower",
+      "source_url": "https://docs.rs/tower/latest/tower/",
+      "enabled": true
+    },
+    {
+      "name": "tower-http",
+      "slug": "tower-http",
+      "source_url": "https://docs.rs/tower-http/latest/tower_http/",
+      "enabled": true
+    },
+    {
+      "name": "Tonic (gRPC)",
+      "slug": "tonic",
+      "source_url": "https://docs.rs/tonic/latest/tonic/",
+      "enabled": true
+    },
+    {
+      "name": "Prost (protobuf)",
+      "slug": "prost",
+      "source_url": "https://docs.rs/prost/latest/prost/",
+      "enabled": true
+    },
+    {
+      "name": "regex crate",
+      "slug": "regex-rust",
+      "source_url": "https://docs.rs/regex/latest/regex/",
+      "enabled": true
+    },
+    {
+      "name": "Chrono",
+      "slug": "chrono",
+      "source_url": "https://docs.rs/chrono/latest/chrono/",
+      "enabled": true
+    },
+    {
+      "name": "time",
+      "slug": "time-rs",
+      "source_url": "https://docs.rs/time/latest/time/",
+      "enabled": true
+    },
+    {
+      "name": "uuid",
+      "slug": "uuid",
+      "source_url": "https://docs.rs/uuid/latest/uuid/",
+      "enabled": true
+    },
+    {
+      "name": "rand",
+      "slug": "rand",
+      "source_url": "https://docs.rs/rand/latest/rand/",
+      "enabled": true
+    },
+    {
+      "name": "itertools",
+      "slug": "itertools-rust",
+      "source_url": "https://docs.rs/itertools/latest/itertools/",
+      "enabled": true
+    },
+    {
+      "name": "futures",
+      "slug": "futures",
+      "source_url": "https://docs.rs/futures/latest/futures/",
+      "enabled": true
+    },
+    {
+      "name": "async-trait",
+      "slug": "async-trait",
+      "source_url": "https://docs.rs/async-trait/latest/async_trait/",
+      "enabled": true
+    },
+    {
+      "name": "tokio-stream",
+      "slug": "tokio-stream",
+      "source_url": "https://docs.rs/tokio-stream/latest/tokio_stream/",
+      "enabled": true
+    },
+    {
+      "name": "flume",
+      "slug": "flume",
+      "source_url": "https://docs.rs/flume/latest/flume/",
+      "enabled": true
+    },
+    {
+      "name": "log",
+      "slug": "log-rust",
+      "source_url": "https://docs.rs/log/latest/log/",
+      "enabled": true
+    },
+    {
+      "name": "env_logger",
+      "slug": "env-logger",
+      "source_url": "https://docs.rs/env_logger/latest/env_logger/",
+      "enabled": true
+    },
+    {
+      "name": "config",
+      "slug": "config-rs",
+      "source_url": "https://docs.rs/config/latest/config/",
+      "enabled": true
+    },
+    {
+      "name": "dotenvy",
+      "slug": "dotenvy",
+      "source_url": "https://docs.rs/dotenvy/latest/dotenvy/",
+      "enabled": true
+    },
+    {
+      "name": "toml",
+      "slug": "toml-rs",
+      "source_url": "https://docs.rs/toml/latest/toml/",
+      "enabled": true
+    },
+    {
+      "name": "serde_yaml",
+      "slug": "serde-yaml",
+      "source_url": "https://docs.rs/serde_yaml/latest/serde_yaml/",
+      "enabled": true
+    },
+    {
+      "name": "strum",
+      "slug": "strum",
+      "source_url": "https://docs.rs/strum/latest/strum/",
+      "enabled": true
+    },
+    {
+      "name": "derive_more",
+      "slug": "derive-more",
+      "source_url": "https://docs.rs/derive_more/latest/derive_more/",
+      "enabled": true
+    },
+    {
+      "name": "indicatif",
+      "slug": "clap-verbosity",
+      "source_url": "https://docs.rs/indicatif/latest/indicatif/",
+      "enabled": true
+    },
+    {
+      "name": "owo-colors",
+      "slug": "owo-colors",
+      "source_url": "https://docs.rs/owo-colors/latest/owo_colors/",
+      "enabled": true
+    },
+    {
+      "name": "colored",
+      "slug": "colored-rs",
+      "source_url": "https://docs.rs/colored/latest/colored/",
+      "enabled": true
+    },
+    {
+      "name": "url",
+      "slug": "url-rs",
+      "source_url": "https://docs.rs/url/latest/url/",
+      "enabled": true
+    },
+    {
+      "name": "mime",
+      "slug": "mime",
+      "source_url": "https://docs.rs/mime/latest/mime/",
+      "enabled": true
+    },
+    {
+      "name": "base64",
+      "slug": "base64-rs",
+      "source_url": "https://docs.rs/base64/latest/base64/",
+      "enabled": true
+    },
+    {
+      "name": "sha2",
+      "slug": "sha2",
+      "source_url": "https://docs.rs/sha2/latest/sha2/",
+      "enabled": true
+    },
+    {
+      "name": "hmac",
+      "slug": "hmac",
+      "source_url": "https://docs.rs/hmac/latest/hmac/",
+      "enabled": true
+    },
+    {
+      "name": "jsonwebtoken",
+      "slug": "jsonwebtoken",
+      "source_url": "https://docs.rs/jsonwebtoken/latest/jsonwebtoken/",
+      "enabled": true
+    },
+    {
+      "name": "bcrypt",
+      "slug": "bcrypt-rs",
+      "source_url": "https://docs.rs/bcrypt/latest/bcrypt/",
+      "enabled": true
+    },
+    {
+      "name": "RustCrypto",
+      "slug": "rust-crypto",
+      "source_url": "https://github.com/RustCrypto",
+      "enabled": true
+    },
+    {
+      "name": "ndarray",
+      "slug": "ndarray",
+      "source_url": "https://docs.rs/ndarray/latest/ndarray/",
+      "enabled": true
+    },
+    {
+      "name": "Polars Rust",
+      "slug": "polars-rust",
+      "source_url": "https://docs.rs/polars/latest/polars/",
+      "enabled": true
+    },
+    {
+      "name": "Candle (ML)",
+      "slug": "candle",
+      "source_url": "https://huggingface.github.io/candle/guide/installation.html",
+      "enabled": true
+    },
+    {
+      "name": "Burn (ML)",
+      "slug": "burn",
+      "source_url": "https://burn.dev/docs/",
+      "enabled": true
+    },
+    {
+      "name": "ort (ONNX Runtime)",
+      "slug": "ort",
+      "source_url": "https://docs.rs/ort/latest/ort/",
+      "enabled": true
+    },
+    {
+      "name": "FastEmbed",
+      "slug": "fastembed",
+      "source_url": "https://docs.rs/fastembed/latest/fastembed/",
+      "enabled": true
+    },
+    {
+      "name": "Tantivy",
+      "slug": "tantivy",
+      "source_url": "https://docs.rs/tantivy/latest/tantivy/",
+      "enabled": true
+    },
+    {
+      "name": "Meilisearch Rust SDK",
+      "slug": "meilisearch-sdk",
+      "source_url": "https://docs.rs/meilisearch-sdk/latest/meilisearch_sdk/",
+      "enabled": true
+    },
+    {
+      "name": "image",
+      "slug": "image-rs",
+      "source_url": "https://docs.rs/image/latest/image/",
+      "enabled": true
+    },
+    {
+      "name": "winit",
+      "slug": "winit",
+      "source_url": "https://docs.rs/winit/latest/winit/",
+      "enabled": true
+    },
+    {
+      "name": "wgpu",
+      "slug": "wgpu",
+      "source_url": "https://docs.rs/wgpu/latest/wgpu/",
+      "enabled": true
+    },
+    {
+      "name": "Bevy",
+      "slug": "bevy",
+      "source_url": "https://docs.rs/bevy/latest/bevy/",
+      "enabled": true
+    },
+    {
+      "name": "Bevy Book",
+      "slug": "bevy-book",
+      "source_url": "https://bevyengine.org/learn/book/introduction/",
+      "enabled": true
+    },
+    {
+      "name": "egui",
+      "slug": "egui",
+      "source_url": "https://docs.rs/egui/latest/egui/",
+      "enabled": true
+    },
+    {
+      "name": "Tauri Rust API",
+      "slug": "tauri-rust",
+      "source_url": "https://docs.rs/tauri/latest/tauri/",
+      "enabled": true
+    },
+    {
+      "name": "SWC Rust",
+      "slug": "swc-core",
+      "source_url": "https://docs.rs/swc_core/latest/swc_core/",
+      "enabled": true
+    },
+    {
+      "name": "napi-rs",
+      "slug": "napi-rs",
+      "source_url": "https://napi.rs/docs/introduction/getting-started",
+      "enabled": true
+    },
+    {
+      "name": "Ratatui (TUI)",
+      "slug": "ratatui",
+      "source_url": "https://ratatui.rs/introduction/",
+      "enabled": true
+    },
+    {
+      "name": "crossterm",
+      "slug": "crossterm",
+      "source_url": "https://docs.rs/crossterm/latest/crossterm/",
+      "enabled": true
+    },
+    {
+      "name": "inquire",
+      "slug": "inquire",
+      "source_url": "https://docs.rs/inquire/latest/inquire/",
+      "enabled": true
+    },
+    {
+      "name": "sled",
+      "slug": "sled",
+      "source_url": "https://docs.rs/sled/latest/sled/",
+      "enabled": true
+    },
+    {
+      "name": "rust-rocksdb",
+      "slug": "rocksdb-rs",
+      "source_url": "https://docs.rs/rocksdb/latest/rocksdb/",
+      "enabled": true
+    },
+    {
+      "name": "redb",
+      "slug": "redb",
+      "source_url": "https://docs.rs/redb/latest/redb/",
+      "enabled": true
+    },
+    {
+      "name": "heed",
+      "slug": "heed",
+      "source_url": "https://docs.rs/heed/latest/heed/",
+      "enabled": true
+    },
+    {
+      "name": "fred (Redis)",
+      "slug": "fred-rs",
+      "source_url": "https://docs.rs/fred/latest/fred/",
+      "enabled": true
+    },
+    {
+      "name": "redis",
+      "slug": "redis-rs",
+      "source_url": "https://docs.rs/redis/latest/redis/",
+      "enabled": true
+    },
+    {
+      "name": "PostgreSQL",
+      "slug": "postgresql",
+      "source_url": "https://www.postgresql.org/docs/current/",
+      "enabled": true
+    },
+    {
+      "name": "PostgreSQL SQL Reference",
+      "slug": "postgresql-ref",
+      "source_url": "https://www.postgresql.org/docs/current/sql-commands.html",
+      "enabled": true
+    },
+    {
+      "name": "MySQL",
+      "slug": "mysql",
+      "source_url": "https://dev.mysql.com/doc/refman/8.0/en/",
+      "enabled": true
+    },
+    {
+      "name": "MariaDB",
+      "slug": "mariadb",
+      "source_url": "https://mariadb.com/kb/en/documentation/",
+      "enabled": true
+    },
+    {
+      "name": "SQLite",
+      "slug": "sqlite",
+      "source_url": "https://www.sqlite.org/docs.html",
+      "enabled": true
+    },
+    {
+      "name": "SQLite SQL Language",
+      "slug": "sqlite-lang",
+      "source_url": "https://www.sqlite.org/lang.html",
+      "enabled": true
+    },
+    {
+      "name": "MongoDB",
+      "slug": "mongodb",
+      "source_url": "https://www.mongodb.com/docs/manual/",
+      "enabled": true
+    },
+    {
+      "name": "Redis",
+      "slug": "redis",
+      "source_url": "https://redis.io/docs/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Redis Commands",
+      "slug": "redis-commands",
+      "source_url": "https://redis.io/docs/latest/commands/",
+      "enabled": true
+    },
+    {
+      "name": "Elasticsearch",
+      "slug": "elasticsearch",
+      "source_url": "https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html",
+      "enabled": true
+    },
+    {
+      "name": "Apache Cassandra",
+      "slug": "cassandra",
+      "source_url": "https://cassandra.apache.org/doc/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Amazon DynamoDB",
+      "slug": "dynamodb",
+      "source_url": "https://docs.aws.amazon.com/dynamodb/",
+      "enabled": true
+    },
+    {
+      "name": "Firestore",
+      "slug": "firestore",
+      "source_url": "https://firebase.google.com/docs/firestore",
+      "enabled": true
+    },
+    {
+      "name": "Supabase",
+      "slug": "supabase",
+      "source_url": "https://supabase.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "PlanetScale",
+      "slug": "planetscale",
+      "source_url": "https://planetscale.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "CockroachDB",
+      "slug": "cockroachdb",
+      "source_url": "https://www.cockroachlabs.com/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Neon (serverless Postgres)",
+      "slug": "neon",
+      "source_url": "https://neon.tech/docs",
+      "enabled": true
+    },
+    {
+      "name": "Turso (libSQL)",
+      "slug": "turso",
+      "source_url": "https://docs.turso.tech/",
+      "enabled": true
+    },
+    {
+      "name": "ClickHouse",
+      "slug": "clickhouse",
+      "source_url": "https://clickhouse.com/docs/en/intro",
+      "enabled": true
+    },
+    {
+      "name": "DuckDB",
+      "slug": "duckdb",
+      "source_url": "https://duckdb.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Neo4j",
+      "slug": "neo4j",
+      "source_url": "https://neo4j.com/docs/",
+      "enabled": true
+    },
+    {
+      "name": "InfluxDB",
+      "slug": "influxdb",
+      "source_url": "https://docs.influxdata.com/influxdb/",
+      "enabled": true
+    },
+    {
+      "name": "TimescaleDB",
+      "slug": "timescaledb",
+      "source_url": "https://docs.timescale.com/",
+      "enabled": true
+    },
+    {
+      "name": "Prisma",
+      "slug": "prisma",
+      "source_url": "https://www.prisma.io/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Drizzle ORM",
+      "slug": "drizzle",
+      "source_url": "https://orm.drizzle.team/docs/overview",
+      "enabled": true
+    },
+    {
+      "name": "TypeORM",
+      "slug": "typeorm",
+      "source_url": "https://typeorm.io/",
+      "enabled": true
+    },
+    {
+      "name": "Mongoose",
+      "slug": "mongoose",
+      "source_url": "https://mongoosejs.com/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Knex.js",
+      "slug": "knex",
+      "source_url": "https://knexjs.org/guide/",
+      "enabled": true
+    },
+    {
+      "name": "Kysely",
+      "slug": "kysely",
+      "source_url": "https://kysely.dev/docs/intro",
+      "enabled": true
+    },
+    {
+      "name": "pgvector",
+      "slug": "pgvector",
+      "source_url": "https://github.com/pgvector/pgvector",
+      "enabled": true
+    },
+    {
+      "name": "Qdrant",
+      "slug": "qdrant",
+      "source_url": "https://qdrant.tech/documentation/",
+      "enabled": true
+    },
+    {
+      "name": "Weaviate",
+      "slug": "weaviate",
+      "source_url": "https://weaviate.io/developers/weaviate",
+      "enabled": true
+    },
+    {
+      "name": "Pinecone",
+      "slug": "pinecone",
+      "source_url": "https://docs.pinecone.io/",
+      "enabled": true
+    },
+    {
+      "name": "Chroma",
+      "slug": "chroma",
+      "source_url": "https://docs.trychroma.com/",
+      "enabled": true
+    },
+    {
+      "name": "Milvus",
+      "slug": "milvus",
+      "source_url": "https://milvus.io/docs",
+      "enabled": true
+    },
+    {
+      "name": "Git Reference",
+      "slug": "git",
+      "source_url": "https://git-scm.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Pro Git Book",
+      "slug": "git-book",
+      "source_url": "https://git-scm.com/book/en/v2",
+      "enabled": true
+    },
+    {
+      "name": "Docker",
+      "slug": "docker",
+      "source_url": "https://docs.docker.com/",
+      "enabled": true
+    },
+    {
+      "name": "Docker Compose",
+      "slug": "docker-compose",
+      "source_url": "https://docs.docker.com/compose/",
+      "enabled": true
+    },
+    {
+      "name": "Docker Engine API",
+      "slug": "docker-engine-api",
+      "source_url": "https://docs.docker.com/engine/api/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Podman",
+      "slug": "podman",
+      "source_url": "https://podman.io/docs",
+      "enabled": true
+    },
+    {
+      "name": "Kubernetes",
+      "slug": "kubernetes",
+      "source_url": "https://kubernetes.io/docs/home/",
+      "enabled": true
+    },
+    {
+      "name": "kubectl Reference",
+      "slug": "kubectl",
+      "source_url": "https://kubernetes.io/docs/reference/kubectl/",
+      "enabled": true
+    },
+    {
+      "name": "Helm",
+      "slug": "helm",
+      "source_url": "https://helm.sh/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Kustomize",
+      "slug": "kustomize",
+      "source_url": "https://kubectl.docs.kubernetes.io/guides/",
+      "enabled": true
+    },
+    {
+      "name": "Terraform",
+      "slug": "terraform",
+      "source_url": "https://developer.hashicorp.com/terraform/docs",
+      "enabled": true
+    },
+    {
+      "name": "Terraform CLI",
+      "slug": "terraform-cli",
+      "source_url": "https://developer.hashicorp.com/terraform/cli",
+      "enabled": true
+    },
+    {
+      "name": "OpenTofu",
+      "slug": "opentofu",
+      "source_url": "https://opentofu.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Pulumi",
+      "slug": "pulumi",
+      "source_url": "https://www.pulumi.com/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Ansible",
+      "slug": "ansible",
+      "source_url": "https://docs.ansible.com/ansible/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Vagrant",
+      "slug": "vagrant",
+      "source_url": "https://developer.hashicorp.com/vagrant/docs",
+      "enabled": true
+    },
+    {
+      "name": "Packer",
+      "slug": "packer",
+      "source_url": "https://developer.hashicorp.com/packer/docs",
+      "enabled": true
+    },
+    {
+      "name": "Consul",
+      "slug": "consul",
+      "source_url": "https://developer.hashicorp.com/consul/docs",
+      "enabled": true
+    },
+    {
+      "name": "Vault",
+      "slug": "vault",
+      "source_url": "https://developer.hashicorp.com/vault/docs",
+      "enabled": true
+    },
+    {
+      "name": "Nomad",
+      "slug": "nomad",
+      "source_url": "https://developer.hashicorp.com/nomad/docs",
+      "enabled": true
+    },
+    {
+      "name": "GitHub Actions",
+      "slug": "github-actions",
+      "source_url": "https://docs.github.com/en/actions",
+      "enabled": true
+    },
+    {
+      "name": "GitHub CLI",
+      "slug": "github-cli",
+      "source_url": "https://cli.github.com/manual/",
+      "enabled": true
+    },
+    {
+      "name": "GitHub REST API",
+      "slug": "github-api",
+      "source_url": "https://docs.github.com/en/rest",
+      "enabled": true
+    },
+    {
+      "name": "GitLab CI/CD",
+      "slug": "gitlab-ci",
+      "source_url": "https://docs.gitlab.com/ee/ci/",
+      "enabled": true
+    },
+    {
+      "name": "CircleCI",
+      "slug": "circleci",
+      "source_url": "https://circleci.com/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Jenkins",
+      "slug": "jenkins",
+      "source_url": "https://www.jenkins.io/doc/",
+      "enabled": true
+    },
+    {
+      "name": "ArgoCD",
+      "slug": "argocd",
+      "source_url": "https://argo-cd.readthedocs.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Flux",
+      "slug": "flux",
+      "source_url": "https://fluxcd.io/flux/get-started/",
+      "enabled": true
+    },
+    {
+      "name": "NGINX",
+      "slug": "nginx",
+      "source_url": "https://nginx.org/en/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Caddy",
+      "slug": "caddy",
+      "source_url": "https://caddyserver.com/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Traefik",
+      "slug": "traefik",
+      "source_url": "https://doc.traefik.io/traefik/",
+      "enabled": true
+    },
+    {
+      "name": "Prometheus",
+      "slug": "prometheus",
+      "source_url": "https://prometheus.io/docs/introduction/overview/",
+      "enabled": true
+    },
+    {
+      "name": "Grafana",
+      "slug": "grafana",
+      "source_url": "https://grafana.com/docs/grafana/latest/",
+      "enabled": true
+    },
+    {
+      "name": "OpenTelemetry",
+      "slug": "opentelemetry",
+      "source_url": "https://opentelemetry.io/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Jaeger",
+      "slug": "jaeger",
+      "source_url": "https://www.jaegertracing.io/docs/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Grafana Loki",
+      "slug": "loki",
+      "source_url": "https://grafana.com/docs/loki/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Alertmanager",
+      "slug": "alertmanager",
+      "source_url": "https://prometheus.io/docs/alerting/latest/alertmanager/",
+      "enabled": true
+    },
+    {
+      "name": "Datadog",
+      "slug": "datadog",
+      "source_url": "https://docs.datadoghq.com/",
+      "enabled": true
+    },
+    {
+      "name": "Apache Kafka",
+      "slug": "kafka",
+      "source_url": "https://kafka.apache.org/documentation/",
+      "enabled": true
+    },
+    {
+      "name": "Confluent Kafka",
+      "slug": "kafka-confluent",
+      "source_url": "https://docs.confluent.io/platform/current/",
+      "enabled": true
+    },
+    {
+      "name": "RabbitMQ",
+      "slug": "rabbitmq",
+      "source_url": "https://www.rabbitmq.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "NATS",
+      "slug": "nats",
+      "source_url": "https://docs.nats.io/",
+      "enabled": true
+    },
+    {
+      "name": "Celery",
+      "slug": "celery",
+      "source_url": "https://docs.celeryq.dev/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "GNU Make",
+      "slug": "make",
+      "source_url": "https://www.gnu.org/software/make/manual/",
+      "enabled": true
+    },
+    {
+      "name": "just (command runner)",
+      "slug": "just",
+      "source_url": "https://just.systems/man/en/",
+      "enabled": true
+    },
+    {
+      "name": "AWS CLI",
+      "slug": "aws-cli",
+      "source_url": "https://docs.aws.amazon.com/cli/latest/userguide/",
+      "enabled": true
+    },
+    {
+      "name": "AWS CLI Reference",
+      "slug": "aws-cli-ref",
+      "source_url": "https://awscli.amazonaws.com/v2/documentation/api/latest/index.html",
+      "enabled": true
+    },
+    {
+      "name": "AWS SDK JavaScript v3",
+      "slug": "aws-sdk-js-v3",
+      "source_url": "https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/",
+      "enabled": true
+    },
+    {
+      "name": "AWS SDK Python (Boto3)",
+      "slug": "aws-sdk-python",
+      "source_url": "https://boto3.amazonaws.com/v1/documentation/api/latest/index.html",
+      "enabled": true
+    },
+    {
+      "name": "AWS SDK for Rust",
+      "slug": "aws-sdk-rust",
+      "source_url": "https://docs.aws.amazon.com/sdk-for-rust/latest/dg/",
+      "enabled": true
+    },
+    {
+      "name": "Amazon S3",
+      "slug": "aws-s3",
+      "source_url": "https://docs.aws.amazon.com/s3/",
+      "enabled": true
+    },
+    {
+      "name": "AWS Lambda",
+      "slug": "aws-lambda",
+      "source_url": "https://docs.aws.amazon.com/lambda/",
+      "enabled": true
+    },
+    {
+      "name": "Amazon EC2",
+      "slug": "aws-ec2",
+      "source_url": "https://docs.aws.amazon.com/ec2/",
+      "enabled": true
+    },
+    {
+      "name": "Amazon ECS",
+      "slug": "aws-ecs",
+      "source_url": "https://docs.aws.amazon.com/ecs/",
+      "enabled": true
+    },
+    {
+      "name": "Amazon EKS",
+      "slug": "aws-eks",
+      "source_url": "https://docs.aws.amazon.com/eks/",
+      "enabled": true
+    },
+    {
+      "name": "Amazon RDS",
+      "slug": "aws-rds",
+      "source_url": "https://docs.aws.amazon.com/rds/",
+      "enabled": true
+    },
+    {
+      "name": "AWS IAM",
+      "slug": "aws-iam",
+      "source_url": "https://docs.aws.amazon.com/iam/",
+      "enabled": true
+    },
+    {
+      "name": "AWS CloudFormation",
+      "slug": "aws-cloudformation",
+      "source_url": "https://docs.aws.amazon.com/cloudformation/",
+      "enabled": true
+    },
+    {
+      "name": "AWS CDK",
+      "slug": "aws-cdk",
+      "source_url": "https://docs.aws.amazon.com/cdk/v2/guide/",
+      "enabled": true
+    },
+    {
+      "name": "AWS CDK API Reference",
+      "slug": "aws-cdk-api",
+      "source_url": "https://docs.aws.amazon.com/cdk/api/v2/",
+      "enabled": true
+    },
+    {
+      "name": "Amazon SQS",
+      "slug": "aws-sqs",
+      "source_url": "https://docs.aws.amazon.com/sqs/",
+      "enabled": true
+    },
+    {
+      "name": "Amazon SNS",
+      "slug": "aws-sns",
+      "source_url": "https://docs.aws.amazon.com/sns/",
+      "enabled": true
+    },
+    {
+      "name": "Amazon API Gateway",
+      "slug": "aws-api-gateway",
+      "source_url": "https://docs.aws.amazon.com/apigateway/",
+      "enabled": true
+    },
+    {
+      "name": "Amazon Cognito",
+      "slug": "aws-cognito",
+      "source_url": "https://docs.aws.amazon.com/cognito/",
+      "enabled": true
+    },
+    {
+      "name": "Amazon CloudWatch",
+      "slug": "aws-cloudwatch",
+      "source_url": "https://docs.aws.amazon.com/cloudwatch/",
+      "enabled": true
+    },
+    {
+      "name": "AWS Secrets Manager",
+      "slug": "aws-secrets-manager",
+      "source_url": "https://docs.aws.amazon.com/secretsmanager/",
+      "enabled": true
+    },
+    {
+      "name": "Google Cloud Documentation",
+      "slug": "gcp",
+      "source_url": "https://cloud.google.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "gcloud CLI",
+      "slug": "gcp-cli",
+      "source_url": "https://cloud.google.com/sdk/gcloud/reference",
+      "enabled": true
+    },
+    {
+      "name": "Cloud Storage",
+      "slug": "gcp-storage",
+      "source_url": "https://cloud.google.com/storage/docs",
+      "enabled": true
+    },
+    {
+      "name": "Cloud Run",
+      "slug": "gcp-run",
+      "source_url": "https://cloud.google.com/run/docs",
+      "enabled": true
+    },
+    {
+      "name": "Cloud Functions",
+      "slug": "gcp-functions",
+      "source_url": "https://cloud.google.com/functions/docs",
+      "enabled": true
+    },
+    {
+      "name": "Google Kubernetes Engine",
+      "slug": "gcp-gke",
+      "source_url": "https://cloud.google.com/kubernetes-engine/docs",
+      "enabled": true
+    },
+    {
+      "name": "BigQuery",
+      "slug": "gcp-bigquery",
+      "source_url": "https://cloud.google.com/bigquery/docs",
+      "enabled": true
+    },
+    {
+      "name": "Pub/Sub",
+      "slug": "gcp-pubsub",
+      "source_url": "https://cloud.google.com/pubsub/docs",
+      "enabled": true
+    },
+    {
+      "name": "Cloud SQL",
+      "slug": "gcp-sql",
+      "source_url": "https://cloud.google.com/sql/docs",
+      "enabled": true
+    },
+    {
+      "name": "Cloud IAM",
+      "slug": "gcp-iam",
+      "source_url": "https://cloud.google.com/iam/docs",
+      "enabled": true
+    },
+    {
+      "name": "Firebase",
+      "slug": "firebase",
+      "source_url": "https://firebase.google.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Firebase Authentication",
+      "slug": "firebase-auth",
+      "source_url": "https://firebase.google.com/docs/auth",
+      "enabled": true
+    },
+    {
+      "name": "Vertex AI",
+      "slug": "vertex-ai",
+      "source_url": "https://cloud.google.com/vertex-ai/docs",
+      "enabled": true
+    },
+    {
+      "name": "Azure Documentation",
+      "slug": "azure",
+      "source_url": "https://learn.microsoft.com/en-us/azure/",
+      "enabled": true
+    },
+    {
+      "name": "Azure CLI",
+      "slug": "azure-cli",
+      "source_url": "https://learn.microsoft.com/en-us/cli/azure/",
+      "enabled": true
+    },
+    {
+      "name": "Azure Functions",
+      "slug": "azure-functions",
+      "source_url": "https://learn.microsoft.com/en-us/azure/azure-functions/",
+      "enabled": true
+    },
+    {
+      "name": "Azure Storage",
+      "slug": "azure-storage",
+      "source_url": "https://learn.microsoft.com/en-us/azure/storage/",
+      "enabled": true
+    },
+    {
+      "name": "Azure Kubernetes Service",
+      "slug": "azure-aks",
+      "source_url": "https://learn.microsoft.com/en-us/azure/aks/",
+      "enabled": true
+    },
+    {
+      "name": "Azure Cosmos DB",
+      "slug": "azure-cosmos",
+      "source_url": "https://learn.microsoft.com/en-us/azure/cosmos-db/",
+      "enabled": true
+    },
+    {
+      "name": "Azure DevOps",
+      "slug": "azure-devops",
+      "source_url": "https://learn.microsoft.com/en-us/azure/devops/",
+      "enabled": true
+    },
+    {
+      "name": "Azure OpenAI",
+      "slug": "azure-openai",
+      "source_url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/",
+      "enabled": true
+    },
+    {
+      "name": "Vercel",
+      "slug": "vercel",
+      "source_url": "https://vercel.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Netlify",
+      "slug": "netlify",
+      "source_url": "https://docs.netlify.com/",
+      "enabled": true
+    },
+    {
+      "name": "Cloudflare Workers",
+      "slug": "cloudflare-workers",
+      "source_url": "https://developers.cloudflare.com/workers/",
+      "enabled": true
+    },
+    {
+      "name": "Cloudflare Pages",
+      "slug": "cloudflare-pages",
+      "source_url": "https://developers.cloudflare.com/pages/",
+      "enabled": true
+    },
+    {
+      "name": "Cloudflare D1",
+      "slug": "cloudflare-d1",
+      "source_url": "https://developers.cloudflare.com/d1/",
+      "enabled": true
+    },
+    {
+      "name": "Cloudflare R2",
+      "slug": "cloudflare-r2",
+      "source_url": "https://developers.cloudflare.com/r2/",
+      "enabled": true
+    },
+    {
+      "name": "Cloudflare KV",
+      "slug": "cloudflare-kv",
+      "source_url": "https://developers.cloudflare.com/kv/",
+      "enabled": true
+    },
+    {
+      "name": "Fly.io",
+      "slug": "fly-io",
+      "source_url": "https://fly.io/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Railway",
+      "slug": "railway",
+      "source_url": "https://docs.railway.app/",
+      "enabled": true
+    },
+    {
+      "name": "Render",
+      "slug": "render",
+      "source_url": "https://render.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "DigitalOcean",
+      "slug": "digitalocean",
+      "source_url": "https://docs.digitalocean.com/",
+      "enabled": true
+    },
+    {
+      "name": "Hetzner Cloud",
+      "slug": "hetzner",
+      "source_url": "https://docs.hetzner.com/",
+      "enabled": true
+    },
+    {
+      "name": "Upstash",
+      "slug": "upstash",
+      "source_url": "https://upstash.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Gin",
+      "slug": "gin",
+      "source_url": "https://gin-gonic.com/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Echo",
+      "slug": "echo-go",
+      "source_url": "https://echo.labstack.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Fiber",
+      "slug": "fiber",
+      "source_url": "https://docs.gofiber.io/",
+      "enabled": true
+    },
+    {
+      "name": "Chi",
+      "slug": "chi",
+      "source_url": "https://go-chi.io/#/README",
+      "enabled": true
+    },
+    {
+      "name": "Gorilla Mux",
+      "slug": "gorilla-mux",
+      "source_url": "https://pkg.go.dev/github.com/gorilla/mux",
+      "enabled": true
+    },
+    {
+      "name": "GORM",
+      "slug": "gorm",
+      "source_url": "https://gorm.io/docs/",
+      "enabled": true
+    },
+    {
+      "name": "sqlx",
+      "slug": "sqlx-go",
+      "source_url": "https://jmoiron.github.io/sqlx/",
+      "enabled": true
+    },
+    {
+      "name": "Cobra",
+      "slug": "cobra",
+      "source_url": "https://cobra.dev/",
+      "enabled": true
+    },
+    {
+      "name": "Viper",
+      "slug": "viper",
+      "source_url": "https://github.com/spf13/viper",
+      "enabled": true
+    },
+    {
+      "name": "Zap",
+      "slug": "zap",
+      "source_url": "https://pkg.go.dev/go.uber.org/zap",
+      "enabled": true
+    },
+    {
+      "name": "zerolog",
+      "slug": "zerolog",
+      "source_url": "https://pkg.go.dev/github.com/rs/zerolog",
+      "enabled": true
+    },
+    {
+      "name": "Testify",
+      "slug": "testify",
+      "source_url": "https://pkg.go.dev/github.com/stretchr/testify",
+      "enabled": true
+    },
+    {
+      "name": "gRPC Go",
+      "slug": "grpc-go",
+      "source_url": "https://grpc.io/docs/languages/go/",
+      "enabled": true
+    },
+    {
+      "name": "Wire (DI)",
+      "slug": "wire-go",
+      "source_url": "https://github.com/google/wire",
+      "enabled": true
+    },
+    {
+      "name": "Spring Boot",
+      "slug": "spring-boot",
+      "source_url": "https://docs.spring.io/spring-boot/docs/current/reference/html/",
+      "enabled": true
+    },
+    {
+      "name": "Spring Framework",
+      "slug": "spring-framework",
+      "source_url": "https://docs.spring.io/spring-framework/reference/",
+      "enabled": true
+    },
+    {
+      "name": "Spring Data",
+      "slug": "spring-data",
+      "source_url": "https://spring.io/projects/spring-data",
+      "enabled": true
+    },
+    {
+      "name": "Spring Security",
+      "slug": "spring-security",
+      "source_url": "https://docs.spring.io/spring-security/reference/",
+      "enabled": true
+    },
+    {
+      "name": "Quarkus",
+      "slug": "quarkus",
+      "source_url": "https://quarkus.io/guides/",
+      "enabled": true
+    },
+    {
+      "name": "Micronaut",
+      "slug": "micronaut",
+      "source_url": "https://docs.micronaut.io/latest/guide/",
+      "enabled": true
+    },
+    {
+      "name": "Ktor",
+      "slug": "ktor",
+      "source_url": "https://ktor.io/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Exposed (Kotlin ORM)",
+      "slug": "exposed",
+      "source_url": "https://jetbrains.github.io/Exposed/home.html",
+      "enabled": true
+    },
+    {
+      "name": "Hibernate ORM",
+      "slug": "hibernate",
+      "source_url": "https://hibernate.org/orm/documentation/",
+      "enabled": true
+    },
+    {
+      "name": "Jackson",
+      "slug": "jackson",
+      "source_url": "https://github.com/FasterXML/jackson-docs",
+      "enabled": true
+    },
+    {
+      "name": "JUnit 5",
+      "slug": "junit5",
+      "source_url": "https://junit.org/junit5/docs/current/user-guide/",
+      "enabled": true
+    },
+    {
+      "name": "Mockito",
+      "slug": "mockito",
+      "source_url": "https://javadoc.io/doc/org.mockito/mockito-core/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Maven",
+      "slug": "maven",
+      "source_url": "https://maven.apache.org/guides/",
+      "enabled": true
+    },
+    {
+      "name": "Gradle",
+      "slug": "gradle",
+      "source_url": "https://docs.gradle.org/current/userguide/userguide.html",
+      "enabled": true
+    },
+    {
+      "name": "Netty",
+      "slug": "netty",
+      "source_url": "https://netty.io/wiki/user-guide.html",
+      "enabled": true
+    },
+    {
+      "name": "Ruby on Rails",
+      "slug": "rails",
+      "source_url": "https://guides.rubyonrails.org/",
+      "enabled": true
+    },
+    {
+      "name": "Rails API Reference",
+      "slug": "rails-api",
+      "source_url": "https://api.rubyonrails.org/",
+      "enabled": true
+    },
+    {
+      "name": "Sinatra",
+      "slug": "sinatra",
+      "source_url": "https://sinatrarb.com/documentation.html",
+      "enabled": true
+    },
+    {
+      "name": "Hanami",
+      "slug": "hanami",
+      "source_url": "https://guides.hanamirb.org/",
+      "enabled": true
+    },
+    {
+      "name": "RSpec",
+      "slug": "rspec",
+      "source_url": "https://rspec.info/documentation/",
+      "enabled": true
+    },
+    {
+      "name": "Minitest",
+      "slug": "minitest",
+      "source_url": "https://github.com/minitest/minitest",
+      "enabled": true
+    },
+    {
+      "name": "Bundler",
+      "slug": "bundler",
+      "source_url": "https://bundler.io/docs.html",
+      "enabled": true
+    },
+    {
+      "name": "RuboCop",
+      "slug": "rubocop",
+      "source_url": "https://docs.rubocop.org/rubocop/",
+      "enabled": true
+    },
+    {
+      "name": "Sidekiq",
+      "slug": "sidekiq",
+      "source_url": "https://github.com/sidekiq/sidekiq/wiki",
+      "enabled": true
+    },
+    {
+      "name": "Devise",
+      "slug": "devise",
+      "source_url": "https://github.com/heartcombo/devise",
+      "enabled": true
+    },
+    {
+      "name": "Laravel",
+      "slug": "laravel",
+      "source_url": "https://laravel.com/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Symfony",
+      "slug": "symfony",
+      "source_url": "https://symfony.com/doc/current/index.html",
+      "enabled": true
+    },
+    {
+      "name": "Composer",
+      "slug": "composer",
+      "source_url": "https://getcomposer.org/doc/",
+      "enabled": true
+    },
+    {
+      "name": "PHPUnit",
+      "slug": "phpunit",
+      "source_url": "https://phpunit.de/documentation.html",
+      "enabled": true
+    },
+    {
+      "name": "Eloquent ORM",
+      "slug": "eloquent",
+      "source_url": "https://laravel.com/docs/eloquent",
+      "enabled": true
+    },
+    {
+      "name": "Livewire",
+      "slug": "livewire",
+      "source_url": "https://livewire.laravel.com/docs/quickstart",
+      "enabled": true
+    },
+    {
+      "name": "Phoenix Framework",
+      "slug": "phoenix",
+      "source_url": "https://hexdocs.pm/phoenix/overview.html",
+      "enabled": true
+    },
+    {
+      "name": "Ecto",
+      "slug": "ecto",
+      "source_url": "https://hexdocs.pm/ecto/Ecto.html",
+      "enabled": true
+    },
+    {
+      "name": "Plug",
+      "slug": "plug",
+      "source_url": "https://hexdocs.pm/plug/readme.html",
+      "enabled": true
+    },
+    {
+      "name": "Absinthe (GraphQL)",
+      "slug": "absinthe",
+      "source_url": "https://hexdocs.pm/absinthe/",
+      "enabled": true
+    },
+    {
+      "name": "OTP Documentation",
+      "slug": "otp",
+      "source_url": "https://www.erlang.org/doc/system/index.html",
+      "enabled": true
+    },
+    {
+      "name": "GraphQL Specification",
+      "slug": "graphql-spec",
+      "source_url": "https://spec.graphql.org/",
+      "enabled": true
+    },
+    {
+      "name": "GraphQL.js Reference",
+      "slug": "graphql-js-ref",
+      "source_url": "https://graphql.org/graphql-js/",
+      "enabled": true
+    },
+    {
+      "name": "Hasura",
+      "slug": "hasura",
+      "source_url": "https://hasura.io/docs/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Strawberry (Python GraphQL)",
+      "slug": "strawberry",
+      "source_url": "https://strawberry.rocks/docs",
+      "enabled": true
+    },
+    {
+      "name": "Graphene (Python)",
+      "slug": "graphene",
+      "source_url": "https://docs.graphene-python.org/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "NextAuth.js",
+      "slug": "nextauth",
+      "source_url": "https://next-auth.js.org/getting-started/introduction",
+      "enabled": true
+    },
+    {
+      "name": "Auth.js",
+      "slug": "auth-js",
+      "source_url": "https://authjs.dev/getting-started",
+      "enabled": true
+    },
+    {
+      "name": "Clerk",
+      "slug": "clerk",
+      "source_url": "https://clerk.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Lucia",
+      "slug": "lucia",
+      "source_url": "https://lucia-auth.com/",
+      "enabled": true
+    },
+    {
+      "name": "Passport.js",
+      "slug": "passportjs",
+      "source_url": "https://www.passportjs.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "OAuth 2.0",
+      "slug": "oauth2",
+      "source_url": "https://oauth.net/2/",
+      "enabled": true
+    },
+    {
+      "name": "JWT.io",
+      "slug": "jwt-io",
+      "source_url": "https://jwt.io/introduction",
+      "enabled": true
+    },
+    {
+      "name": "OpenID Connect",
+      "slug": "openid",
+      "source_url": "https://openid.net/developers/how-connect-works/",
+      "enabled": true
+    },
+    {
+      "name": "Let's Encrypt",
+      "slug": "lets-encrypt",
+      "source_url": "https://letsencrypt.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Certbot",
+      "slug": "certbot",
+      "source_url": "https://eff-certbot.readthedocs.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "OpenAI API",
+      "slug": "openai-api",
+      "source_url": "https://platform.openai.com/docs/api-reference",
+      "enabled": true
+    },
+    {
+      "name": "OpenAI Guides",
+      "slug": "openai-guides",
+      "source_url": "https://platform.openai.com/docs/guides",
+      "enabled": true
+    },
+    {
+      "name": "Anthropic API",
+      "slug": "anthropic-api",
+      "source_url": "https://docs.anthropic.com/en/api/",
+      "enabled": true
+    },
+    {
+      "name": "Anthropic Guides",
+      "slug": "anthropic-guides",
+      "source_url": "https://docs.anthropic.com/en/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Google Gemini API",
+      "slug": "gemini-api",
+      "source_url": "https://ai.google.dev/api",
+      "enabled": true
+    },
+    {
+      "name": "Cohere",
+      "slug": "cohere",
+      "source_url": "https://docs.cohere.com/",
+      "enabled": true
+    },
+    {
+      "name": "Mistral AI",
+      "slug": "mistral",
+      "source_url": "https://docs.mistral.ai/",
+      "enabled": true
+    },
+    {
+      "name": "Together AI",
+      "slug": "together-ai",
+      "source_url": "https://docs.together.ai/",
+      "enabled": true
+    },
+    {
+      "name": "Groq",
+      "slug": "groq",
+      "source_url": "https://console.groq.com/docs/quickstart",
+      "enabled": true
+    },
+    {
+      "name": "Replicate",
+      "slug": "replicate",
+      "source_url": "https://replicate.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Modal",
+      "slug": "modal",
+      "source_url": "https://modal.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "MLflow",
+      "slug": "mlflow",
+      "source_url": "https://mlflow.org/docs/latest/index.html",
+      "enabled": true
+    },
+    {
+      "name": "Weights & Biases",
+      "slug": "wandb",
+      "source_url": "https://docs.wandb.ai/",
+      "enabled": true
+    },
+    {
+      "name": "DVC",
+      "slug": "dvc",
+      "source_url": "https://dvc.org/doc",
+      "enabled": true
+    },
+    {
+      "name": "BentoML",
+      "slug": "bentoml",
+      "source_url": "https://docs.bentoml.com/",
+      "enabled": true
+    },
+    {
+      "name": "Triton Inference Server",
+      "slug": "triton",
+      "source_url": "https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/",
+      "enabled": true
+    },
+    {
+      "name": "ONNX Runtime",
+      "slug": "onnxruntime",
+      "source_url": "https://onnxruntime.ai/docs/",
+      "enabled": true
+    },
+    {
+      "name": "vLLM",
+      "slug": "vllm",
+      "source_url": "https://docs.vllm.ai/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Embedded Rust Book",
+      "slug": "embedded-rust",
+      "source_url": "https://doc.rust-lang.org/embedded-book/",
+      "enabled": true
+    },
+    {
+      "name": "ESP-IDF",
+      "slug": "esp-idf",
+      "source_url": "https://docs.espressif.com/projects/esp-idf/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "RP2040 Datasheet",
+      "slug": "rp2040",
+      "source_url": "https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf",
+      "enabled": true
+    },
+    {
+      "name": "Arduino Reference",
+      "slug": "arduino",
+      "source_url": "https://www.arduino.cc/reference/en/",
+      "enabled": true
+    },
+    {
+      "name": "Raspberry Pi Documentation",
+      "slug": "raspberry-pi",
+      "source_url": "https://www.raspberrypi.com/documentation/",
+      "enabled": true
+    },
+    {
+      "name": "ARM CMSIS",
+      "slug": "cmsis",
+      "source_url": "https://arm-software.github.io/CMSIS_6/",
+      "enabled": true
+    },
+    {
+      "name": "Linux Kernel Documentation",
+      "slug": "linux-kernel",
+      "source_url": "https://www.kernel.org/doc/html/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Linux Man Pages",
+      "slug": "linux-man",
+      "source_url": "https://www.man7.org/linux/man-pages/",
+      "enabled": true
+    },
+    {
+      "name": "POSIX Standard",
+      "slug": "posix",
+      "source_url": "https://pubs.opengroup.org/onlinepubs/9699919799/",
+      "enabled": true
+    },
+    {
+      "name": "systemd",
+      "slug": "systemd",
+      "source_url": "https://systemd.io/",
+      "enabled": true
+    },
+    {
+      "name": "GNU C Library",
+      "slug": "glibc",
+      "source_url": "https://www.gnu.org/software/libc/manual/",
+      "enabled": true
+    },
+    {
+      "name": "OpenSSL",
+      "slug": "openssl",
+      "source_url": "https://www.openssl.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Android Developer",
+      "slug": "android",
+      "source_url": "https://developer.android.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Android API Reference",
+      "slug": "android-api",
+      "source_url": "https://developer.android.com/reference",
+      "enabled": true
+    },
+    {
+      "name": "Apple Developer",
+      "slug": "apple-dev",
+      "source_url": "https://developer.apple.com/documentation/",
+      "enabled": true
+    },
+    {
+      "name": "UIKit",
+      "slug": "uikit",
+      "source_url": "https://developer.apple.com/documentation/uikit",
+      "enabled": true
+    },
+    {
+      "name": "SwiftUI",
+      "slug": "swiftui",
+      "source_url": "https://developer.apple.com/documentation/swiftui",
+      "enabled": true
+    },
+    {
+      "name": "Flutter",
+      "slug": "flutter",
+      "source_url": "https://docs.flutter.dev/",
+      "enabled": true
+    },
+    {
+      "name": "Flutter API Reference",
+      "slug": "flutter-api",
+      "source_url": "https://api.flutter.dev/",
+      "enabled": true
+    },
+    {
+      "name": "Dart for Flutter",
+      "slug": "dart-flutter",
+      "source_url": "https://dart.dev/guides",
+      "enabled": true
+    },
+    {
+      "name": "Unity Documentation",
+      "slug": "unity",
+      "source_url": "https://docs.unity3d.com/Manual/index.html",
+      "enabled": true
+    },
+    {
+      "name": "Unity Scripting API",
+      "slug": "unity-api",
+      "source_url": "https://docs.unity3d.com/ScriptReference/",
+      "enabled": true
+    },
+    {
+      "name": "Unreal Engine",
+      "slug": "unreal",
+      "source_url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/",
+      "enabled": true
+    },
+    {
+      "name": "Godot Engine",
+      "slug": "godot",
+      "source_url": "https://docs.godotengine.org/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Godot API",
+      "slug": "godot-api",
+      "source_url": "https://docs.godotengine.org/en/stable/classes/",
+      "enabled": true
+    },
+    {
+      "name": "Bevy Engine",
+      "slug": "bevy-engine",
+      "source_url": "https://bevyengine.org/learn/",
+      "enabled": true
+    },
+    {
+      "name": "Three.js",
+      "slug": "three-js",
+      "source_url": "https://threejs.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Phaser",
+      "slug": "phaser",
+      "source_url": "https://newdocs.phaser.io/docs/",
+      "enabled": true
+    },
+    {
+      "name": "PixiJS",
+      "slug": "pixijs",
+      "source_url": "https://pixijs.download/dev/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Pygame",
+      "slug": "pygame",
+      "source_url": "https://www.pygame.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "L\u00d6VE 2D",
+      "slug": "love2d",
+      "source_url": "https://love2d.org/wiki/Main_Page",
+      "enabled": true
+    },
+    {
+      "name": "JSON Schema",
+      "slug": "json-schema",
+      "source_url": "https://json-schema.org/understanding-json-schema/",
+      "enabled": true
+    },
+    {
+      "name": "OpenAPI Specification",
+      "slug": "openapi",
+      "source_url": "https://swagger.io/specification/",
+      "enabled": true
+    },
+    {
+      "name": "Protocol Buffers",
+      "slug": "protobuf",
+      "source_url": "https://protobuf.dev/programming-guides/proto3/",
+      "enabled": true
+    },
+    {
+      "name": "gRPC",
+      "slug": "grpc",
+      "source_url": "https://grpc.io/docs/",
+      "enabled": true
+    },
+    {
+      "name": "GraphQL",
+      "slug": "graphql-spec-ref",
+      "source_url": "https://graphql.org/learn/",
+      "enabled": true
+    },
+    {
+      "name": "Apache Avro",
+      "slug": "avro",
+      "source_url": "https://avro.apache.org/docs/current/",
+      "enabled": true
+    },
+    {
+      "name": "Apache Parquet",
+      "slug": "parquet",
+      "source_url": "https://parquet.apache.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Apache Arrow",
+      "slug": "arrow",
+      "source_url": "https://arrow.apache.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "MessagePack",
+      "slug": "messagepack",
+      "source_url": "https://msgpack.org/",
+      "enabled": true
+    },
+    {
+      "name": "CBOR",
+      "slug": "cbor",
+      "source_url": "https://cbor.io/",
+      "enabled": true
+    },
+    {
+      "name": "TOML Spec",
+      "slug": "toml-spec",
+      "source_url": "https://toml.io/en/v1.0.0",
+      "enabled": true
+    },
+    {
+      "name": "YAML Spec",
+      "slug": "yaml-spec",
+      "source_url": "https://yaml.org/spec/1.2.2/",
+      "enabled": true
+    },
+    {
+      "name": "Regular Expressions (MDN)",
+      "slug": "regex-syntax",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions",
+      "enabled": true
+    },
+    {
+      "name": "Unicode Standard",
+      "slug": "unicode",
+      "source_url": "https://www.unicode.org/reports/tr51/",
+      "enabled": true
+    },
+    {
+      "name": "pip",
+      "slug": "pip",
+      "source_url": "https://pip.pypa.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "uv (Python package manager)",
+      "slug": "uv",
+      "source_url": "https://docs.astral.sh/uv/",
+      "enabled": true
+    },
+    {
+      "name": "Poetry",
+      "slug": "poetry",
+      "source_url": "https://python-poetry.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Conda",
+      "slug": "conda",
+      "source_url": "https://docs.conda.io/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Cargo Reference",
+      "slug": "cargo-docs",
+      "source_url": "https://doc.rust-lang.org/cargo/",
+      "enabled": true
+    },
+    {
+      "name": "Nix",
+      "slug": "nix",
+      "source_url": "https://nixos.org/manual/nix/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Nixpkgs",
+      "slug": "nixpkgs",
+      "source_url": "https://nixos.org/manual/nixpkgs/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Homebrew",
+      "slug": "homebrew",
+      "source_url": "https://docs.brew.sh/",
+      "enabled": true
+    },
+    {
+      "name": "CMake",
+      "slug": "cmake",
+      "source_url": "https://cmake.org/cmake/help/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Bazel",
+      "slug": "bazel",
+      "source_url": "https://bazel.build/docs",
+      "enabled": true
+    },
+    {
+      "name": "mise (polyglot version mgr)",
+      "slug": "mise",
+      "source_url": "https://mise.jdx.dev/",
+      "enabled": true
+    },
+    {
+      "name": "asdf",
+      "slug": "asdf",
+      "source_url": "https://asdf-vm.com/guide/getting-started.html",
+      "enabled": true
+    },
+    {
+      "name": "VS Code Extension API",
+      "slug": "vscode-api",
+      "source_url": "https://code.visualstudio.com/api",
+      "enabled": true
+    },
+    {
+      "name": "VS Code Documentation",
+      "slug": "vscode-docs",
+      "source_url": "https://code.visualstudio.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Neovim API",
+      "slug": "neovim-api",
+      "source_url": "https://neovim.io/doc/user/",
+      "enabled": true
+    },
+    {
+      "name": "Neovim Lua Guide",
+      "slug": "neovim-lua",
+      "source_url": "https://neovim.io/doc/user/lua-guide.html",
+      "enabled": true
+    },
+    {
+      "name": "Vim Documentation",
+      "slug": "vim",
+      "source_url": "https://vimdoc.sourceforge.net/",
+      "enabled": true
+    },
+    {
+      "name": "GNU Emacs",
+      "slug": "emacs",
+      "source_url": "https://www.gnu.org/software/emacs/manual/html_mono/emacs.html",
+      "enabled": true
+    },
+    {
+      "name": "Zed Editor",
+      "slug": "zed",
+      "source_url": "https://zed.dev/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Helix Editor",
+      "slug": "helix",
+      "source_url": "https://docs.helix-editor.com/",
+      "enabled": true
+    },
+    {
+      "name": "LLDB Debugger",
+      "slug": "lldb",
+      "source_url": "https://lldb.llvm.org/use/tutorial.html",
+      "enabled": true
+    },
+    {
+      "name": "GDB Documentation",
+      "slug": "gdb",
+      "source_url": "https://www.gnu.org/software/gdb/documentation/",
+      "enabled": true
+    },
+    {
+      "name": "Valgrind",
+      "slug": "valgrind",
+      "source_url": "https://valgrind.org/docs/manual/",
+      "enabled": true
+    },
+    {
+      "name": "Linux perf",
+      "slug": "perf",
+      "source_url": "https://perf.wiki.kernel.org/index.php/Tutorial",
+      "enabled": true
+    },
+    {
+      "name": "DTrace",
+      "slug": "dtrace",
+      "source_url": "https://dtrace.org/guide/",
+      "enabled": true
+    },
+    {
+      "name": "FFmpeg",
+      "slug": "ffmpeg",
+      "source_url": "https://ffmpeg.org/documentation.html",
+      "enabled": true
+    },
+    {
+      "name": "ImageMagick",
+      "slug": "imagemagick",
+      "source_url": "https://imagemagick.org/script/command-line-processing.php",
+      "enabled": true
+    },
+    {
+      "name": "Tesseract OCR",
+      "slug": "tesseract",
+      "source_url": "https://tesseract-ocr.github.io/tessdoc/",
+      "enabled": true
+    },
+    {
+      "name": "Pandoc",
+      "slug": "pandoc",
+      "source_url": "https://pandoc.org/MANUAL.html",
+      "enabled": true
+    },
+    {
+      "name": "LaTeX",
+      "slug": "latex",
+      "source_url": "https://www.latex-project.org/help/documentation/",
+      "enabled": true
+    },
+    {
+      "name": "Graphviz",
+      "slug": "graphviz",
+      "source_url": "https://graphviz.org/documentation/",
+      "enabled": true
+    },
+    {
+      "name": "D3.js",
+      "slug": "d3-js",
+      "source_url": "https://d3js.org/getting-started",
+      "enabled": true
+    },
+    {
+      "name": "D3.js API Reference",
+      "slug": "d3-api",
+      "source_url": "https://d3js.org/d3-selection",
+      "enabled": true
+    },
+    {
+      "name": "Apache ECharts",
+      "slug": "echarts",
+      "source_url": "https://echarts.apache.org/en/api.html",
+      "enabled": true
+    },
+    {
+      "name": "Chart.js",
+      "slug": "chart-js",
+      "source_url": "https://www.chartjs.org/docs/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Vega-Lite",
+      "slug": "vega-lite",
+      "source_url": "https://vega.github.io/vega-lite/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Observable Plot",
+      "slug": "observable-plot",
+      "source_url": "https://observablehq.com/plot/getting-started",
+      "enabled": true
+    },
+    {
+      "name": "Mapbox GL JS",
+      "slug": "mapbox",
+      "source_url": "https://docs.mapbox.com/mapbox-gl-js/api/",
+      "enabled": true
+    },
+    {
+      "name": "Leaflet",
+      "slug": "leaflet",
+      "source_url": "https://leafletjs.com/reference.html",
+      "enabled": true
+    },
+    {
+      "name": "Turf.js (geospatial)",
+      "slug": "turf",
+      "source_url": "https://turfjs.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Protomaps",
+      "slug": "protomaps",
+      "source_url": "https://docs.protomaps.com/",
+      "enabled": true
+    },
+    {
+      "name": "Stripe",
+      "slug": "stripe",
+      "source_url": "https://stripe.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Stripe API Reference",
+      "slug": "stripe-api",
+      "source_url": "https://stripe.com/docs/api",
+      "enabled": true
+    },
+    {
+      "name": "Twilio",
+      "slug": "twilio",
+      "source_url": "https://www.twilio.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "SendGrid",
+      "slug": "sendgrid",
+      "source_url": "https://docs.sendgrid.com/",
+      "enabled": true
+    },
+    {
+      "name": "Resend",
+      "slug": "resend",
+      "source_url": "https://resend.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Sentry",
+      "slug": "sentry",
+      "source_url": "https://docs.sentry.io/",
+      "enabled": true
+    },
+    {
+      "name": "PostHog",
+      "slug": "posthog",
+      "source_url": "https://posthog.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Segment",
+      "slug": "segment",
+      "source_url": "https://segment.com/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Algolia",
+      "slug": "algolia",
+      "source_url": "https://www.algolia.com/doc/",
+      "enabled": true
+    },
+    {
+      "name": "Meilisearch",
+      "slug": "meilisearch",
+      "source_url": "https://www.meilisearch.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Typesense",
+      "slug": "typesense",
+      "source_url": "https://typesense.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Lunr.js",
+      "slug": "lunr",
+      "source_url": "https://lunrjs.com/guides/getting_started.html",
+      "enabled": true
+    },
+    {
+      "name": "Fuse.js",
+      "slug": "fuse-js",
+      "source_url": "https://www.fusejs.io/",
+      "enabled": true
+    },
+    {
+      "name": "Sharp (image processing)",
+      "slug": "sharp",
+      "source_url": "https://sharp.pixelplumbing.com/",
+      "enabled": true
+    },
+    {
+      "name": "fluent-ffmpeg",
+      "slug": "ffmpeg-js",
+      "source_url": "https://github.com/fluent-ffmpeg/node-fluent-ffmpeg",
+      "enabled": true
+    },
+    {
+      "name": "PDF.js",
+      "slug": "pdfjs",
+      "source_url": "https://mozilla.github.io/pdf.js/",
+      "enabled": true
+    },
+    {
+      "name": "docx (JS)",
+      "slug": "docx-js",
+      "source_url": "https://docx.js.org/#/",
+      "enabled": true
+    },
+    {
+      "name": "ExcelJS",
+      "slug": "exceljs",
+      "source_url": "https://github.com/exceljs/exceljs",
+      "enabled": true
+    },
+    {
+      "name": "Cheerio",
+      "slug": "cheerio",
+      "source_url": "https://cheerio.js.org/docs/intro",
+      "enabled": true
+    },
+    {
+      "name": "PuppeteerSharp",
+      "slug": "puppeteer-sharp",
+      "source_url": "https://www.puppeteersharp.com/api/",
+      "enabled": true
+    },
+    {
+      "name": "Playwright Python",
+      "slug": "playwright-python",
+      "source_url": "https://playwright.dev/python/docs/intro",
+      "enabled": true
+    },
+    {
+      "name": "Selenium",
+      "slug": "selenium",
+      "source_url": "https://www.selenium.dev/documentation/",
+      "enabled": true
+    },
+    {
+      "name": "Crawlee",
+      "slug": "crawlee",
+      "source_url": "https://crawlee.dev/docs/introduction",
+      "enabled": true
+    },
+    {
+      "name": "Scrapy",
+      "slug": "scrapy",
+      "source_url": "https://docs.scrapy.org/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "Beautiful Soup",
+      "slug": "beautiful-soup",
+      "source_url": "https://www.crummy.com/software/BeautifulSoup/bs4/doc/",
+      "enabled": true
+    },
+    {
+      "name": "Mechanize (Python)",
+      "slug": "mechanize",
+      "source_url": "https://mechanize.readthedocs.io/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "HTTPie",
+      "slug": "httpie",
+      "source_url": "https://httpie.io/docs",
+      "enabled": true
+    },
+    {
+      "name": "curl",
+      "slug": "curl",
+      "source_url": "https://curl.se/docs/",
+      "enabled": true
+    },
+    {
+      "name": "grpcurl",
+      "slug": "grpcurl",
+      "source_url": "https://github.com/fullstorydev/grpcurl",
+      "enabled": true
+    },
+    {
+      "name": "jq",
+      "slug": "jq",
+      "source_url": "https://jqlang.github.io/jq/manual/",
+      "enabled": true
+    },
+    {
+      "name": "yq",
+      "slug": "yq",
+      "source_url": "https://mikefarah.gitbook.io/yq/",
+      "enabled": true
+    },
+    {
+      "name": "sqlite-utils",
+      "slug": "sqlite-utils",
+      "source_url": "https://sqlite-utils.datasette.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Datasette",
+      "slug": "datasette",
+      "source_url": "https://docs.datasette.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "dbt",
+      "slug": "dbt",
+      "source_url": "https://docs.getdbt.com/",
+      "enabled": true
+    },
+    {
+      "name": "Apache Airflow",
+      "slug": "airflow",
+      "source_url": "https://airflow.apache.org/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Prefect",
+      "slug": "prefect",
+      "source_url": "https://docs.prefect.io/",
+      "enabled": true
+    },
+    {
+      "name": "Dagster",
+      "slug": "dagster",
+      "source_url": "https://docs.dagster.io/",
+      "enabled": true
+    },
+    {
+      "name": "Great Expectations",
+      "slug": "great-expectations",
+      "source_url": "https://docs.greatexpectations.io/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Jupyter",
+      "slug": "jupyter",
+      "source_url": "https://docs.jupyter.org/en/latest/",
+      "enabled": true
+    },
+    {
+      "name": "JupyterLab",
+      "slug": "jupyterlab",
+      "source_url": "https://jupyterlab.readthedocs.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "IPython",
+      "slug": "ipython",
+      "source_url": "https://ipython.readthedocs.io/en/stable/",
+      "enabled": true
+    },
+    {
+      "name": "Streamlit",
+      "slug": "streamlit",
+      "source_url": "https://docs.streamlit.io/",
+      "enabled": true
+    },
+    {
+      "name": "Gradio",
+      "slug": "gradio",
+      "source_url": "https://www.gradio.app/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Panel",
+      "slug": "panel",
+      "source_url": "https://panel.holoviz.org/",
+      "enabled": true
+    },
+    {
+      "name": "Dash",
+      "slug": "dash",
+      "source_url": "https://dash.plotly.com/",
+      "enabled": true
+    },
+    {
+      "name": "nix.dev",
+      "slug": "nix-dev",
+      "source_url": "https://nix.dev/tutorials/",
+      "enabled": true
+    },
+    {
+      "name": "buf (protobuf tooling)",
+      "slug": "proto-buf",
+      "source_url": "https://buf.build/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Temporal",
+      "slug": "temporal",
+      "source_url": "https://docs.temporal.io/",
+      "enabled": true
+    },
+    {
+      "name": "Inngest",
+      "slug": "inngest",
+      "source_url": "https://www.inngest.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Trigger.dev",
+      "slug": "trigger-dev",
+      "source_url": "https://trigger.dev/docs",
+      "enabled": true
+    },
+    {
+      "name": "Liveblocks",
+      "slug": "liveblocks",
+      "source_url": "https://liveblocks.io/docs",
+      "enabled": true
+    },
+    {
+      "name": "Yjs (CRDT)",
+      "slug": "yjs",
+      "source_url": "https://docs.yjs.dev/",
+      "enabled": true
+    },
+    {
+      "name": "Automerge",
+      "slug": "automerge",
+      "source_url": "https://automerge.org/docs/hello/",
+      "enabled": true
+    },
+    {
+      "name": "PartyKit",
+      "slug": "partykit",
+      "source_url": "https://docs.partykit.io/",
+      "enabled": true
+    },
+    {
+      "name": "Convex",
+      "slug": "convex",
+      "source_url": "https://docs.convex.dev/",
+      "enabled": true
+    },
+    {
+      "name": "PocketBase",
+      "slug": "pocketbase",
+      "source_url": "https://pocketbase.io/docs/",
+      "enabled": true
+    },
+    {
+      "name": "Appwrite",
+      "slug": "appwrite",
+      "source_url": "https://appwrite.io/docs",
+      "enabled": true
+    },
+    {
+      "name": "Directus",
+      "slug": "directus",
+      "source_url": "https://docs.directus.io/",
+      "enabled": true
+    },
+    {
+      "name": "Strapi",
+      "slug": "strapi",
+      "source_url": "https://docs.strapi.io/",
+      "enabled": true
+    },
+    {
+      "name": "Payload CMS",
+      "slug": "payload",
+      "source_url": "https://payloadcms.com/docs",
+      "enabled": true
+    },
+    {
+      "name": "Sanity",
+      "slug": "sanity",
+      "source_url": "https://www.sanity.io/docs",
+      "enabled": true
+    },
+    {
+      "name": "Contentful",
+      "slug": "contentful",
+      "source_url": "https://www.contentful.com/developers/docs/",
+      "enabled": true
+    },
+    {
+      "name": "WordPress REST API",
+      "slug": "wordpress-rest",
+      "source_url": "https://developer.wordpress.org/rest-api/",
+      "enabled": true
+    },
+    {
+      "name": "Shopify API",
+      "slug": "shopify-api",
+      "source_url": "https://shopify.dev/docs/api",
+      "enabled": true
+    }
+  ]
+}
