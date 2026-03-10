@@ -83,11 +83,16 @@
             line-height: 1.7;
         }
 
-        /*
-      Two vertical rail lines, fixed, running the full height of the viewport
-      including behind the sticky nav. z-index 200 puts them above the nav
-      backdrop so they're always visible as continuous lines.
-    */
+        /* ── DASH FIELD CANVAS ── */
+        #dash-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+        }
+
         .rails {
             position: fixed;
             top: 0;
@@ -124,7 +129,6 @@
             border-top: 1px solid var(--border);
         }
 
-        /* nav bottom border constrained to content column, like the dividers */
         .nav-border {
             max-width: var(--content);
             margin: 0 auto;
@@ -144,7 +148,6 @@
 
         .nav-logo {
             font-weight: 700;
-            font-size: 14px;
         }
 
         .nav-links {
@@ -155,7 +158,6 @@
 
         .nav-links a {
             color: var(--text-2);
-            font-size: 13px;
             transition: color 0.1s;
         }
 
@@ -171,7 +173,6 @@
             margin: 0 auto;
         }
 
-        /* Horizontal divider — spans exactly the content column width */
         .divider {
             width: 100%;
             height: 1px;
@@ -188,12 +189,12 @@
         }
 
         .hero h1 {
-            font-size: clamp(20px, 3vw, 30px);
+            font-size: 32px;
             font-weight: 700;
             line-height: 1.3;
             letter-spacing: -0.02em;
             margin-bottom: 14px;
-            max-width: 480px;
+            max-width: 540px;
             color: #ffffff;
         }
 
@@ -207,7 +208,7 @@
 
         .hero-sub {
             color: var(--text-2);
-            max-width: 420px;
+            max-width: 500px;
             margin-bottom: 36px;
             line-height: 1.8;
         }
@@ -285,25 +286,44 @@
 
         .copy-btn {
             background: none;
-            border: 1px solid var(--border);
+            border: none;
             color: var(--text-3);
-            font-family: var(--mono);
-            font-size: 11px;
-            padding: 3px 9px;
-            border-radius: 2px;
+            padding: 0;
             cursor: pointer;
-            white-space: nowrap;
             flex-shrink: 0;
-            transition: color 0.1s, border-color 0.1s;
+            display: flex;
+            align-items: center;
+            transition: color 0.15s;
         }
 
         .copy-btn:hover {
             color: var(--text-2);
         }
 
+        .copy-btn svg {
+            width: 16px;
+            height: 16px;
+            display: block;
+        }
+
+        .copy-btn .icon-copy {
+            display: block;
+        }
+
+        .copy-btn .icon-check {
+            display: none;
+        }
+
         .copy-btn.copied {
             color: #00c632;
-            border-color: #00c632;
+        }
+
+        .copy-btn.copied .icon-copy {
+            display: none;
+        }
+
+        .copy-btn.copied .icon-check {
+            display: block;
         }
 
         /* ── SECTIONS ── */
@@ -311,13 +331,8 @@
             padding: 52px var(--pad);
         }
 
-        /*
-      Label: white text, with a short gradient line to its left.
-      The line starts at the left edge of the padding (i.e. the rail),
-      so all body text beneath is flush-left aligned.
-    */
         .label {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
             letter-spacing: 0.1em;
             text-transform: uppercase;
@@ -339,19 +354,18 @@
             flex-shrink: 0;
         }
 
-        /* Prose */
         .prose {
             color: var(--text-2);
-            max-width: 540px;
+            max-width: 580px;
             line-height: 1.9;
         }
 
         .ci {
             background: var(--bg-3);
             border: 1px solid var(--border);
-            padding: 1px 5px;
+            padding: 1px 6px;
             border-radius: 2px;
-            font-size: 11px;
+            font-size: inherit;
             color: var(--text);
             font-family: var(--mono);
         }
@@ -376,9 +390,8 @@
         }
 
         .feature-table td:first-child {
-            width: 190px;
+            width: 220px;
             font-weight: 700;
-            font-size: 12px;
             color: var(--text);
             padding-right: 24px;
             white-space: nowrap;
@@ -417,7 +430,7 @@
         }
 
         .wf-label {
-            font-size: 11px;
+            font-size: 13px;
             color: var(--text-3);
             letter-spacing: 0.06em;
             text-transform: uppercase;
@@ -431,7 +444,7 @@
             padding: 14px 16px;
             overflow-x: auto;
             font-family: var(--mono);
-            font-size: 12px;
+            font-size: inherit;
             line-height: 1.9;
             color: var(--text);
         }
@@ -466,8 +479,7 @@
             justify-content: space-between;
             align-items: baseline;
             gap: 16px;
-            padding: 14px 0;
-            font-size: 13px;
+            padding: 16px 0;
             font-weight: 700;
             color: var(--text);
             cursor: pointer;
@@ -490,7 +502,6 @@
             color: var(--text-2);
             line-height: 1.8;
             padding-bottom: 14px;
-            max-width: 540px;
         }
 
         .faq-item.open .faq-a {
@@ -535,16 +546,17 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            font-size: 13px;
+            font-size: inherit;
             white-space: nowrap;
             flex-shrink: 0;
+            padding-bottom: 2px;
+            position: relative;
             border-bottom: 1px solid #ec8b49;
-            padding-bottom: 1px;
-            transition: opacity 0.1s;
+            transition: filter 0.15s;
         }
 
         .link-out:hover {
-            opacity: 0.7;
+            filter: brightness(1.3);
         }
 
         /* ── FOOTER ── */
@@ -565,7 +577,6 @@
 
         .footer-logo {
             font-weight: 700;
-            font-size: 13px;
             background: var(--accent-grad);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -579,43 +590,86 @@
         }
 
         .footer-links a {
-            color: var(--text-3);
-            font-size: 12px;
+            color: var(--text-2);
             transition: color 0.1s;
         }
 
         .footer-links a:hover {
-            color: var(--text-2);
+            color: var(--text);
         }
 
         .footer-copy {
             color: var(--text-3);
-            font-size: 12px;
         }
 
-        @media (max-width: 560px) {
-            :root {
-                --content: 100vw;
-            }
-
-            .rails {
-                display: none;
-            }
-
-            .feature-table td:first-child {
-                width: auto;
-                display: block;
-                padding-bottom: 4px;
-                white-space: normal;
-            }
-
-            .feature-table td:last-child {
-                display: block;
-                padding-top: 0;
+        /* ── BREAKPOINTS ── */
+        @media (max-width: 599px) {
+            body {
+                font-size: 13px;
             }
 
             .hero h1 {
-                font-size: 20px;
+                font-size: 24px;
+            }
+        }
+
+        .nav-hamburger {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-2);
+            font-family: var(--mono);
+            font-size: 22px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            transition: color 0.1s, transform 0.2s;
+            user-select: none;
+        }
+
+        .nav-hamburger:hover {
+            color: var(--text);
+        }
+
+        .nav-hamburger.open {
+            transform: rotate(45deg);
+        }
+
+        .nav-mobile {
+            display: none;
+            flex-direction: column;
+            max-width: var(--content);
+            margin: 0 auto;
+            padding: 0 var(--pad);
+            border-top: 1px solid var(--border);
+        }
+
+        .nav-mobile.open {
+            display: flex;
+        }
+
+        .nav-mobile a {
+            color: var(--text-2);
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+            transition: color 0.1s;
+        }
+
+        .nav-mobile a:last-child {
+            border-bottom: none;
+        }
+
+        .nav-mobile a:hover {
+            color: var(--text);
+        }
+
+        @media (max-width: 479px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav-hamburger {
+                display: block;
             }
         }
     </style>
@@ -623,7 +677,7 @@
 
 <body>
 
-    <!-- Rails: fixed overlay, z-index above nav so lines are continuous -->
+    <canvas id="dash-canvas"></canvas>
     <div class="rails"></div>
 
     <nav>
@@ -635,6 +689,12 @@
                 <li><a href="/docs">Docs</a></li>
                 <li><a href="/registry">Registry</a></li>
             </ul>
+            <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">+</button>
+        </div>
+        <div class="nav-mobile" id="nav-mobile">
+            <a href="https://github.com/HariharPrasadd/plshelp" target="_blank">GitHub</a>
+            <a href="/docs">Docs</a>
+            <a href="/registry">Registry</a>
         </div>
         <div class="nav-border"></div>
     </nav>
@@ -643,10 +703,10 @@
 
         <!-- HERO -->
         <section class="hero">
-            <h1>Local-first documentation context<br>for <em>coding agents</em></h1>
+            <h1>Local-first documentation search for <em>agents and humans</em></h1>
             <p class="hero-sub">
-                Crawl docs once, index them locally, query fast with BM25 + embeddings.
-                No hosted database. No API calls at retrieval time.
+                Crawl, index, and query documentation blazing fast, <br>
+                all while keeping your data on your machine.
             </p>
             <div class="install-block">
                 <div class="install-tabs">
@@ -657,19 +717,60 @@
                 </div>
                 <div class="install-cmd active" id="tab-curl">
                     <code><span class="d">curl -fsSL</span> https://plshelp.run/install.sh <span class="d">|</span> sh</code>
-                    <button class="copy-btn" data-copy="curl -fsSL https://plshelp.run/install.sh | sh">copy</button>
+                    <button class="copy-btn" data-copy="curl -fsSL https://plshelp.run/install.sh | sh"
+                        aria-label="Copy">
+                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" />
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                        </svg>
+                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </button>
                 </div>
                 <div class="install-cmd" id="tab-npm">
                     <code><span class="d">npm install -g</span> plshelp</code>
-                    <button class="copy-btn" data-copy="npm install -g plshelp">copy</button>
+                    <button class="copy-btn" data-copy="npm install -g plshelp" aria-label="Copy">
+                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" />
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                        </svg>
+                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </button>
                 </div>
                 <div class="install-cmd" id="tab-bun">
                     <code><span class="d">bun add -g</span> plshelp</code>
-                    <button class="copy-btn" data-copy="bun add -g plshelp">copy</button>
+                    <button class="copy-btn" data-copy="bun add -g plshelp" aria-label="Copy">
+                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" />
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                        </svg>
+                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </button>
                 </div>
                 <div class="install-cmd" id="tab-brew">
                     <code><span class="d">brew install</span> plshelp</code>
-                    <button class="copy-btn" data-copy="brew install plshelp">copy</button>
+                    <button class="copy-btn" data-copy="brew install plshelp" aria-label="Copy">
+                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" />
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                        </svg>
+                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </section>
@@ -680,13 +781,27 @@
         <div class="section-inner">
             <div class="label">What is plshelp?</div>
             <p class="prose">
-                <span class="ci">plshelp</span> is an open source CLI that turns documentation websites, Markdown,
+                <span class="ci">plshelp</span> is an open source CLI tool that turns documentation websites, Markdown,
                 and plain text files into a local searchable corpus for coding assistants and RAG workflows.
                 It handles crawling, cleaning, chunking, and indexing — so your agent has accurate context
                 without hitting the internet at query time.
             </p>
             <div style="margin-top: 20px;">
                 <a href="/docs" class="link-out">Read docs →</a>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- REGISTRY -->
+        <div class="section-inner">
+            <div class="label">the plshelp Registry</div>
+            <div class="registry-row">
+                <div>
+                    <p>A repository of 1000+ pre-crawled documentation pages. Use them for custom workflows, finetuning,
+                        or pipe directly to your model.</p>
+                </div>
+                <a href="/registry" class="link-out">Browse registry →</a>
             </div>
         </div>
 
@@ -737,7 +852,7 @@
                 <li>Build local context for coding agents</li>
                 <li>Export cleaned docs as <span class="ci">docs.md</span> and <span class="ci">docs.txt</span></li>
                 <li>Merge multiple libraries into one searchable corpus</li>
-                <li>Index internal notes or project docs from local files</li>
+                <li>Index personal notes or project docs from local files</li>
             </ul>
         </div>
 
@@ -780,12 +895,8 @@
                 <div class="faq-item">
                     <div class="faq-q">What can I index?</div>
                     <div class="faq-a">
-                        <ul>
-                            <li>documentation websites</li>
-                            <li>local Markdown files</li>
-                            <li>local text files</li>
-                            <li>merged collections of multiple libraries</li>
-                        </ul>
+                        You can index documentation websites, local Markdown files, local text files, any url you
+                        crawled, any text on your machine - anything you want, really.
                     </div>
                 </div>
                 <div class="faq-item">
@@ -795,44 +906,31 @@
                 </div>
                 <div class="faq-item">
                     <div class="faq-q">Can I use it without embeddings?</div>
-                    <div class="faq-a">Yes. BM25 search works immediately after chunking. Embeddings are optional for
-                        hybrid or vector-only retrieval.</div>
+                    <div class="faq-a">Yes. BM25 search works immediately after chunking, but only returns exact
+                        matches. Embeddings are optional for hybrid or vector-only retrieval, but highly recommended.
+                    </div>
                 </div>
                 <div class="faq-item">
                     <div class="faq-q">Does it work well for coding agents?</div>
-                    <div class="faq-a">Yes. Designed for local documentation context with structured <span
-                            class="ci">--json</span> output for agent tooling.</div>
+                    <div class="faq-a">Yes. The structured <span class="ci">--json</span> output is meant specifically
+                        for agent tooling.</div>
                 </div>
                 <div class="faq-item">
                     <div class="faq-q">Where does data live?</div>
                     <div class="faq-a">
-                        By default in your local application data directory:
-                        <ul>
-                            <li>SQLite database</li>
-                            <li>doc artifacts (<span class="ci">.md</span> / <span class="ci">.txt</span>)</li>
-                            <li>embedding model cache</li>
-                            <li>config file</li>
-                        </ul>
+                        By default, <span class="ci">plshelp</span> stores all of its runtime state in your local
+                        application data directory. On macOS this is
+                        typically <span class="ci">~/Library/Application Support/plshelp</span>, on Linux it is usually
+                        <span class="ci">~/.local/share/plshelp</span> or the XDG data
+                        directory, and on Windows it would normally live under <span
+                            class="ci">%APPDATA%\plshelp</span>.
                     </div>
                 </div>
                 <div class="faq-item">
                     <div class="faq-q">Is plshelp open source?</div>
-                    <div class="faq-a">Yes. MIT licensed and available on GitHub.</div>
+                    <div class="faq-a">Yes. MIT licensed and available on <a
+                            href="https://github.com/HariharPrasadd/plshelp" target="_blank">GitHub</a>.</div>
                 </div>
-            </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <!-- REGISTRY -->
-        <div class="section-inner">
-            <div class="label">Registry</div>
-            <div class="registry-row">
-                <div>
-                    <p>Download pre-crawled documentation artifacts. Skip the crawl step and start querying immediately.
-                    </p>
-                </div>
-                <a href="/registry" class="link-out">Browse registry →</a>
             </div>
         </div>
 
@@ -853,6 +951,117 @@
     </footer>
 
     <script>
+        // ── DASH FIELD ────────────────────────────────────────────────────────
+        const canvas = document.getElementById('dash-canvas');
+        const ctx = canvas.getContext('2d');
+
+        const SPACING = 28;
+        const DASH_LEN = 10;
+        const IDLE_SPEED = 0.004;
+        const INFLUENCE = 340;
+        const OUTER_FADE = 600;
+
+        let W, H, dashes;
+        let mouse = { x: -9999, y: -9999 };
+
+        function resize() {
+            W = canvas.width = window.innerWidth;
+            H = canvas.height = window.innerHeight;
+            buildGrid();
+        }
+
+        function buildGrid() {
+            dashes = [];
+            const offsetX = (W % SPACING) / 2;
+            const offsetY = (H % SPACING) / 2;
+            for (let x = offsetX + SPACING / 2; x < W; x += SPACING) {
+                for (let y = offsetY + SPACING / 2; y < H; y += SPACING) {
+                    dashes.push({
+                        x, y,
+                        angle: Math.random() * Math.PI * 2,
+                        targetAngle: 0,
+                    });
+                }
+            }
+        }
+
+        function angleDiff(a, b) {
+            return ((b - a) % (Math.PI * 2) + Math.PI * 3) % (Math.PI * 2) - Math.PI;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+
+            for (const d of dashes) {
+                const dx = mouse.x - d.x;
+                const dy = mouse.y - d.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                const towardCursor = Math.atan2(dy, dx);
+                const weight = dist < INFLUENCE
+                    ? 1
+                    : dist < OUTER_FADE
+                        ? 1 - (dist - INFLUENCE) / (OUTER_FADE - INFLUENCE)
+                        : 0;
+
+                const idleAngle = d.angle + IDLE_SPEED;
+                d.targetAngle = weight > 0
+                    ? towardCursor + (1 - weight) * angleDiff(towardCursor, idleAngle) * 0.5
+                    : idleAngle;
+
+                const easeStrength = 0.04 + weight * 0.1;
+                d.angle += angleDiff(d.angle, d.targetAngle) * easeStrength;
+
+                // Brightness: smooth cubic falloff, floor at 0.44
+                const proximity = Math.max(0, 1 - dist / OUTER_FADE);
+                const alpha = 0.44 + proximity * proximity * proximity * 1.5;
+
+                // Muted site-accent gradient: amber -> rust -> neutral gray.
+                let r, g, b;
+                if (dist < INFLUENCE * 0.4) {
+                    const t = dist / (INFLUENCE * 0.4);
+                    r = Math.round(178 - t * 30);
+                    g = Math.round(112 - t * 28);
+                    b = Math.round(76 - t * 18);
+                } else if (dist < INFLUENCE) {
+                    const t = (dist - INFLUENCE * 0.4) / (INFLUENCE * 0.6);
+                    r = Math.round(148 - t * (148 - 87));
+                    g = Math.round(84 - t * (84 - 86));
+                    b = Math.round(58 - t * (58 - 83));
+                } else {
+                    r = 87; g = 86; b = 83;
+                }
+
+                const cos = Math.cos(d.angle);
+                const sin = Math.sin(d.angle);
+                ctx.beginPath();
+                ctx.moveTo(d.x - cos * DASH_LEN, d.y - sin * DASH_LEN);
+                ctx.lineTo(d.x + cos * DASH_LEN, d.y + sin * DASH_LEN);
+                ctx.strokeStyle = `rgba(${r},${g},${b},${alpha.toFixed(3)})`;
+                ctx.lineWidth = 1.2;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', resize);
+        window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+        window.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
+
+        resize();
+        draw();
+
+        // ── NAV HAMBURGER ─────────────────────────────────────────────────────
+        const hamburger = document.getElementById('hamburger');
+        const navMobile = document.getElementById('nav-mobile');
+        hamburger.addEventListener('click', () => {
+            const isOpen = navMobile.classList.toggle('open');
+            hamburger.classList.toggle('open', isOpen);
+        });
+
+        // ── INSTALL TABS ──────────────────────────────────────────────────────
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
@@ -862,16 +1071,17 @@
             });
         });
 
+        // ── COPY BUTTONS ──────────────────────────────────────────────────────
         document.querySelectorAll('.copy-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 navigator.clipboard.writeText(btn.dataset.copy).then(() => {
-                    btn.textContent = 'copied';
                     btn.classList.add('copied');
-                    setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1800);
+                    setTimeout(() => btn.classList.remove('copied'), 1800);
                 });
             });
         });
 
+        // ── FAQ ───────────────────────────────────────────────────────────────
         document.querySelectorAll('.faq-q').forEach(q => {
             q.addEventListener('click', () => q.parentElement.classList.toggle('open'));
         });

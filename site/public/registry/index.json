@@ -1,0 +1,2706 @@
+{
+  "version": 1,
+  "generated_at": "2026-03-10T07:41:15.412580Z",
+  "entries": [
+    {
+      "name": "Python 3",
+      "slug": "python",
+      "source_url": "https://docs.python.org/3/",
+      "pages": 563,
+      "content_size_chars": 24751189,
+      "artifacts": {
+        "markdown_path": "/registry/docs/python/docs.md",
+        "text_path": "/registry/docs/python/docs.txt",
+        "markdown_bytes": 24817460,
+        "text_bytes": 24817460,
+        "markdown_sha256": "4fa4da1feddf004d9b7e11dbff1991f8d148c39b6060429c418a738f7c084dd4",
+        "text_sha256": "4fa4da1feddf004d9b7e11dbff1991f8d148c39b6060429c418a738f7c084dd4"
+      },
+      "last_crawled_at": "2026-03-10T06:49:59.336632Z",
+      "last_successful_crawled_at": "2026-03-10T06:50:21.286623Z",
+      "crawl_duration_ms": 21949,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Python Standard Library",
+      "slug": "python-stdlib",
+      "source_url": "https://docs.python.org/3/library/index.html",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/python-stdlib/docs.md",
+        "text_path": "/registry/docs/python-stdlib/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T06:50:21.287010Z",
+      "last_successful_crawled_at": "2026-03-10T06:50:21.373917Z",
+      "crawl_duration_ms": 86,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Python Language Reference",
+      "slug": "python-reference",
+      "source_url": "https://docs.python.org/3/reference/index.html",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/python-reference/docs.md",
+        "text_path": "/registry/docs/python-reference/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T06:50:21.374358Z",
+      "last_successful_crawled_at": "2026-03-10T06:50:21.413719Z",
+      "crawl_duration_ms": 39,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Python Tutorial",
+      "slug": "python-tutorial",
+      "source_url": "https://docs.python.org/3/tutorial/index.html",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/python-tutorial/docs.md",
+        "text_path": "/registry/docs/python-tutorial/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T06:50:21.414325Z",
+      "last_successful_crawled_at": "2026-03-10T06:50:21.459415Z",
+      "crawl_duration_ms": 45,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "The Rust Programming Language (Book)",
+      "slug": "rust",
+      "source_url": "https://doc.rust-lang.org/book/",
+      "pages": 112,
+      "content_size_chars": 2782665,
+      "artifacts": {
+        "markdown_path": "/registry/docs/rust/docs.md",
+        "text_path": "/registry/docs/rust/docs.txt",
+        "markdown_bytes": 2800956,
+        "text_bytes": 2800956,
+        "markdown_sha256": "34e3819136862887f162995522b72660625c903a69bc062e0ea9bab8bcb12488",
+        "text_sha256": "34e3819136862887f162995522b72660625c903a69bc062e0ea9bab8bcb12488"
+      },
+      "last_crawled_at": "2026-03-10T06:50:21.459985Z",
+      "last_successful_crawled_at": "2026-03-10T06:50:24.434569Z",
+      "crawl_duration_ms": 2974,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Rust Standard Library",
+      "slug": "rust-std",
+      "source_url": "https://doc.rust-lang.org/std/",
+      "pages": 2188,
+      "content_size_chars": 51865268,
+      "artifacts": {
+        "markdown_path": "/registry/docs/rust-std/docs.md",
+        "text_path": "/registry/docs/rust-std/docs.txt",
+        "markdown_bytes": 52092355,
+        "text_bytes": 52092355,
+        "markdown_sha256": "b2a33006ec9d4f15660fe6bbe16b3ae4c2c1f5303d169e26324245651e368984",
+        "text_sha256": "b2a33006ec9d4f15660fe6bbe16b3ae4c2c1f5303d169e26324245651e368984"
+      },
+      "last_crawled_at": "2026-03-10T06:50:24.435077Z",
+      "last_successful_crawled_at": "2026-03-10T06:51:01.839320Z",
+      "crawl_duration_ms": 37404,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Rust Reference",
+      "slug": "rust-reference",
+      "source_url": "https://doc.rust-lang.org/reference/",
+      "pages": 119,
+      "content_size_chars": 5443385,
+      "artifacts": {
+        "markdown_path": "/registry/docs/rust-reference/docs.md",
+        "text_path": "/registry/docs/rust-reference/docs.txt",
+        "markdown_bytes": 5451423,
+        "text_bytes": 5451423,
+        "markdown_sha256": "cb84bdb177ef65ae04ffed05df1ad645493646760a0cf7d8ec228ba748ffe9fb",
+        "text_sha256": "cb84bdb177ef65ae04ffed05df1ad645493646760a0cf7d8ec228ba748ffe9fb"
+      },
+      "last_crawled_at": "2026-03-10T06:51:01.842791Z",
+      "last_successful_crawled_at": "2026-03-10T06:51:10.124305Z",
+      "crawl_duration_ms": 8281,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "The Rustonomicon",
+      "slug": "rust-nomicon",
+      "source_url": "https://doc.rust-lang.org/nomicon/",
+      "pages": 64,
+      "content_size_chars": 632264,
+      "artifacts": {
+        "markdown_path": "/registry/docs/rust-nomicon/docs.md",
+        "text_path": "/registry/docs/rust-nomicon/docs.txt",
+        "markdown_bytes": 635830,
+        "text_bytes": 635830,
+        "markdown_sha256": "a63db0bc9ae11a0950bab76dc53b54ffe91d1f9be84ee0ddefc0b8a9793cf95d",
+        "text_sha256": "a63db0bc9ae11a0950bab76dc53b54ffe91d1f9be84ee0ddefc0b8a9793cf95d"
+      },
+      "last_crawled_at": "2026-03-10T06:51:10.124914Z",
+      "last_successful_crawled_at": "2026-03-10T06:51:11.716486Z",
+      "crawl_duration_ms": 1591,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Async Rust Book",
+      "slug": "rust-async-book",
+      "source_url": "https://rust-lang.github.io/async-book/",
+      "pages": 50,
+      "content_size_chars": 577791,
+      "artifacts": {
+        "markdown_path": "/registry/docs/rust-async-book/docs.md",
+        "text_path": "/registry/docs/rust-async-book/docs.txt",
+        "markdown_bytes": 578239,
+        "text_bytes": 578239,
+        "markdown_sha256": "08a3af4c5e67fb3fc7917552712ccb18811afe2b7ba47d9144947c437bb30bbc",
+        "text_sha256": "08a3af4c5e67fb3fc7917552712ccb18811afe2b7ba47d9144947c437bb30bbc"
+      },
+      "last_crawled_at": "2026-03-10T06:51:11.716976Z",
+      "last_successful_crawled_at": "2026-03-10T06:51:12.575963Z",
+      "crawl_duration_ms": 858,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Rust Edition Guide",
+      "slug": "rust-edition-guide",
+      "source_url": "https://doc.rust-lang.org/edition-guide/",
+      "pages": 58,
+      "content_size_chars": 414743,
+      "artifacts": {
+        "markdown_path": "/registry/docs/rust-edition-guide/docs.md",
+        "text_path": "/registry/docs/rust-edition-guide/docs.txt",
+        "markdown_bytes": 416345,
+        "text_bytes": 416345,
+        "markdown_sha256": "852322a3637f0dd365edc0caef3016c945efed13952cf810da1a7db82bd8f37b",
+        "text_sha256": "852322a3637f0dd365edc0caef3016c945efed13952cf810da1a7db82bd8f37b"
+      },
+      "last_crawled_at": "2026-03-10T06:51:12.576426Z",
+      "last_successful_crawled_at": "2026-03-10T06:51:13.944776Z",
+      "crawl_duration_ms": 1368,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "rustc Book",
+      "slug": "rust-rustc",
+      "source_url": "https://doc.rust-lang.org/rustc/",
+      "pages": 152,
+      "content_size_chars": 2507224,
+      "artifacts": {
+        "markdown_path": "/registry/docs/rust-rustc/docs.md",
+        "text_path": "/registry/docs/rust-rustc/docs.txt",
+        "markdown_bytes": 2521530,
+        "text_bytes": 2521530,
+        "markdown_sha256": "bfa21af7e216bef21ed0e5462171bdb2da9084f63bca384985e8e04a3c1f943c",
+        "text_sha256": "bfa21af7e216bef21ed0e5462171bdb2da9084f63bca384985e8e04a3c1f943c"
+      },
+      "last_crawled_at": "2026-03-10T06:51:13.945357Z",
+      "last_successful_crawled_at": "2026-03-10T06:51:16.876314Z",
+      "crawl_duration_ms": 2930,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Cargo Book",
+      "slug": "rust-cargo",
+      "source_url": "https://doc.rust-lang.org/cargo/",
+      "pages": 97,
+      "content_size_chars": 2854128,
+      "artifacts": {
+        "markdown_path": "/registry/docs/rust-cargo/docs.md",
+        "text_path": "/registry/docs/rust-cargo/docs.txt",
+        "markdown_bytes": 2865166,
+        "text_bytes": 2865166,
+        "markdown_sha256": "715f285bd1ae89c83a3c3d3895c372968b769926fe8f56f29e6ae0a07ebf8a60",
+        "text_sha256": "715f285bd1ae89c83a3c3d3895c372968b769926fe8f56f29e6ae0a07ebf8a60"
+      },
+      "last_crawled_at": "2026-03-10T06:51:16.876979Z",
+      "last_successful_crawled_at": "2026-03-10T06:51:20.194223Z",
+      "crawl_duration_ms": 3317,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Clippy Documentation",
+      "slug": "rust-clippy",
+      "source_url": "https://doc.rust-lang.org/clippy/",
+      "pages": 35,
+      "content_size_chars": 523305,
+      "artifacts": {
+        "markdown_path": "/registry/docs/rust-clippy/docs.md",
+        "text_path": "/registry/docs/rust-clippy/docs.txt",
+        "markdown_bytes": 524725,
+        "text_bytes": 524725,
+        "markdown_sha256": "cbfaa024bb1b22757941099fb4dd7f0bf72441024c8ebade33d627c1e36f6830",
+        "text_sha256": "cbfaa024bb1b22757941099fb4dd7f0bf72441024c8ebade33d627c1e36f6830"
+      },
+      "last_crawled_at": "2026-03-10T06:51:20.194954Z",
+      "last_successful_crawled_at": "2026-03-10T06:51:21.281518Z",
+      "crawl_duration_ms": 1086,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "MDN JavaScript Reference",
+      "slug": "javascript-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+      "pages": 1330,
+      "content_size_chars": 10234591,
+      "artifacts": {
+        "markdown_path": "/registry/docs/javascript-mdn/docs.md",
+        "text_path": "/registry/docs/javascript-mdn/docs.txt",
+        "markdown_bytes": 10252053,
+        "text_bytes": 10252053,
+        "markdown_sha256": "eef5afc151174e96b3ef993a92888eef18878fd1e7234b6dfd608fe8f8e902b0",
+        "text_sha256": "eef5afc151174e96b3ef993a92888eef18878fd1e7234b6dfd608fe8f8e902b0"
+      },
+      "last_crawled_at": "2026-03-10T06:51:21.282145Z",
+      "last_successful_crawled_at": "2026-03-10T06:51:59.313740Z",
+      "crawl_duration_ms": 38031,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "TypeScript Documentation",
+      "slug": "typescript",
+      "source_url": "https://www.typescriptlang.org/docs/",
+      "pages": 129,
+      "content_size_chars": 2081242,
+      "artifacts": {
+        "markdown_path": "/registry/docs/typescript/docs.md",
+        "text_path": "/registry/docs/typescript/docs.txt",
+        "markdown_bytes": 2091358,
+        "text_bytes": 2091358,
+        "markdown_sha256": "de339634d7569f3c901da94250a5d646980b38aab2b1bcf3d53166a86ebd6ac0",
+        "text_sha256": "de339634d7569f3c901da94250a5d646980b38aab2b1bcf3d53166a86ebd6ac0"
+      },
+      "last_crawled_at": "2026-03-10T06:51:59.314611Z",
+      "last_successful_crawled_at": "2026-03-10T06:52:06.576933Z",
+      "crawl_duration_ms": 7262,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "TypeScript Handbook",
+      "slug": "typescript-handbook",
+      "source_url": "https://www.typescriptlang.org/docs/handbook/intro.html",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/typescript-handbook/docs.md",
+        "text_path": "/registry/docs/typescript-handbook/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T06:52:06.577683Z",
+      "last_successful_crawled_at": "2026-03-10T06:52:06.617875Z",
+      "crawl_duration_ms": 40,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Go Documentation",
+      "slug": "go",
+      "source_url": "https://go.dev/doc/",
+      "pages": 187,
+      "content_size_chars": 3333339,
+      "artifacts": {
+        "markdown_path": "/registry/docs/go/docs.md",
+        "text_path": "/registry/docs/go/docs.txt",
+        "markdown_bytes": 3340069,
+        "text_bytes": 3340069,
+        "markdown_sha256": "87719dbc35f0f9a88e3e9878576708e8f5a8170e8a8d88e1aaea3e7d01a0d459",
+        "text_sha256": "87719dbc35f0f9a88e3e9878576708e8f5a8170e8a8d88e1aaea3e7d01a0d459"
+      },
+      "last_crawled_at": "2026-03-10T06:52:06.618492Z",
+      "last_successful_crawled_at": "2026-03-10T06:52:09.432438Z",
+      "crawl_duration_ms": 2813,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Go Standard Library",
+      "slug": "go-stdlib",
+      "source_url": "https://pkg.go.dev/std",
+      "pages": 3,
+      "content_size_chars": 392739,
+      "artifacts": {
+        "markdown_path": "/registry/docs/go-stdlib/docs.md",
+        "text_path": "/registry/docs/go-stdlib/docs.txt",
+        "markdown_bytes": 392787,
+        "text_bytes": 392787,
+        "markdown_sha256": "1ffb4a90a877bce38835095edddaa0ad376a6f3ed74af2ca2eb0fe7e762f8441",
+        "text_sha256": "1ffb4a90a877bce38835095edddaa0ad376a6f3ed74af2ca2eb0fe7e762f8441"
+      },
+      "last_crawled_at": "2026-03-10T06:52:09.433137Z",
+      "last_successful_crawled_at": "2026-03-10T06:52:10.370292Z",
+      "crawl_duration_ms": 937,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Go Language Specification",
+      "slug": "go-spec",
+      "source_url": "https://go.dev/ref/spec",
+      "pages": 2,
+      "content_size_chars": 504318,
+      "artifacts": {
+        "markdown_path": "/registry/docs/go-spec/docs.md",
+        "text_path": "/registry/docs/go-spec/docs.txt",
+        "markdown_bytes": 504838,
+        "text_bytes": 504838,
+        "markdown_sha256": "4203aa4b9591a64c292946ade3745e80484896a6f724fa7c6ab074cfc32e62a8",
+        "text_sha256": "4203aa4b9591a64c292946ade3745e80484896a6f724fa7c6ab074cfc32e62a8"
+      },
+      "last_crawled_at": "2026-03-10T06:52:10.370991Z",
+      "last_successful_crawled_at": "2026-03-10T06:52:11.078777Z",
+      "crawl_duration_ms": 707,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "A Tour of Go",
+      "slug": "go-tour",
+      "source_url": "https://go.dev/tour/",
+      "pages": 1,
+      "content_size_chars": 62,
+      "artifacts": {
+        "markdown_path": "/registry/docs/go-tour/docs.md",
+        "text_path": "/registry/docs/go-tour/docs.txt",
+        "markdown_bytes": 64,
+        "text_bytes": 64,
+        "markdown_sha256": "ffbb4e80147b098c713604b6915d26600c8809b1cbb4e91e8c3eddd32db03963",
+        "text_sha256": "ffbb4e80147b098c713604b6915d26600c8809b1cbb4e91e8c3eddd32db03963"
+      },
+      "last_crawled_at": "2026-03-10T06:52:11.079536Z",
+      "last_successful_crawled_at": "2026-03-10T06:52:11.217640Z",
+      "crawl_duration_ms": 138,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Java SE 21 API",
+      "slug": "java-se21",
+      "source_url": "https://docs.oracle.com/en/java/javase/21/docs/api/",
+      "pages": 5000,
+      "content_size_chars": 81042245,
+      "artifacts": {
+        "markdown_path": "/registry/docs/java-se21/docs.md",
+        "text_path": "/registry/docs/java-se21/docs.txt",
+        "markdown_bytes": 81288334,
+        "text_bytes": 81288334,
+        "markdown_sha256": "48c74a5149c10b213bb0b951c428fed1e235e1dd8a3c9b1228c736f02dbcb6b3",
+        "text_sha256": "48c74a5149c10b213bb0b951c428fed1e235e1dd8a3c9b1228c736f02dbcb6b3"
+      },
+      "last_crawled_at": "2026-03-10T06:52:11.218655Z",
+      "last_successful_crawled_at": "2026-03-10T06:53:16.110659Z",
+      "crawl_duration_ms": 64891,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Java Tutorials",
+      "slug": "java-tutorial",
+      "source_url": "https://docs.oracle.com/javase/tutorial/",
+      "pages": 2301,
+      "content_size_chars": 13585983,
+      "artifacts": {
+        "markdown_path": "/registry/docs/java-tutorial/docs.md",
+        "text_path": "/registry/docs/java-tutorial/docs.txt",
+        "markdown_bytes": 13617704,
+        "text_bytes": 13617704,
+        "markdown_sha256": "20624cfc01b85b404ab8d0a47a58c1d1e2233d5635c3fc8b1475d10c74b3b0d6",
+        "text_sha256": "20624cfc01b85b404ab8d0a47a58c1d1e2233d5635c3fc8b1475d10c74b3b0d6"
+      },
+      "last_crawled_at": "2026-03-10T06:53:16.112733Z",
+      "last_successful_crawled_at": "2026-03-10T06:53:28.134920Z",
+      "crawl_duration_ms": 12022,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Kotlin Documentation",
+      "slug": "kotlin",
+      "source_url": "https://kotlinlang.org/docs/home.html",
+      "pages": 1,
+      "content_size_chars": 164,
+      "artifacts": {
+        "markdown_path": "/registry/docs/kotlin/docs.md",
+        "text_path": "/registry/docs/kotlin/docs.txt",
+        "markdown_bytes": 166,
+        "text_bytes": 166,
+        "markdown_sha256": "9e9bfddb03f630b43222786c2108a6d03ad12cd3fe042601e6f6b2e1c3d8a56a",
+        "text_sha256": "9e9bfddb03f630b43222786c2108a6d03ad12cd3fe042601e6f6b2e1c3d8a56a"
+      },
+      "last_crawled_at": "2026-03-10T06:53:28.136066Z",
+      "last_successful_crawled_at": "2026-03-10T06:53:29.467708Z",
+      "crawl_duration_ms": 1331,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Kotlin Standard Library",
+      "slug": "kotlin-stdlib",
+      "source_url": "https://kotlinlang.org/api/latest/jvm/stdlib/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/kotlin-stdlib/docs.md",
+        "text_path": "/registry/docs/kotlin-stdlib/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T06:53:29.469027Z",
+      "last_successful_crawled_at": "2026-03-10T06:53:29.906739Z",
+      "crawl_duration_ms": 437,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Swift Documentation",
+      "slug": "swift",
+      "source_url": "https://www.swift.org/documentation/",
+      "pages": 52,
+      "content_size_chars": 623567,
+      "artifacts": {
+        "markdown_path": "/registry/docs/swift/docs.md",
+        "text_path": "/registry/docs/swift/docs.txt",
+        "markdown_bytes": 625590,
+        "text_bytes": 625590,
+        "markdown_sha256": "3edc6cf6ab06ad9e43f5618c9d2280b8dc198ec9ba9c27951779970f592042b5",
+        "text_sha256": "3edc6cf6ab06ad9e43f5618c9d2280b8dc198ec9ba9c27951779970f592042b5"
+      },
+      "last_crawled_at": "2026-03-10T06:53:29.908776Z",
+      "last_successful_crawled_at": "2026-03-10T06:53:32.636074Z",
+      "crawl_duration_ms": 2727,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Swift Standard Library",
+      "slug": "swift-stdlib",
+      "source_url": "https://developer.apple.com/documentation/swift/swift-standard-library",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/swift-stdlib/docs.md",
+        "text_path": "/registry/docs/swift-stdlib/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T06:53:32.636986Z",
+      "last_successful_crawled_at": "2026-03-10T06:53:32.854635Z",
+      "crawl_duration_ms": 217,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "The Swift Programming Language",
+      "slug": "swift-book",
+      "source_url": "https://docs.swift.org/swift-book/",
+      "pages": 2,
+      "content_size_chars": 138,
+      "artifacts": {
+        "markdown_path": "/registry/docs/swift-book/docs.md",
+        "text_path": "/registry/docs/swift-book/docs.txt",
+        "markdown_bytes": 142,
+        "text_bytes": 142,
+        "markdown_sha256": "a513e479a00426d11c87708feb8a5f559fb53c74a52d973e2734a3528416d6fb",
+        "text_sha256": "a513e479a00426d11c87708feb8a5f559fb53c74a52d973e2734a3528416d6fb"
+      },
+      "last_crawled_at": "2026-03-10T06:53:32.857327Z",
+      "last_successful_crawled_at": "2026-03-10T06:53:33.481826Z",
+      "crawl_duration_ms": 624,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "C++ Reference",
+      "slug": "cpp-reference",
+      "source_url": "https://en.cppreference.com/w/cpp",
+      "pages": 175,
+      "content_size_chars": 69816,
+      "artifacts": {
+        "markdown_path": "/registry/docs/cpp-reference/docs.md",
+        "text_path": "/registry/docs/cpp-reference/docs.txt",
+        "markdown_bytes": 70412,
+        "text_bytes": 70412,
+        "markdown_sha256": "16e089afcbf6a56ec6460655d1ecf66282a9440c8ba6f454d6d42c7d549021bb",
+        "text_sha256": "16e089afcbf6a56ec6460655d1ecf66282a9440c8ba6f454d6d42c7d549021bb"
+      },
+      "last_crawled_at": "2026-03-10T06:53:33.484122Z",
+      "last_successful_crawled_at": "2026-03-10T06:53:34.578781Z",
+      "crawl_duration_ms": 1094,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "C Reference",
+      "slug": "c-reference",
+      "source_url": "https://en.cppreference.com/w/c",
+      "pages": 53,
+      "content_size_chars": 17136,
+      "artifacts": {
+        "markdown_path": "/registry/docs/c-reference/docs.md",
+        "text_path": "/registry/docs/c-reference/docs.txt",
+        "markdown_bytes": 17281,
+        "text_bytes": 17281,
+        "markdown_sha256": "92cdc17ad332a2191b6d6a66173db2b223956e14415c8701ddd5019b0122decd",
+        "text_sha256": "92cdc17ad332a2191b6d6a66173db2b223956e14415c8701ddd5019b0122decd"
+      },
+      "last_crawled_at": "2026-03-10T06:53:34.579617Z",
+      "last_successful_crawled_at": "2026-03-10T06:53:36.581704Z",
+      "crawl_duration_ms": 2002,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "C# Documentation",
+      "slug": "csharp",
+      "source_url": "https://learn.microsoft.com/en-us/dotnet/csharp/",
+      "pages": 410,
+      "content_size_chars": 3441691,
+      "artifacts": {
+        "markdown_path": "/registry/docs/csharp/docs.md",
+        "text_path": "/registry/docs/csharp/docs.txt",
+        "markdown_bytes": 3450833,
+        "text_bytes": 3450833,
+        "markdown_sha256": "2a906bda6eec6e1384c3fb10e75b0feed910b2813fffcda0efcfc895e8ac14dd",
+        "text_sha256": "2a906bda6eec6e1384c3fb10e75b0feed910b2813fffcda0efcfc895e8ac14dd"
+      },
+      "last_crawled_at": "2026-03-10T06:53:36.582948Z",
+      "last_successful_crawled_at": "2026-03-10T06:53:40.227439Z",
+      "crawl_duration_ms": 3644,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": ".NET Documentation",
+      "slug": "dotnet",
+      "source_url": "https://learn.microsoft.com/en-us/dotnet/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/dotnet/docs.md",
+        "text_path": "/registry/docs/dotnet/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T06:53:40.228419Z",
+      "last_successful_crawled_at": "2026-03-10T06:53:40.274868Z",
+      "crawl_duration_ms": 46,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": ".NET API Browser",
+      "slug": "dotnet-api",
+      "source_url": "https://learn.microsoft.com/en-us/dotnet/api/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/dotnet-api/docs.md",
+        "text_path": "/registry/docs/dotnet-api/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T06:53:40.275811Z",
+      "last_successful_crawled_at": "2026-03-10T06:53:40.326350Z",
+      "crawl_duration_ms": 50,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Ruby Documentation",
+      "slug": "ruby",
+      "source_url": "https://www.ruby-lang.org/en/documentation/",
+      "pages": 24,
+      "content_size_chars": 154187,
+      "artifacts": {
+        "markdown_path": "/registry/docs/ruby/docs.md",
+        "text_path": "/registry/docs/ruby/docs.txt",
+        "markdown_bytes": 155267,
+        "text_bytes": 155267,
+        "markdown_sha256": "90a430ff7507a3c0a30f19ba07e282bc2e4f47a07cf192a6d065faa85745dc9c",
+        "text_sha256": "90a430ff7507a3c0a30f19ba07e282bc2e4f47a07cf192a6d065faa85745dc9c"
+      },
+      "last_crawled_at": "2026-03-10T06:53:40.327546Z",
+      "last_successful_crawled_at": "2026-03-10T06:53:40.830671Z",
+      "crawl_duration_ms": 503,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Ruby Core API",
+      "slug": "ruby-core",
+      "source_url": "https://ruby-doc.org/core/",
+      "pages": 4219,
+      "content_size_chars": 21250479,
+      "artifacts": {
+        "markdown_path": "/registry/docs/ruby-core/docs.md",
+        "text_path": "/registry/docs/ruby-core/docs.txt",
+        "markdown_bytes": 21402012,
+        "text_bytes": 21402012,
+        "markdown_sha256": "816818734a3edf6f270167c529f1678849efa814715a4e519f3afd0af7a539ba",
+        "text_sha256": "816818734a3edf6f270167c529f1678849efa814715a4e519f3afd0af7a539ba"
+      },
+      "last_crawled_at": "2026-03-10T06:53:40.831656Z",
+      "last_successful_crawled_at": "2026-03-10T06:54:27.789188Z",
+      "crawl_duration_ms": 46957,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Ruby Standard Library",
+      "slug": "ruby-stdlib",
+      "source_url": "https://ruby-doc.org/stdlib/",
+      "pages": 4219,
+      "content_size_chars": 21251581,
+      "artifacts": {
+        "markdown_path": "/registry/docs/ruby-stdlib/docs.md",
+        "text_path": "/registry/docs/ruby-stdlib/docs.txt",
+        "markdown_bytes": 21403118,
+        "text_bytes": 21403118,
+        "markdown_sha256": "ffd3dd9c3e46f3793de74260b9ed9aa29a463eb4f4b805a26e8ef714c7a3ad4b",
+        "text_sha256": "ffd3dd9c3e46f3793de74260b9ed9aa29a463eb4f4b805a26e8ef714c7a3ad4b"
+      },
+      "last_crawled_at": "2026-03-10T06:54:27.790300Z",
+      "last_successful_crawled_at": "2026-03-10T06:55:13.277381Z",
+      "crawl_duration_ms": 45486,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "PHP Manual",
+      "slug": "php",
+      "source_url": "https://www.php.net/manual/en/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/php/docs.md",
+        "text_path": "/registry/docs/php/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T06:55:13.278502Z",
+      "last_successful_crawled_at": "2026-03-10T06:55:13.437142Z",
+      "crawl_duration_ms": 158,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "PHP Function Reference",
+      "slug": "php-functions",
+      "source_url": "https://www.php.net/manual/en/funcref.php",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/php-functions/docs.md",
+        "text_path": "/registry/docs/php-functions/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T06:55:13.438209Z",
+      "last_successful_crawled_at": "2026-03-10T06:55:13.517333Z",
+      "crawl_duration_ms": 79,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Scala Documentation",
+      "slug": "scala",
+      "source_url": "https://docs.scala-lang.org/",
+      "pages": 1654,
+      "content_size_chars": 11487843,
+      "artifacts": {
+        "markdown_path": "/registry/docs/scala/docs.md",
+        "text_path": "/registry/docs/scala/docs.txt",
+        "markdown_bytes": 13094582,
+        "text_bytes": 13094582,
+        "markdown_sha256": "76762240e1a14636c661b38c1a0a6e94af5f8ed7f60160f677449dfb5b86364d",
+        "text_sha256": "76762240e1a14636c661b38c1a0a6e94af5f8ed7f60160f677449dfb5b86364d"
+      },
+      "last_crawled_at": "2026-03-10T06:55:13.518812Z",
+      "last_successful_crawled_at": "2026-03-10T06:55:54.740270Z",
+      "crawl_duration_ms": 41221,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Scala Standard Library API",
+      "slug": "scala-stdlib",
+      "source_url": "https://www.scala-lang.org/api/current/",
+      "pages": 2069,
+      "content_size_chars": 55343620,
+      "artifacts": {
+        "markdown_path": "/registry/docs/scala-stdlib/docs.md",
+        "text_path": "/registry/docs/scala-stdlib/docs.txt",
+        "markdown_bytes": 55358979,
+        "text_bytes": 55358979,
+        "markdown_sha256": "f04b2c62a323f974c1ed435071019f752f7bba5acaa3c0907ea4f806cba94253",
+        "text_sha256": "f04b2c62a323f974c1ed435071019f752f7bba5acaa3c0907ea4f806cba94253"
+      },
+      "last_crawled_at": "2026-03-10T06:55:54.741888Z",
+      "last_successful_crawled_at": "2026-03-10T06:59:55.802216Z",
+      "crawl_duration_ms": 241059,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Haskell Documentation",
+      "slug": "haskell",
+      "source_url": "https://www.haskell.org/documentation/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/haskell/docs.md",
+        "text_path": "/registry/docs/haskell/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T06:59:55.803767Z",
+      "last_successful_crawled_at": "2026-03-10T06:59:56.271520Z",
+      "crawl_duration_ms": 467,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Haskell base package",
+      "slug": "haskell-base",
+      "source_url": "https://hackage.haskell.org/package/base",
+      "pages": 8,
+      "content_size_chars": 111979,
+      "artifacts": {
+        "markdown_path": "/registry/docs/haskell-base/docs.md",
+        "text_path": "/registry/docs/haskell-base/docs.txt",
+        "markdown_bytes": 112007,
+        "text_bytes": 112007,
+        "markdown_sha256": "c6134dc1478fe4ce96be937c0a26ae77ae1a5b0704462e64f6f52a5e7c46bafb",
+        "text_sha256": "c6134dc1478fe4ce96be937c0a26ae77ae1a5b0704462e64f6f52a5e7c46bafb"
+      },
+      "last_crawled_at": "2026-03-10T06:59:56.275636Z",
+      "last_successful_crawled_at": "2026-03-10T07:00:01.511237Z",
+      "crawl_duration_ms": 5235,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Elixir Documentation",
+      "slug": "elixir",
+      "source_url": "https://elixir-lang.org/docs.html",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/elixir/docs.md",
+        "text_path": "/registry/docs/elixir/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:00:01.512443Z",
+      "last_successful_crawled_at": "2026-03-10T07:00:02.233966Z",
+      "crawl_duration_ms": 721,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Elixir Standard Library",
+      "slug": "elixir-stdlib",
+      "source_url": "https://hexdocs.pm/elixir/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/elixir-stdlib/docs.md",
+        "text_path": "/registry/docs/elixir-stdlib/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:00:02.238043Z",
+      "last_successful_crawled_at": "2026-03-10T07:00:02.776037Z",
+      "crawl_duration_ms": 537,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Erlang Documentation",
+      "slug": "erlang",
+      "source_url": "https://www.erlang.org/docs",
+      "pages": 2,
+      "content_size_chars": 7124,
+      "artifacts": {
+        "markdown_path": "/registry/docs/erlang/docs.md",
+        "text_path": "/registry/docs/erlang/docs.txt",
+        "markdown_bytes": 7144,
+        "text_bytes": 7144,
+        "markdown_sha256": "86a776a757a4336525de653c245eaa61dd760df21346c38816821278e4a0cc51",
+        "text_sha256": "86a776a757a4336525de653c245eaa61dd760df21346c38816821278e4a0cc51"
+      },
+      "last_crawled_at": "2026-03-10T07:00:02.778877Z",
+      "last_successful_crawled_at": "2026-03-10T07:00:04.712809Z",
+      "crawl_duration_ms": 1933,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Clojure Reference",
+      "slug": "clojure",
+      "source_url": "https://clojure.org/reference/documentation",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/clojure/docs.md",
+        "text_path": "/registry/docs/clojure/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:00:04.714693Z",
+      "last_successful_crawled_at": "2026-03-10T07:00:05.253944Z",
+      "crawl_duration_ms": 539,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Clojure API",
+      "slug": "clojure-api",
+      "source_url": "https://clojure.github.io/clojure/",
+      "pages": 333,
+      "content_size_chars": 8596346,
+      "artifacts": {
+        "markdown_path": "/registry/docs/clojure-api/docs.md",
+        "text_path": "/registry/docs/clojure-api/docs.txt",
+        "markdown_bytes": 8597060,
+        "text_bytes": 8597060,
+        "markdown_sha256": "ad548fc66321a91932c176791553665108db712b5e965cdb42a935dd4d4b9cff",
+        "text_sha256": "ad548fc66321a91932c176791553665108db712b5e965cdb42a935dd4d4b9cff"
+      },
+      "last_crawled_at": "2026-03-10T07:00:05.258341Z",
+      "last_successful_crawled_at": "2026-03-10T07:00:11.041436Z",
+      "crawl_duration_ms": 5783,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "OCaml Manual",
+      "slug": "ocaml",
+      "source_url": "https://v2.ocaml.org/manual/",
+      "pages": 913,
+      "content_size_chars": 13050284,
+      "artifacts": {
+        "markdown_path": "/registry/docs/ocaml/docs.md",
+        "text_path": "/registry/docs/ocaml/docs.txt",
+        "markdown_bytes": 13188308,
+        "text_bytes": 13188308,
+        "markdown_sha256": "99712c6d3e5fc6f08e129d280284c98ea4cfa6b5a2ebed3ccc78559f8ddabefa",
+        "text_sha256": "99712c6d3e5fc6f08e129d280284c98ea4cfa6b5a2ebed3ccc78559f8ddabefa"
+      },
+      "last_crawled_at": "2026-03-10T07:00:11.042775Z",
+      "last_successful_crawled_at": "2026-03-10T07:00:27.615994Z",
+      "crawl_duration_ms": 16573,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "OCaml Standard Library",
+      "slug": "ocaml-stdlib",
+      "source_url": "https://v2.ocaml.org/api/",
+      "pages": 486,
+      "content_size_chars": 7360930,
+      "artifacts": {
+        "markdown_path": "/registry/docs/ocaml-stdlib/docs.md",
+        "text_path": "/registry/docs/ocaml-stdlib/docs.txt",
+        "markdown_bytes": 7431331,
+        "text_bytes": 7431331,
+        "markdown_sha256": "5d3f36c6c3e7db3d4be25e2357f5c86fc5010dd826db25fb4e374dee09066c8d",
+        "text_sha256": "5d3f36c6c3e7db3d4be25e2357f5c86fc5010dd826db25fb4e374dee09066c8d"
+      },
+      "last_crawled_at": "2026-03-10T07:00:27.617346Z",
+      "last_successful_crawled_at": "2026-03-10T07:00:37.585115Z",
+      "crawl_duration_ms": 9967,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Lua 5.4 Reference",
+      "slug": "lua",
+      "source_url": "https://www.lua.org/manual/5.4/",
+      "pages": 3,
+      "content_size_chars": 415437,
+      "artifacts": {
+        "markdown_path": "/registry/docs/lua/docs.md",
+        "text_path": "/registry/docs/lua/docs.txt",
+        "markdown_bytes": 417038,
+        "text_bytes": 417038,
+        "markdown_sha256": "976d725dd4260a2d24f9fdf9e3d6865296c37f710ac837e29267a8d50709fa13",
+        "text_sha256": "976d725dd4260a2d24f9fdf9e3d6865296c37f710ac837e29267a8d50709fa13"
+      },
+      "last_crawled_at": "2026-03-10T07:00:37.587783Z",
+      "last_successful_crawled_at": "2026-03-10T07:00:39.447379Z",
+      "crawl_duration_ms": 1859,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "R Documentation",
+      "slug": "r",
+      "source_url": "https://www.r-project.org/other-docs.html",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/r/docs.md",
+        "text_path": "/registry/docs/r/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:00:39.448683Z",
+      "last_successful_crawled_at": "2026-03-10T07:00:40.498766Z",
+      "crawl_duration_ms": 1050,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "R CRAN Manuals",
+      "slug": "r-cran",
+      "source_url": "https://cran.r-project.org/manuals.html",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/r-cran/docs.md",
+        "text_path": "/registry/docs/r-cran/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:00:40.503341Z",
+      "last_successful_crawled_at": "2026-03-10T07:00:41.132111Z",
+      "crawl_duration_ms": 628,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Julia Documentation",
+      "slug": "julia",
+      "source_url": "https://docs.julialang.org/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/julia/docs.md",
+        "text_path": "/registry/docs/julia/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:00:41.136317Z",
+      "last_successful_crawled_at": "2026-03-10T07:00:41.263889Z",
+      "crawl_duration_ms": 127,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Julia Standard Library",
+      "slug": "julia-stdlib",
+      "source_url": "https://docs.julialang.org/en/v1/stdlib/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/julia-stdlib/docs.md",
+        "text_path": "/registry/docs/julia-stdlib/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:00:41.267487Z",
+      "last_successful_crawled_at": "2026-03-10T07:00:41.561071Z",
+      "crawl_duration_ms": 293,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Dart Documentation",
+      "slug": "dart",
+      "source_url": "https://dart.dev/guides",
+      "pages": 1,
+      "content_size_chars": 10503,
+      "artifacts": {
+        "markdown_path": "/registry/docs/dart/docs.md",
+        "text_path": "/registry/docs/dart/docs.txt",
+        "markdown_bytes": 10509,
+        "text_bytes": 10509,
+        "markdown_sha256": "72203ab1be3b47a944fc1abe4d361b1571bec135fba7003a3467576e0ac2891b",
+        "text_sha256": "72203ab1be3b47a944fc1abe4d361b1571bec135fba7003a3467576e0ac2891b"
+      },
+      "last_crawled_at": "2026-03-10T07:00:41.565246Z",
+      "last_successful_crawled_at": "2026-03-10T07:00:41.818211Z",
+      "crawl_duration_ms": 252,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Dart Core Library",
+      "slug": "dart-core",
+      "source_url": "https://api.dart.dev/stable/dart-core/",
+      "pages": 4936,
+      "content_size_chars": 5636817,
+      "artifacts": {
+        "markdown_path": "/registry/docs/dart-core/docs.md",
+        "text_path": "/registry/docs/dart-core/docs.txt",
+        "markdown_bytes": 5648807,
+        "text_bytes": 5648807,
+        "markdown_sha256": "7c3bd6f4d9ce5c91b16af94be4831952a07a2bcc8548485f3e5ed295c6a50109",
+        "text_sha256": "7c3bd6f4d9ce5c91b16af94be4831952a07a2bcc8548485f3e5ed295c6a50109"
+      },
+      "last_crawled_at": "2026-03-10T07:00:41.819544Z",
+      "last_successful_crawled_at": "2026-03-10T07:00:57.946247Z",
+      "crawl_duration_ms": 16126,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Zig Documentation",
+      "slug": "zig",
+      "source_url": "https://ziglang.org/documentation/master/",
+      "pages": 2,
+      "content_size_chars": 535071,
+      "artifacts": {
+        "markdown_path": "/registry/docs/zig/docs.md",
+        "text_path": "/registry/docs/zig/docs.txt",
+        "markdown_bytes": 535474,
+        "text_bytes": 535474,
+        "markdown_sha256": "7a25c11962367a3346db415dced5f2451756864f380f9ffef12523101435d28b",
+        "text_sha256": "7a25c11962367a3346db415dced5f2451756864f380f9ffef12523101435d28b"
+      },
+      "last_crawled_at": "2026-03-10T07:00:57.947786Z",
+      "last_successful_crawled_at": "2026-03-10T07:01:00.159645Z",
+      "crawl_duration_ms": 2211,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Zig Standard Library",
+      "slug": "zig-stdlib",
+      "source_url": "https://ziglang.org/documentation/master/std/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/zig-stdlib/docs.md",
+        "text_path": "/registry/docs/zig-stdlib/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:01:00.161044Z",
+      "last_successful_crawled_at": "2026-03-10T07:01:00.535540Z",
+      "crawl_duration_ms": 374,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Nim Manual",
+      "slug": "nim",
+      "source_url": "https://nim-lang.org/docs/manual.html",
+      "pages": 2,
+      "content_size_chars": 310526,
+      "artifacts": {
+        "markdown_path": "/registry/docs/nim/docs.md",
+        "text_path": "/registry/docs/nim/docs.txt",
+        "markdown_bytes": 310582,
+        "text_bytes": 310582,
+        "markdown_sha256": "123645c8977bbd3a4524a7e1896b9fcf4cf1c39ccac935199391e4616906d775",
+        "text_sha256": "123645c8977bbd3a4524a7e1896b9fcf4cf1c39ccac935199391e4616906d775"
+      },
+      "last_crawled_at": "2026-03-10T07:01:00.539715Z",
+      "last_successful_crawled_at": "2026-03-10T07:01:02.884689Z",
+      "crawl_duration_ms": 2344,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Nim Standard Library",
+      "slug": "nim-stdlib",
+      "source_url": "https://nim-lang.org/docs/lib.html",
+      "pages": 2,
+      "content_size_chars": 25179,
+      "artifacts": {
+        "markdown_path": "/registry/docs/nim-stdlib/docs.md",
+        "text_path": "/registry/docs/nim-stdlib/docs.txt",
+        "markdown_bytes": 25193,
+        "text_bytes": 25193,
+        "markdown_sha256": "1b613741b522e2de54b78cfe61b668046e72f6b1eb6f7943dce122dfd037613d",
+        "text_sha256": "1b613741b522e2de54b78cfe61b668046e72f6b1eb6f7943dce122dfd037613d"
+      },
+      "last_crawled_at": "2026-03-10T07:01:02.886138Z",
+      "last_successful_crawled_at": "2026-03-10T07:01:03.375735Z",
+      "crawl_duration_ms": 489,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Perl Documentation",
+      "slug": "perl",
+      "source_url": "https://perldoc.perl.org/",
+      "pages": 5000,
+      "content_size_chars": 127988551,
+      "artifacts": {
+        "markdown_path": "/registry/docs/perl/docs.md",
+        "text_path": "/registry/docs/perl/docs.txt",
+        "markdown_bytes": 128064590,
+        "text_bytes": 128064590,
+        "markdown_sha256": "cb69bb6f82ee1a8b6de8aad66ae22ff84ac052e1d76f4c97b7431e5219aa66bf",
+        "text_sha256": "cb69bb6f82ee1a8b6de8aad66ae22ff84ac052e1d76f4c97b7431e5219aa66bf"
+      },
+      "last_crawled_at": "2026-03-10T07:01:03.377235Z",
+      "last_successful_crawled_at": "2026-03-10T07:03:39.906315Z",
+      "crawl_duration_ms": 156528,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Groovy Documentation",
+      "slug": "groovy",
+      "source_url": "https://groovy-lang.org/documentation.html",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/groovy/docs.md",
+        "text_path": "/registry/docs/groovy/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:03:39.909393Z",
+      "last_successful_crawled_at": "2026-03-10T07:04:03.916191Z",
+      "crawl_duration_ms": 24006,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Groovy API",
+      "slug": "groovy-api",
+      "source_url": "https://docs.groovy-lang.org/latest/html/gapi/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/groovy-api/docs.md",
+        "text_path": "/registry/docs/groovy-api/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:04:03.921434Z",
+      "last_successful_crawled_at": "2026-03-10T07:04:27.929529Z",
+      "crawl_duration_ms": 24008,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "PowerShell Documentation",
+      "slug": "powershell",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/",
+      "pages": 1759,
+      "content_size_chars": 1489982,
+      "artifacts": {
+        "markdown_path": "/registry/docs/powershell/docs.md",
+        "text_path": "/registry/docs/powershell/docs.txt",
+        "markdown_bytes": 1493635,
+        "text_bytes": 1493635,
+        "markdown_sha256": "0c3b60494aa275f9c8b3ac23b7c120c42f19c9a2c9244cde52e91e4b09abab46",
+        "text_sha256": "0c3b60494aa275f9c8b3ac23b7c120c42f19c9a2c9244cde52e91e4b09abab46"
+      },
+      "last_crawled_at": "2026-03-10T07:04:27.934445Z",
+      "last_successful_crawled_at": "2026-03-10T07:04:33.694994Z",
+      "crawl_duration_ms": 5760,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Bash Manual",
+      "slug": "bash",
+      "source_url": "https://www.gnu.org/software/bash/manual/",
+      "pages": 140,
+      "content_size_chars": 1406866,
+      "artifacts": {
+        "markdown_path": "/registry/docs/bash/docs.md",
+        "text_path": "/registry/docs/bash/docs.txt",
+        "markdown_bytes": 1416069,
+        "text_bytes": 1416069,
+        "markdown_sha256": "f69d2eb9185bc75528ec7fe7fc9383007d73a297f77bcdfc18b5a726b69b9019",
+        "text_sha256": "f69d2eb9185bc75528ec7fe7fc9383007d73a297f77bcdfc18b5a726b69b9019"
+      },
+      "last_crawled_at": "2026-03-10T07:04:33.696572Z",
+      "last_successful_crawled_at": "2026-03-10T07:04:35.779039Z",
+      "crawl_duration_ms": 2082,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "F# Documentation",
+      "slug": "fsharp",
+      "source_url": "https://learn.microsoft.com/en-us/dotnet/fsharp/",
+      "pages": 134,
+      "content_size_chars": 1845269,
+      "artifacts": {
+        "markdown_path": "/registry/docs/fsharp/docs.md",
+        "text_path": "/registry/docs/fsharp/docs.txt",
+        "markdown_bytes": 1846653,
+        "text_bytes": 1846653,
+        "markdown_sha256": "ef696bf0625fef685584cf5d17c0a098108a36a115dfc457730a0e31ceeac06a",
+        "text_sha256": "ef696bf0625fef685584cf5d17c0a098108a36a115dfc457730a0e31ceeac06a"
+      },
+      "last_crawled_at": "2026-03-10T07:04:35.780718Z",
+      "last_successful_crawled_at": "2026-03-10T07:04:40.610076Z",
+      "crawl_duration_ms": 4829,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Racket Documentation",
+      "slug": "racket",
+      "source_url": "https://docs.racket-lang.org/",
+      "pages": 4999,
+      "content_size_chars": 5972028249,
+      "artifacts": {
+        "markdown_path": "/registry/docs/racket/docs.md",
+        "text_path": "/registry/docs/racket/docs.txt",
+        "markdown_bytes": 5973672896,
+        "text_bytes": 5973672896,
+        "markdown_sha256": "c21b8bf71b4a6196932d8714e0d0cb8240c38728c2a4bb16157ee66c5b033241",
+        "text_sha256": "c21b8bf71b4a6196932d8714e0d0cb8240c38728c2a4bb16157ee66c5b033241"
+      },
+      "last_crawled_at": "2026-03-10T07:04:40.612875Z",
+      "last_successful_crawled_at": "2026-03-10T07:19:49.189785Z",
+      "crawl_duration_ms": 908568,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Crystal Documentation",
+      "slug": "crystal",
+      "source_url": "https://crystal-lang.org/docs/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/crystal/docs.md",
+        "text_path": "/registry/docs/crystal/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:19:49.222206Z",
+      "last_successful_crawled_at": "2026-03-10T07:19:49.763448Z",
+      "crawl_duration_ms": 541,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Crystal Standard Library",
+      "slug": "crystal-stdlib",
+      "source_url": "https://crystal-lang.org/api/",
+      "pages": 1019,
+      "content_size_chars": 43914038,
+      "artifacts": {
+        "markdown_path": "/registry/docs/crystal-stdlib/docs.md",
+        "text_path": "/registry/docs/crystal-stdlib/docs.txt",
+        "markdown_bytes": 43916745,
+        "text_bytes": 43916745,
+        "markdown_sha256": "03297b1260d7a296c2e9b94167f1f76df7392cf3dac02558f5965d6411d0b15a",
+        "text_sha256": "03297b1260d7a296c2e9b94167f1f76df7392cf3dac02558f5965d6411d0b15a"
+      },
+      "last_crawled_at": "2026-03-10T07:19:49.766258Z",
+      "last_successful_crawled_at": "2026-03-10T07:21:11.643030Z",
+      "crawl_duration_ms": 81876,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "V Language Documentation",
+      "slug": "v-lang",
+      "source_url": "https://docs.vlang.io/",
+      "pages": 51,
+      "content_size_chars": 209677,
+      "artifacts": {
+        "markdown_path": "/registry/docs/v-lang/docs.md",
+        "text_path": "/registry/docs/v-lang/docs.txt",
+        "markdown_bytes": 209892,
+        "text_bytes": 209892,
+        "markdown_sha256": "077f18a0dffcaf916a97669d649d125da3375db4c5379b6dfa65a4cf54f96f99",
+        "text_sha256": "077f18a0dffcaf916a97669d649d125da3375db4c5379b6dfa65a4cf54f96f99"
+      },
+      "last_crawled_at": "2026-03-10T07:21:11.644934Z",
+      "last_successful_crawled_at": "2026-03-10T07:21:12.742038Z",
+      "crawl_duration_ms": 1097,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Odin Language Overview",
+      "slug": "odin",
+      "source_url": "https://odin-lang.org/docs/",
+      "pages": 18,
+      "content_size_chars": 615397,
+      "artifacts": {
+        "markdown_path": "/registry/docs/odin/docs.md",
+        "text_path": "/registry/docs/odin/docs.txt",
+        "markdown_bytes": 616705,
+        "text_bytes": 616705,
+        "markdown_sha256": "6eb045129f59abd0737311bb47c06b48ca7a7e6ea3673719f35d7d1fcfd27bdd",
+        "text_sha256": "6eb045129f59abd0737311bb47c06b48ca7a7e6ea3673719f35d7d1fcfd27bdd"
+      },
+      "last_crawled_at": "2026-03-10T07:21:12.743922Z",
+      "last_successful_crawled_at": "2026-03-10T07:21:14.720774Z",
+      "crawl_duration_ms": 1976,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Gleam Documentation",
+      "slug": "gleam",
+      "source_url": "https://gleam.run/documentation/",
+      "pages": 3,
+      "content_size_chars": 13064,
+      "artifacts": {
+        "markdown_path": "/registry/docs/gleam/docs.md",
+        "text_path": "/registry/docs/gleam/docs.txt",
+        "markdown_bytes": 13094,
+        "text_bytes": 13094,
+        "markdown_sha256": "a737b8c095466c9425d3db5e00ada0684c5e645dc75ef88423f5b6efbcfc6963",
+        "text_sha256": "a737b8c095466c9425d3db5e00ada0684c5e645dc75ef88423f5b6efbcfc6963"
+      },
+      "last_crawled_at": "2026-03-10T07:21:14.722602Z",
+      "last_successful_crawled_at": "2026-03-10T07:21:15.271442Z",
+      "crawl_duration_ms": 548,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Gleam Standard Library",
+      "slug": "gleam-stdlib",
+      "source_url": "https://hexdocs.pm/gleam_stdlib/",
+      "pages": 21,
+      "content_size_chars": 188671,
+      "artifacts": {
+        "markdown_path": "/registry/docs/gleam-stdlib/docs.md",
+        "text_path": "/registry/docs/gleam-stdlib/docs.txt",
+        "markdown_bytes": 188943,
+        "text_bytes": 188943,
+        "markdown_sha256": "5c2be721a510a2debfc1ba85005082a8193802fd16c992c4d0cf4ecc4831122f",
+        "text_sha256": "5c2be721a510a2debfc1ba85005082a8193802fd16c992c4d0cf4ecc4831122f"
+      },
+      "last_crawled_at": "2026-03-10T07:21:15.273424Z",
+      "last_successful_crawled_at": "2026-03-10T07:21:15.682086Z",
+      "crawl_duration_ms": 408,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Mojo Documentation",
+      "slug": "mojo",
+      "source_url": "https://docs.modular.com/mojo/",
+      "pages": 2833,
+      "content_size_chars": 15070772,
+      "artifacts": {
+        "markdown_path": "/registry/docs/mojo/docs.md",
+        "text_path": "/registry/docs/mojo/docs.txt",
+        "markdown_bytes": 15153582,
+        "text_bytes": 15153582,
+        "markdown_sha256": "e4ea47df162f548be9b972dbcfae7789a3b2cf94780f678d914b42a83b3de71e",
+        "text_sha256": "e4ea47df162f548be9b972dbcfae7789a3b2cf94780f678d914b42a83b3de71e"
+      },
+      "last_crawled_at": "2026-03-10T07:21:15.683943Z",
+      "last_successful_crawled_at": "2026-03-10T07:22:14.601158Z",
+      "crawl_duration_ms": 58916,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Solidity Documentation",
+      "slug": "solidity",
+      "source_url": "https://docs.soliditylang.org/",
+      "pages": 247,
+      "content_size_chars": 5343185,
+      "artifacts": {
+        "markdown_path": "/registry/docs/solidity/docs.md",
+        "text_path": "/registry/docs/solidity/docs.txt",
+        "markdown_bytes": 5754269,
+        "text_bytes": 5754269,
+        "markdown_sha256": "618deebf28f9d8f1631d3982f620708454dd382de61673663f284f8a13a11890",
+        "text_sha256": "618deebf28f9d8f1631d3982f620708454dd382de61673663f284f8a13a11890"
+      },
+      "last_crawled_at": "2026-03-10T07:22:14.603303Z",
+      "last_successful_crawled_at": "2026-03-10T07:22:23.285262Z",
+      "crawl_duration_ms": 8681,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "WebAssembly Documentation",
+      "slug": "wasm",
+      "source_url": "https://webassembly.org/docs/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/wasm/docs.md",
+        "text_path": "/registry/docs/wasm/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:22:23.287078Z",
+      "last_successful_crawled_at": "2026-03-10T07:22:23.698667Z",
+      "crawl_duration_ms": 411,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "MDN WebAssembly",
+      "slug": "wasm-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/WebAssembly",
+      "pages": 135,
+      "content_size_chars": 729165,
+      "artifacts": {
+        "markdown_path": "/registry/docs/wasm-mdn/docs.md",
+        "text_path": "/registry/docs/wasm-mdn/docs.txt",
+        "markdown_bytes": 730332,
+        "text_bytes": 730332,
+        "markdown_sha256": "67a9d44dc8d618d6f91d015245e58d90716254342b56cc41797ecfb01b0078ab",
+        "text_sha256": "67a9d44dc8d618d6f91d015245e58d90716254342b56cc41797ecfb01b0078ab"
+      },
+      "last_crawled_at": "2026-03-10T07:22:23.703976Z",
+      "last_successful_crawled_at": "2026-03-10T07:22:28.544857Z",
+      "crawl_duration_ms": 4840,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "MDN HTML Reference",
+      "slug": "html-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+      "pages": 252,
+      "content_size_chars": 3479103,
+      "artifacts": {
+        "markdown_path": "/registry/docs/html-mdn/docs.md",
+        "text_path": "/registry/docs/html-mdn/docs.txt",
+        "markdown_bytes": 3481782,
+        "text_bytes": 3481782,
+        "markdown_sha256": "f903ec2b0603df45258546745b0290f2bc25e6161d86dd35df7d2ad82c413faf",
+        "text_sha256": "f903ec2b0603df45258546745b0290f2bc25e6161d86dd35df7d2ad82c413faf"
+      },
+      "last_crawled_at": "2026-03-10T07:22:28.547585Z",
+      "last_successful_crawled_at": "2026-03-10T07:22:40.671088Z",
+      "crawl_duration_ms": 12123,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "MDN CSS Reference",
+      "slug": "css-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+      "pages": 1221,
+      "content_size_chars": 12629778,
+      "artifacts": {
+        "markdown_path": "/registry/docs/css-mdn/docs.md",
+        "text_path": "/registry/docs/css-mdn/docs.txt",
+        "markdown_bytes": 12643545,
+        "text_bytes": 12643545,
+        "markdown_sha256": "a96c6c7187db5a1cb6de8865ab4e0c23fb806c4b6eaf06c9f2accb277e02b900",
+        "text_sha256": "a96c6c7187db5a1cb6de8865ab4e0c23fb806c4b6eaf06c9f2accb277e02b900"
+      },
+      "last_crawled_at": "2026-03-10T07:22:40.673371Z",
+      "last_successful_crawled_at": "2026-03-10T07:24:51.705133Z",
+      "crawl_duration_ms": 131031,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "MDN Web APIs",
+      "slug": "web-api-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/API",
+      "pages": 4999,
+      "content_size_chars": 27032471,
+      "artifacts": {
+        "markdown_path": "/registry/docs/web-api-mdn/docs.md",
+        "text_path": "/registry/docs/web-api-mdn/docs.txt",
+        "markdown_bytes": 27063053,
+        "text_bytes": 27063053,
+        "markdown_sha256": "4042a08bacb83bd59bfa8998a7ffac914252d19fccb32aea8418959d9cf83ea2",
+        "text_sha256": "4042a08bacb83bd59bfa8998a7ffac914252d19fccb32aea8418959d9cf83ea2"
+      },
+      "last_crawled_at": "2026-03-10T07:24:51.707913Z",
+      "last_successful_crawled_at": "2026-03-10T07:27:42.111353Z",
+      "crawl_duration_ms": 170402,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "MDN HTTP Reference",
+      "slug": "http-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
+      "pages": 370,
+      "content_size_chars": 2558956,
+      "artifacts": {
+        "markdown_path": "/registry/docs/http-mdn/docs.md",
+        "text_path": "/registry/docs/http-mdn/docs.txt",
+        "markdown_bytes": 2561189,
+        "text_bytes": 2561189,
+        "markdown_sha256": "75755369521e6453cd18d0dd04739ac87fccf114459f11765d71e603c277cd76",
+        "text_sha256": "75755369521e6453cd18d0dd04739ac87fccf114459f11765d71e603c277cd76"
+      },
+      "last_crawled_at": "2026-03-10T07:27:42.114255Z",
+      "last_successful_crawled_at": "2026-03-10T07:28:06.950515Z",
+      "crawl_duration_ms": 24836,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "MDN SVG Reference",
+      "slug": "svg-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/SVG",
+      "pages": 299,
+      "content_size_chars": 2076549,
+      "artifacts": {
+        "markdown_path": "/registry/docs/svg-mdn/docs.md",
+        "text_path": "/registry/docs/svg-mdn/docs.txt",
+        "markdown_bytes": 2078309,
+        "text_bytes": 2078309,
+        "markdown_sha256": "5cc9dbcce9815c1ed636e24ac066f0521a0e63907a5bada987a844131ad981f2",
+        "text_sha256": "5cc9dbcce9815c1ed636e24ac066f0521a0e63907a5bada987a844131ad981f2"
+      },
+      "last_crawled_at": "2026-03-10T07:28:06.953017Z",
+      "last_successful_crawled_at": "2026-03-10T07:28:20.568363Z",
+      "crawl_duration_ms": 13615,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "MDN Canvas API",
+      "slug": "canvas-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API",
+      "pages": 16,
+      "content_size_chars": 232017,
+      "artifacts": {
+        "markdown_path": "/registry/docs/canvas-mdn/docs.md",
+        "text_path": "/registry/docs/canvas-mdn/docs.txt",
+        "markdown_bytes": 232141,
+        "text_bytes": 232141,
+        "markdown_sha256": "35a3e4dee2129f51dbf72f6f15bdecead31d48f42500c7a78e8f27ff2fb4075a",
+        "text_sha256": "35a3e4dee2129f51dbf72f6f15bdecead31d48f42500c7a78e8f27ff2fb4075a"
+      },
+      "last_crawled_at": "2026-03-10T07:28:20.570844Z",
+      "last_successful_crawled_at": "2026-03-10T07:28:21.508669Z",
+      "crawl_duration_ms": 937,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "MDN WebGL Reference",
+      "slug": "webgl-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API",
+      "pages": 35,
+      "content_size_chars": 451671,
+      "artifacts": {
+        "markdown_path": "/registry/docs/webgl-mdn/docs.md",
+        "text_path": "/registry/docs/webgl-mdn/docs.txt",
+        "markdown_bytes": 451897,
+        "text_bytes": 451897,
+        "markdown_sha256": "a55cdf61484213a2f9034937bc8f434a63ba9606c473343b38de02df80e6732c",
+        "text_sha256": "a55cdf61484213a2f9034937bc8f434a63ba9606c473343b38de02df80e6732c"
+      },
+      "last_crawled_at": "2026-03-10T07:28:21.511419Z",
+      "last_successful_crawled_at": "2026-03-10T07:28:23.522904Z",
+      "crawl_duration_ms": 2011,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "MDN WebSockets",
+      "slug": "websockets-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API",
+      "pages": 8,
+      "content_size_chars": 99825,
+      "artifacts": {
+        "markdown_path": "/registry/docs/websockets-mdn/docs.md",
+        "text_path": "/registry/docs/websockets-mdn/docs.txt",
+        "markdown_bytes": 99885,
+        "text_bytes": 99885,
+        "markdown_sha256": "5639ff5d0fc95454d5ca5494ef3b7e90cd3c5f1a740ab4004401a7c2a42cbc65",
+        "text_sha256": "5639ff5d0fc95454d5ca5494ef3b7e90cd3c5f1a740ab4004401a7c2a42cbc65"
+      },
+      "last_crawled_at": "2026-03-10T07:28:23.525857Z",
+      "last_successful_crawled_at": "2026-03-10T07:28:24.231972Z",
+      "crawl_duration_ms": 706,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "MDN Service Workers",
+      "slug": "service-workers-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API",
+      "pages": 3,
+      "content_size_chars": 60347,
+      "artifacts": {
+        "markdown_path": "/registry/docs/service-workers-mdn/docs.md",
+        "text_path": "/registry/docs/service-workers-mdn/docs.txt",
+        "markdown_bytes": 60397,
+        "text_bytes": 60397,
+        "markdown_sha256": "e497b87419024b601cec15bc0c84f8cec28de7bbf954f0623f9257b5d73ca94d",
+        "text_sha256": "e497b87419024b601cec15bc0c84f8cec28de7bbf954f0623f9257b5d73ca94d"
+      },
+      "last_crawled_at": "2026-03-10T07:28:24.234184Z",
+      "last_successful_crawled_at": "2026-03-10T07:28:24.702514Z",
+      "crawl_duration_ms": 468,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "MDN Web Components",
+      "slug": "web-components-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_components",
+      "pages": 5,
+      "content_size_chars": 104913,
+      "artifacts": {
+        "markdown_path": "/registry/docs/web-components-mdn/docs.md",
+        "text_path": "/registry/docs/web-components-mdn/docs.txt",
+        "markdown_bytes": 105009,
+        "text_bytes": 105009,
+        "markdown_sha256": "856013af02ee94417ee7bb75ad043ca63d58372409ed8daa50be46a2135b40b7",
+        "text_sha256": "856013af02ee94417ee7bb75ad043ca63d58372409ed8daa50be46a2135b40b7"
+      },
+      "last_crawled_at": "2026-03-10T07:28:24.704761Z",
+      "last_successful_crawled_at": "2026-03-10T07:28:25.207572Z",
+      "crawl_duration_ms": 502,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "MDN Fetch API",
+      "slug": "fetch-mdn",
+      "source_url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
+      "pages": 4,
+      "content_size_chars": 59716,
+      "artifacts": {
+        "markdown_path": "/registry/docs/fetch-mdn/docs.md",
+        "text_path": "/registry/docs/fetch-mdn/docs.txt",
+        "markdown_bytes": 59760,
+        "text_bytes": 59760,
+        "markdown_sha256": "23bdfc5b98c4f885f156fc0a2a823306c8c3bc5867630344190816f07ab8c3db",
+        "text_sha256": "23bdfc5b98c4f885f156fc0a2a823306c8c3bc5867630344190816f07ab8c3db"
+      },
+      "last_crawled_at": "2026-03-10T07:28:25.209631Z",
+      "last_successful_crawled_at": "2026-03-10T07:28:25.868657Z",
+      "crawl_duration_ms": 659,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "CSS-Tricks Almanac",
+      "slug": "css-tricks-almanac",
+      "source_url": "https://css-tricks.com/almanac/",
+      "pages": 808,
+      "content_size_chars": 8806854,
+      "artifacts": {
+        "markdown_path": "/registry/docs/css-tricks-almanac/docs.md",
+        "text_path": "/registry/docs/css-tricks-almanac/docs.txt",
+        "markdown_bytes": 8851687,
+        "text_bytes": 8851687,
+        "markdown_sha256": "98f943b4eeb2fce791b51900c2433ee35a2e0516259890f10dd3300bd18f8cc8",
+        "text_sha256": "98f943b4eeb2fce791b51900c2433ee35a2e0516259890f10dd3300bd18f8cc8"
+      },
+      "last_crawled_at": "2026-03-10T07:28:25.870697Z",
+      "last_successful_crawled_at": "2026-03-10T07:29:11.260087Z",
+      "crawl_duration_ms": 45389,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Tailwind CSS",
+      "slug": "tailwind",
+      "source_url": "https://tailwindcss.com/docs",
+      "pages": 221,
+      "content_size_chars": 2183560,
+      "artifacts": {
+        "markdown_path": "/registry/docs/tailwind/docs.md",
+        "text_path": "/registry/docs/tailwind/docs.txt",
+        "markdown_bytes": 2186661,
+        "text_bytes": 2186661,
+        "markdown_sha256": "4a656afe6907646c327fb9b71ade7418cb2c44aa9dc691ffd9cda294226ce46d",
+        "text_sha256": "4a656afe6907646c327fb9b71ade7418cb2c44aa9dc691ffd9cda294226ce46d"
+      },
+      "last_crawled_at": "2026-03-10T07:29:11.262440Z",
+      "last_successful_crawled_at": "2026-03-10T07:29:46.170981Z",
+      "crawl_duration_ms": 34908,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Tailwind CSS v4",
+      "slug": "tailwind-v4",
+      "source_url": "https://tailwindcss.com/docs/v4-beta",
+      "pages": 1,
+      "content_size_chars": 2896,
+      "artifacts": {
+        "markdown_path": "/registry/docs/tailwind-v4/docs.md",
+        "text_path": "/registry/docs/tailwind-v4/docs.txt",
+        "markdown_bytes": 2908,
+        "text_bytes": 2908,
+        "markdown_sha256": "5f8087bf94f328823323ce4c2dec982262b8efa3f0fe25f231876da226d30817",
+        "text_sha256": "5f8087bf94f328823323ce4c2dec982262b8efa3f0fe25f231876da226d30817"
+      },
+      "last_crawled_at": "2026-03-10T07:29:46.209565Z",
+      "last_successful_crawled_at": "2026-03-10T07:29:46.727739Z",
+      "crawl_duration_ms": 518,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Bootstrap",
+      "slug": "bootstrap",
+      "source_url": "https://getbootstrap.com/docs/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/bootstrap/docs.md",
+        "text_path": "/registry/docs/bootstrap/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:29:46.730378Z",
+      "last_successful_crawled_at": "2026-03-10T07:29:46.952860Z",
+      "crawl_duration_ms": 222,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Bulma CSS",
+      "slug": "bulma",
+      "source_url": "https://bulma.io/documentation/",
+      "pages": 85,
+      "content_size_chars": 1344342,
+      "artifacts": {
+        "markdown_path": "/registry/docs/bulma/docs.md",
+        "text_path": "/registry/docs/bulma/docs.txt",
+        "markdown_bytes": 1346316,
+        "text_bytes": 1346316,
+        "markdown_sha256": "983ff4dfe1e1f395e1fb53a1860067fbb9255db6452daa96c25046f666c7d706",
+        "text_sha256": "983ff4dfe1e1f395e1fb53a1860067fbb9255db6452daa96c25046f666c7d706"
+      },
+      "last_crawled_at": "2026-03-10T07:29:46.958603Z",
+      "last_successful_crawled_at": "2026-03-10T07:29:50.445299Z",
+      "crawl_duration_ms": 3486,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Sass Documentation",
+      "slug": "sass",
+      "source_url": "https://sass-lang.com/documentation/",
+      "pages": 273,
+      "content_size_chars": 2211806,
+      "artifacts": {
+        "markdown_path": "/registry/docs/sass/docs.md",
+        "text_path": "/registry/docs/sass/docs.txt",
+        "markdown_bytes": 2224804,
+        "text_bytes": 2224804,
+        "markdown_sha256": "e0717b85fa63f03c760a0f19d8946b1ea6e6cc1b7a0d52ee6018803afac6309a",
+        "text_sha256": "e0717b85fa63f03c760a0f19d8946b1ea6e6cc1b7a0d52ee6018803afac6309a"
+      },
+      "last_crawled_at": "2026-03-10T07:29:50.447882Z",
+      "last_successful_crawled_at": "2026-03-10T07:29:57.830634Z",
+      "crawl_duration_ms": 7382,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "PostCSS Documentation",
+      "slug": "postcss",
+      "source_url": "https://postcss.org/",
+      "pages": 9,
+      "content_size_chars": 476198,
+      "artifacts": {
+        "markdown_path": "/registry/docs/postcss/docs.md",
+        "text_path": "/registry/docs/postcss/docs.txt",
+        "markdown_bytes": 477008,
+        "text_bytes": 477008,
+        "markdown_sha256": "f38367882e47a0539721bacdbfbc88be3fe952cead83d5a3574e3278f644d8bc",
+        "text_sha256": "f38367882e47a0539721bacdbfbc88be3fe952cead83d5a3574e3278f644d8bc"
+      },
+      "last_crawled_at": "2026-03-10T07:29:57.834169Z",
+      "last_successful_crawled_at": "2026-03-10T07:29:59.768430Z",
+      "crawl_duration_ms": 1934,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "styled-components",
+      "slug": "styled-components",
+      "source_url": "https://styled-components.com/docs",
+      "pages": 6,
+      "content_size_chars": 144765,
+      "artifacts": {
+        "markdown_path": "/registry/docs/styled-components/docs.md",
+        "text_path": "/registry/docs/styled-components/docs.txt",
+        "markdown_bytes": 144862,
+        "text_bytes": 144862,
+        "markdown_sha256": "6a84be00b6d9e17b4aa5d5a8127deaea1ccb316f261a5fefed24975702c9b45d",
+        "text_sha256": "6a84be00b6d9e17b4aa5d5a8127deaea1ccb316f261a5fefed24975702c9b45d"
+      },
+      "last_crawled_at": "2026-03-10T07:29:59.770691Z",
+      "last_successful_crawled_at": "2026-03-10T07:30:00.976845Z",
+      "crawl_duration_ms": 1206,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Emotion CSS-in-JS",
+      "slug": "emotion",
+      "source_url": "https://emotion.sh/docs/introduction",
+      "pages": 2,
+      "content_size_chars": 9154,
+      "artifacts": {
+        "markdown_path": "/registry/docs/emotion/docs.md",
+        "text_path": "/registry/docs/emotion/docs.txt",
+        "markdown_bytes": 9190,
+        "text_bytes": 9190,
+        "markdown_sha256": "fed6494715808a109fee7ad0ed14337fa5637ffc97aa51a73fe812927f123172",
+        "text_sha256": "fed6494715808a109fee7ad0ed14337fa5637ffc97aa51a73fe812927f123172"
+      },
+      "last_crawled_at": "2026-03-10T07:30:00.979458Z",
+      "last_successful_crawled_at": "2026-03-10T07:30:01.750383Z",
+      "crawl_duration_ms": 770,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Open Props",
+      "slug": "open-props",
+      "source_url": "https://open-props.style/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/open-props/docs.md",
+        "text_path": "/registry/docs/open-props/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:30:01.752670Z",
+      "last_successful_crawled_at": "2026-03-10T07:30:02.163214Z",
+      "crawl_duration_ms": 410,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "DaisyUI",
+      "slug": "daisyui",
+      "source_url": "https://daisyui.com/docs/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/daisyui/docs.md",
+        "text_path": "/registry/docs/daisyui/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:30:02.167338Z",
+      "last_successful_crawled_at": "2026-03-10T07:30:02.590967Z",
+      "crawl_duration_ms": 423,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "shadcn/ui",
+      "slug": "shadcn",
+      "source_url": "https://ui.shadcn.com/docs",
+      "pages": 213,
+      "content_size_chars": 1901674,
+      "artifacts": {
+        "markdown_path": "/registry/docs/shadcn/docs.md",
+        "text_path": "/registry/docs/shadcn/docs.txt",
+        "markdown_bytes": 1909369,
+        "text_bytes": 1909369,
+        "markdown_sha256": "267180ff32a422ca82a34afa7d7dbf8ef79461ef0603d35e55a6753cbd5a3840",
+        "text_sha256": "267180ff32a422ca82a34afa7d7dbf8ef79461ef0603d35e55a6753cbd5a3840"
+      },
+      "last_crawled_at": "2026-03-10T07:30:02.598204Z",
+      "last_successful_crawled_at": "2026-03-10T07:30:30.499789Z",
+      "crawl_duration_ms": 27901,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Radix UI",
+      "slug": "radix-ui",
+      "source_url": "https://www.radix-ui.com/docs/primitives/overview/introduction",
+      "pages": 1,
+      "content_size_chars": 7319,
+      "artifacts": {
+        "markdown_path": "/registry/docs/radix-ui/docs.md",
+        "text_path": "/registry/docs/radix-ui/docs.txt",
+        "markdown_bytes": 7321,
+        "text_bytes": 7321,
+        "markdown_sha256": "b511ee7f3612b1d627f638bef01a16230ffb86f57df7cd5f09aa3c7d37ca594d",
+        "text_sha256": "b511ee7f3612b1d627f638bef01a16230ffb86f57df7cd5f09aa3c7d37ca594d"
+      },
+      "last_crawled_at": "2026-03-10T07:30:30.502118Z",
+      "last_successful_crawled_at": "2026-03-10T07:30:30.966426Z",
+      "crawl_duration_ms": 464,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Headless UI",
+      "slug": "headlessui",
+      "source_url": "https://headlessui.com/",
+      "pages": 39,
+      "content_size_chars": 822408,
+      "artifacts": {
+        "markdown_path": "/registry/docs/headlessui/docs.md",
+        "text_path": "/registry/docs/headlessui/docs.txt",
+        "markdown_bytes": 823014,
+        "text_bytes": 823014,
+        "markdown_sha256": "fdcfb1e008edd7d04e635717bd6b30d533046f1fc59f0cdd6798b3c016aaa5a9",
+        "text_sha256": "fdcfb1e008edd7d04e635717bd6b30d533046f1fc59f0cdd6798b3c016aaa5a9"
+      },
+      "last_crawled_at": "2026-03-10T07:30:30.969053Z",
+      "last_successful_crawled_at": "2026-03-10T07:30:34.983837Z",
+      "crawl_duration_ms": 4014,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Chakra UI",
+      "slug": "chakra-ui",
+      "source_url": "https://chakra-ui.com/docs/getting-started",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/chakra-ui/docs.md",
+        "text_path": "/registry/docs/chakra-ui/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:30:34.986136Z",
+      "last_successful_crawled_at": "2026-03-10T07:30:35.415514Z",
+      "crawl_duration_ms": 429,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Mantine",
+      "slug": "mantine",
+      "source_url": "https://mantine.dev/getting-started/",
+      "pages": 1,
+      "content_size_chars": 17813,
+      "artifacts": {
+        "markdown_path": "/registry/docs/mantine/docs.md",
+        "text_path": "/registry/docs/mantine/docs.txt",
+        "markdown_bytes": 17839,
+        "text_bytes": 17839,
+        "markdown_sha256": "28553148764dcb17bbd994e741e197fd423ae24692016f048bf5915e56c06b97",
+        "text_sha256": "28553148764dcb17bbd994e741e197fd423ae24692016f048bf5915e56c06b97"
+      },
+      "last_crawled_at": "2026-03-10T07:30:35.421192Z",
+      "last_successful_crawled_at": "2026-03-10T07:30:36.261455Z",
+      "crawl_duration_ms": 840,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Material UI (MUI)",
+      "slug": "material-ui",
+      "source_url": "https://mui.com/material-ui/getting-started/",
+      "pages": 20,
+      "content_size_chars": 83400,
+      "artifacts": {
+        "markdown_path": "/registry/docs/material-ui/docs.md",
+        "text_path": "/registry/docs/material-ui/docs.txt",
+        "markdown_bytes": 83680,
+        "text_bytes": 83680,
+        "markdown_sha256": "d0ff7c135ceb38e3fac3bec79fe7f04e5b4800523c76972c70456c03ec49af27",
+        "text_sha256": "d0ff7c135ceb38e3fac3bec79fe7f04e5b4800523c76972c70456c03ec49af27"
+      },
+      "last_crawled_at": "2026-03-10T07:30:36.263712Z",
+      "last_successful_crawled_at": "2026-03-10T07:30:38.145318Z",
+      "crawl_duration_ms": 1881,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Ant Design",
+      "slug": "ant-design",
+      "source_url": "https://ant.design/docs/react/introduce",
+      "pages": 2,
+      "content_size_chars": 26558,
+      "artifacts": {
+        "markdown_path": "/registry/docs/ant-design/docs.md",
+        "text_path": "/registry/docs/ant-design/docs.txt",
+        "markdown_bytes": 26614,
+        "text_bytes": 26614,
+        "markdown_sha256": "6d159c30ed80f3fb7f4c102c252b3d2659293348f6ec62a9f84fe096c618a10d",
+        "text_sha256": "6d159c30ed80f3fb7f4c102c252b3d2659293348f6ec62a9f84fe096c618a10d"
+      },
+      "last_crawled_at": "2026-03-10T07:30:38.147626Z",
+      "last_successful_crawled_at": "2026-03-10T07:30:38.772769Z",
+      "crawl_duration_ms": 625,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Flowbite",
+      "slug": "flowbite",
+      "source_url": "https://flowbite.com/docs/getting-started/introduction/",
+      "pages": 1,
+      "content_size_chars": 18174,
+      "artifacts": {
+        "markdown_path": "/registry/docs/flowbite/docs.md",
+        "text_path": "/registry/docs/flowbite/docs.txt",
+        "markdown_bytes": 18211,
+        "text_bytes": 18211,
+        "markdown_sha256": "53a67f15003da4ee5d409440fd2a195075caa2b1f77be7bbdc72afb7adc1b551",
+        "text_sha256": "53a67f15003da4ee5d409440fd2a195075caa2b1f77be7bbdc72afb7adc1b551"
+      },
+      "last_crawled_at": "2026-03-10T07:30:38.775240Z",
+      "last_successful_crawled_at": "2026-03-10T07:30:39.675427Z",
+      "crawl_duration_ms": 900,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "React",
+      "slug": "react",
+      "source_url": "https://react.dev/reference/react",
+      "pages": 50,
+      "content_size_chars": 178850,
+      "artifacts": {
+        "markdown_path": "/registry/docs/react/docs.md",
+        "text_path": "/registry/docs/react/docs.txt",
+        "markdown_bytes": 178950,
+        "text_bytes": 178950,
+        "markdown_sha256": "d3ff14770ab71c4296621bf7fd9486247d4a166a8e416afb41a3a82a3de56c58",
+        "text_sha256": "d3ff14770ab71c4296621bf7fd9486247d4a166a8e416afb41a3a82a3de56c58"
+      },
+      "last_crawled_at": "2026-03-10T07:30:39.677818Z",
+      "last_successful_crawled_at": "2026-03-10T07:30:45.160455Z",
+      "crawl_duration_ms": 5482,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "React DOM",
+      "slug": "react-dom",
+      "source_url": "https://react.dev/reference/react-dom",
+      "pages": 47,
+      "content_size_chars": 164048,
+      "artifacts": {
+        "markdown_path": "/registry/docs/react-dom/docs.md",
+        "text_path": "/registry/docs/react-dom/docs.txt",
+        "markdown_bytes": 164144,
+        "text_bytes": 164144,
+        "markdown_sha256": "1089264b1c81f8ed2d2020240760f23905bafe318bdf79be7ebf1067013eaa09",
+        "text_sha256": "1089264b1c81f8ed2d2020240760f23905bafe318bdf79be7ebf1067013eaa09"
+      },
+      "last_crawled_at": "2026-03-10T07:30:45.163150Z",
+      "last_successful_crawled_at": "2026-03-10T07:30:50.466236Z",
+      "crawl_duration_ms": 5303,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Next.js",
+      "slug": "nextjs",
+      "source_url": "https://nextjs.org/docs",
+      "pages": 418,
+      "content_size_chars": 3162576,
+      "artifacts": {
+        "markdown_path": "/registry/docs/nextjs/docs.md",
+        "text_path": "/registry/docs/nextjs/docs.txt",
+        "markdown_bytes": 3164472,
+        "text_bytes": 3164472,
+        "markdown_sha256": "3ddcdfd9de66cbdcb3cbade0f820aa99ed43b14c019694d0aa44ee95689e1de7",
+        "text_sha256": "3ddcdfd9de66cbdcb3cbade0f820aa99ed43b14c019694d0aa44ee95689e1de7"
+      },
+      "last_crawled_at": "2026-03-10T07:30:50.469299Z",
+      "last_successful_crawled_at": "2026-03-10T07:32:55.687068Z",
+      "crawl_duration_ms": 125217,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Vue.js 3",
+      "slug": "vue",
+      "source_url": "https://vuejs.org/guide/introduction.html",
+      "pages": 1,
+      "content_size_chars": 11300,
+      "artifacts": {
+        "markdown_path": "/registry/docs/vue/docs.md",
+        "text_path": "/registry/docs/vue/docs.txt",
+        "markdown_bytes": 11323,
+        "text_bytes": 11323,
+        "markdown_sha256": "302e3d9acfba5f00849f9a7d0462a13e7d7ee2157e86379964344fa4d5002ad9",
+        "text_sha256": "302e3d9acfba5f00849f9a7d0462a13e7d7ee2157e86379964344fa4d5002ad9"
+      },
+      "last_crawled_at": "2026-03-10T07:32:55.689999Z",
+      "last_successful_crawled_at": "2026-03-10T07:32:56.047635Z",
+      "crawl_duration_ms": 357,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Vue.js 3 API Reference",
+      "slug": "vue-api",
+      "source_url": "https://vuejs.org/api/",
+      "pages": 29,
+      "content_size_chars": 228819,
+      "artifacts": {
+        "markdown_path": "/registry/docs/vue-api/docs.md",
+        "text_path": "/registry/docs/vue-api/docs.txt",
+        "markdown_bytes": 229353,
+        "text_bytes": 229353,
+        "markdown_sha256": "e7271658f090163f80a399f444bb4239a8e292e8ca9b7aa7784f4f6ec6276532",
+        "text_sha256": "e7271658f090163f80a399f444bb4239a8e292e8ca9b7aa7784f4f6ec6276532"
+      },
+      "last_crawled_at": "2026-03-10T07:32:56.051203Z",
+      "last_successful_crawled_at": "2026-03-10T07:32:57.423675Z",
+      "crawl_duration_ms": 1372,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Nuxt.js",
+      "slug": "nuxt",
+      "source_url": "https://nuxt.com/docs",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/nuxt/docs.md",
+        "text_path": "/registry/docs/nuxt/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:32:57.427105Z",
+      "last_successful_crawled_at": "2026-03-10T07:32:57.614149Z",
+      "crawl_duration_ms": 187,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Angular",
+      "slug": "angular",
+      "source_url": "https://angular.dev/overview",
+      "pages": 175,
+      "content_size_chars": 349407,
+      "artifacts": {
+        "markdown_path": "/registry/docs/angular/docs.md",
+        "text_path": "/registry/docs/angular/docs.txt",
+        "markdown_bytes": 350652,
+        "text_bytes": 350652,
+        "markdown_sha256": "8779b25ed604cb30fa3ad6467d2e43e46bf78b8857d833540972d212f327087d",
+        "text_sha256": "8779b25ed604cb30fa3ad6467d2e43e46bf78b8857d833540972d212f327087d"
+      },
+      "last_crawled_at": "2026-03-10T07:32:57.619866Z",
+      "last_successful_crawled_at": "2026-03-10T07:33:04.367027Z",
+      "crawl_duration_ms": 6747,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Angular API Reference",
+      "slug": "angular-api",
+      "source_url": "https://angular.dev/api",
+      "pages": 2336,
+      "content_size_chars": 11276897,
+      "artifacts": {
+        "markdown_path": "/registry/docs/angular-api/docs.md",
+        "text_path": "/registry/docs/angular-api/docs.txt",
+        "markdown_bytes": 11288306,
+        "text_bytes": 11288306,
+        "markdown_sha256": "4910d9626775837c38de28dacb4f553558aa9ef0a16577e3984582510e6a86e4",
+        "text_sha256": "4910d9626775837c38de28dacb4f553558aa9ef0a16577e3984582510e6a86e4"
+      },
+      "last_crawled_at": "2026-03-10T07:33:04.370784Z",
+      "last_successful_crawled_at": "2026-03-10T07:34:48.853377Z",
+      "crawl_duration_ms": 104482,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Svelte",
+      "slug": "svelte",
+      "source_url": "https://svelte.dev/docs",
+      "pages": 202,
+      "content_size_chars": 2036405,
+      "artifacts": {
+        "markdown_path": "/registry/docs/svelte/docs.md",
+        "text_path": "/registry/docs/svelte/docs.txt",
+        "markdown_bytes": 2038442,
+        "text_bytes": 2038442,
+        "markdown_sha256": "a881bc25a10dbcc3f1a6b5925981fdcf9b817584d5193c59a2dc3307a537b8bd",
+        "text_sha256": "a881bc25a10dbcc3f1a6b5925981fdcf9b817584d5193c59a2dc3307a537b8bd"
+      },
+      "last_crawled_at": "2026-03-10T07:34:48.856444Z",
+      "last_successful_crawled_at": "2026-03-10T07:34:59.598537Z",
+      "crawl_duration_ms": 10742,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "SvelteKit",
+      "slug": "sveltekit",
+      "source_url": "https://kit.svelte.dev/docs",
+      "pages": 48,
+      "content_size_chars": 1033230,
+      "artifacts": {
+        "markdown_path": "/registry/docs/sveltekit/docs.md",
+        "text_path": "/registry/docs/sveltekit/docs.txt",
+        "markdown_bytes": 1034321,
+        "text_bytes": 1034321,
+        "markdown_sha256": "ddc506fddad01e696cd753096279f5b80ce24023a1c74e062de893ba5862f5dc",
+        "text_sha256": "ddc506fddad01e696cd753096279f5b80ce24023a1c74e062de893ba5862f5dc"
+      },
+      "last_crawled_at": "2026-03-10T07:34:59.601162Z",
+      "last_successful_crawled_at": "2026-03-10T07:35:06.093276Z",
+      "crawl_duration_ms": 6492,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "SolidJS",
+      "slug": "solid",
+      "source_url": "https://docs.solidjs.com/",
+      "pages": 215,
+      "content_size_chars": 895486,
+      "artifacts": {
+        "markdown_path": "/registry/docs/solid/docs.md",
+        "text_path": "/registry/docs/solid/docs.txt",
+        "markdown_bytes": 896355,
+        "text_bytes": 896355,
+        "markdown_sha256": "48f8ffbe0854e9c5cb6c6ace814b79c85f57218035454156a615d04d887449c3",
+        "text_sha256": "48f8ffbe0854e9c5cb6c6ace814b79c85f57218035454156a615d04d887449c3"
+      },
+      "last_crawled_at": "2026-03-10T07:35:06.097698Z",
+      "last_successful_crawled_at": "2026-03-10T07:35:21.303268Z",
+      "crawl_duration_ms": 15205,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "SolidStart",
+      "slug": "solidstart",
+      "source_url": "https://docs.solidjs.com/solid-start",
+      "pages": 39,
+      "content_size_chars": 172846,
+      "artifacts": {
+        "markdown_path": "/registry/docs/solidstart/docs.md",
+        "text_path": "/registry/docs/solidstart/docs.txt",
+        "markdown_bytes": 173076,
+        "text_bytes": 173076,
+        "markdown_sha256": "311a5466e06a43f030eef9df2d67989d3f506687988da53bbd17ec61f3e47e8b",
+        "text_sha256": "311a5466e06a43f030eef9df2d67989d3f506687988da53bbd17ec61f3e47e8b"
+      },
+      "last_crawled_at": "2026-03-10T07:35:21.308970Z",
+      "last_successful_crawled_at": "2026-03-10T07:35:25.449146Z",
+      "crawl_duration_ms": 4140,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Qwik",
+      "slug": "qwik",
+      "source_url": "https://qwik.dev/docs/",
+      "pages": 142,
+      "content_size_chars": 1198005,
+      "artifacts": {
+        "markdown_path": "/registry/docs/qwik/docs.md",
+        "text_path": "/registry/docs/qwik/docs.txt",
+        "markdown_bytes": 1207830,
+        "text_bytes": 1207830,
+        "markdown_sha256": "1774b4d9f900b6a17bf9633b05f969721ec01bd5c301913318721bceaef51515",
+        "text_sha256": "1774b4d9f900b6a17bf9633b05f969721ec01bd5c301913318721bceaef51515"
+      },
+      "last_crawled_at": "2026-03-10T07:35:25.453774Z",
+      "last_successful_crawled_at": "2026-03-10T07:35:44.788034Z",
+      "crawl_duration_ms": 19334,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Astro",
+      "slug": "astro",
+      "source_url": "https://docs.astro.build/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/astro/docs.md",
+        "text_path": "/registry/docs/astro/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:35:44.791380Z",
+      "last_successful_crawled_at": "2026-03-10T07:35:44.898920Z",
+      "crawl_duration_ms": 107,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Remix",
+      "slug": "remix",
+      "source_url": "https://remix.run/docs/en/main",
+      "pages": 1,
+      "content_size_chars": 2989,
+      "artifacts": {
+        "markdown_path": "/registry/docs/remix/docs.md",
+        "text_path": "/registry/docs/remix/docs.txt",
+        "markdown_bytes": 2994,
+        "text_bytes": 2994,
+        "markdown_sha256": "598fefaeaab19a097e542bf95b5485de3ecd8a6d5b4675484a1ecb565a84ce66",
+        "text_sha256": "598fefaeaab19a097e542bf95b5485de3ecd8a6d5b4675484a1ecb565a84ce66"
+      },
+      "last_crawled_at": "2026-03-10T07:35:44.902787Z",
+      "last_successful_crawled_at": "2026-03-10T07:35:45.811454Z",
+      "crawl_duration_ms": 908,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Gatsby",
+      "slug": "gatsby",
+      "source_url": "https://www.gatsbyjs.com/docs/",
+      "pages": 696,
+      "content_size_chars": 4569603,
+      "artifacts": {
+        "markdown_path": "/registry/docs/gatsby/docs.md",
+        "text_path": "/registry/docs/gatsby/docs.txt",
+        "markdown_bytes": 4589145,
+        "text_bytes": 4589145,
+        "markdown_sha256": "bc3b1031e55e0905c7603f52a224cc1c7e25372b09fbbda7583dac64b91634e5",
+        "text_sha256": "bc3b1031e55e0905c7603f52a224cc1c7e25372b09fbbda7583dac64b91634e5"
+      },
+      "last_crawled_at": "2026-03-10T07:35:45.814303Z",
+      "last_successful_crawled_at": "2026-03-10T07:36:21.432664Z",
+      "crawl_duration_ms": 35618,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Vite",
+      "slug": "vite",
+      "source_url": "https://vite.dev/guide/",
+      "pages": 24,
+      "content_size_chars": 331392,
+      "artifacts": {
+        "markdown_path": "/registry/docs/vite/docs.md",
+        "text_path": "/registry/docs/vite/docs.txt",
+        "markdown_bytes": 332178,
+        "text_bytes": 332178,
+        "markdown_sha256": "7f34f38008b746ce34199d44b0699edb984d051a0511ed3f8bc7965c083547b3",
+        "text_sha256": "7f34f38008b746ce34199d44b0699edb984d051a0511ed3f8bc7965c083547b3"
+      },
+      "last_crawled_at": "2026-03-10T07:36:21.435746Z",
+      "last_successful_crawled_at": "2026-03-10T07:36:22.435582Z",
+      "crawl_duration_ms": 999,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Vitest",
+      "slug": "vitest",
+      "source_url": "https://vitest.dev/guide/",
+      "pages": 46,
+      "content_size_chars": 370817,
+      "artifacts": {
+        "markdown_path": "/registry/docs/vitest/docs.md",
+        "text_path": "/registry/docs/vitest/docs.txt",
+        "markdown_bytes": 372596,
+        "text_bytes": 372596,
+        "markdown_sha256": "361c5bf0a3e329f9f9c4b445eeda86a5db9e219365c0a74b5e330de9b8d6fed8",
+        "text_sha256": "361c5bf0a3e329f9f9c4b445eeda86a5db9e219365c0a74b5e330de9b8d6fed8"
+      },
+      "last_crawled_at": "2026-03-10T07:36:22.438784Z",
+      "last_successful_crawled_at": "2026-03-10T07:36:24.114600Z",
+      "crawl_duration_ms": 1675,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Webpack",
+      "slug": "webpack",
+      "source_url": "https://webpack.js.org/concepts/",
+      "pages": 21,
+      "content_size_chars": 198122,
+      "artifacts": {
+        "markdown_path": "/registry/docs/webpack/docs.md",
+        "text_path": "/registry/docs/webpack/docs.txt",
+        "markdown_bytes": 198277,
+        "text_bytes": 198277,
+        "markdown_sha256": "f5d6cebda3de785cdd106040d556c8a4c765fb03c23765cca6f0fc61a904908c",
+        "text_sha256": "f5d6cebda3de785cdd106040d556c8a4c765fb03c23765cca6f0fc61a904908c"
+      },
+      "last_crawled_at": "2026-03-10T07:36:24.118644Z",
+      "last_successful_crawled_at": "2026-03-10T07:36:25.177212Z",
+      "crawl_duration_ms": 1058,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "esbuild",
+      "slug": "esbuild",
+      "source_url": "https://esbuild.github.io/",
+      "pages": 8,
+      "content_size_chars": 460008,
+      "artifacts": {
+        "markdown_path": "/registry/docs/esbuild/docs.md",
+        "text_path": "/registry/docs/esbuild/docs.txt",
+        "markdown_bytes": 461125,
+        "text_bytes": 461125,
+        "markdown_sha256": "be9131acbaf6a6db451cac34fd2ee08a8a4d05c477d683338ff6292577888111",
+        "text_sha256": "be9131acbaf6a6db451cac34fd2ee08a8a4d05c477d683338ff6292577888111"
+      },
+      "last_crawled_at": "2026-03-10T07:36:25.180188Z",
+      "last_successful_crawled_at": "2026-03-10T07:36:26.224859Z",
+      "crawl_duration_ms": 1044,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Rollup",
+      "slug": "rollup",
+      "source_url": "https://rollupjs.org/introduction/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/rollup/docs.md",
+        "text_path": "/registry/docs/rollup/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:36:26.227657Z",
+      "last_successful_crawled_at": "2026-03-10T07:36:26.649739Z",
+      "crawl_duration_ms": 422,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Parcel",
+      "slug": "parcel",
+      "source_url": "https://parceljs.org/docs/",
+      "pages": 1,
+      "content_size_chars": 4435,
+      "artifacts": {
+        "markdown_path": "/registry/docs/parcel/docs.md",
+        "text_path": "/registry/docs/parcel/docs.txt",
+        "markdown_bytes": 4437,
+        "text_bytes": 4437,
+        "markdown_sha256": "97022dd1813ba90b7ef3043f5730c15dc694e7ff9859cab36c412ad7eacbc705",
+        "text_sha256": "97022dd1813ba90b7ef3043f5730c15dc694e7ff9859cab36c412ad7eacbc705"
+      },
+      "last_crawled_at": "2026-03-10T07:36:26.655702Z",
+      "last_successful_crawled_at": "2026-03-10T07:36:27.164168Z",
+      "crawl_duration_ms": 508,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Turbopack",
+      "slug": "turbopack",
+      "source_url": "https://turbo.build/pack/docs",
+      "pages": 1,
+      "content_size_chars": 22720,
+      "artifacts": {
+        "markdown_path": "/registry/docs/turbopack/docs.md",
+        "text_path": "/registry/docs/turbopack/docs.txt",
+        "markdown_bytes": 22732,
+        "text_bytes": 22732,
+        "markdown_sha256": "f6df97af118b635d83f448074c4206697e048b0aa38cea3e8e4d6c4aa9b4456e",
+        "text_sha256": "f6df97af118b635d83f448074c4206697e048b0aa38cea3e8e4d6c4aa9b4456e"
+      },
+      "last_crawled_at": "2026-03-10T07:36:27.167594Z",
+      "last_successful_crawled_at": "2026-03-10T07:36:29.056669Z",
+      "crawl_duration_ms": 1889,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Turborepo",
+      "slug": "turborepo",
+      "source_url": "https://turbo.build/repo/docs",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/turborepo/docs.md",
+        "text_path": "/registry/docs/turborepo/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:36:29.062615Z",
+      "last_successful_crawled_at": "2026-03-10T07:36:29.427115Z",
+      "crawl_duration_ms": 364,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Expo",
+      "slug": "expo",
+      "source_url": "https://docs.expo.dev/",
+      "pages": 2365,
+      "content_size_chars": 40726221,
+      "artifacts": {
+        "markdown_path": "/registry/docs/expo/docs.md",
+        "text_path": "/registry/docs/expo/docs.txt",
+        "markdown_bytes": 40826077,
+        "text_bytes": 40826077,
+        "markdown_sha256": "ccd818565eaf35f94e7fd96cef961a069ed9b933516ff4f35207980787ed9f49",
+        "text_sha256": "ccd818565eaf35f94e7fd96cef961a069ed9b933516ff4f35207980787ed9f49"
+      },
+      "last_crawled_at": "2026-03-10T07:36:29.430819Z",
+      "last_successful_crawled_at": "2026-03-10T07:41:06.924591Z",
+      "crawl_duration_ms": 277492,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "React Native",
+      "slug": "react-native",
+      "source_url": "https://reactnative.dev/docs/getting-started",
+      "pages": 3,
+      "content_size_chars": 7489,
+      "artifacts": {
+        "markdown_path": "/registry/docs/react-native/docs.md",
+        "text_path": "/registry/docs/react-native/docs.txt",
+        "markdown_bytes": 7527,
+        "text_bytes": 7527,
+        "markdown_sha256": "fafb43f62d47bcbacb0a8eadc8ef7ad3fbebce3ad548457caf9b34de570f52b4",
+        "text_sha256": "fafb43f62d47bcbacb0a8eadc8ef7ad3fbebce3ad548457caf9b34de570f52b4"
+      },
+      "last_crawled_at": "2026-03-10T07:41:06.928652Z",
+      "last_successful_crawled_at": "2026-03-10T07:41:07.251118Z",
+      "crawl_duration_ms": 322,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Electron",
+      "slug": "electron",
+      "source_url": "https://www.electronjs.org/docs/latest/",
+      "pages": 265,
+      "content_size_chars": 2153612,
+      "artifacts": {
+        "markdown_path": "/registry/docs/electron/docs.md",
+        "text_path": "/registry/docs/electron/docs.txt",
+        "markdown_bytes": 2161882,
+        "text_bytes": 2161882,
+        "markdown_sha256": "8c67c00b7f417a870be07e1ef5b5e7047b4dd275c73d3af5d7a3ca8253bcc414",
+        "text_sha256": "8c67c00b7f417a870be07e1ef5b5e7047b4dd275c73d3af5d7a3ca8253bcc414"
+      },
+      "last_crawled_at": "2026-03-10T07:41:07.254258Z",
+      "last_successful_crawled_at": "2026-03-10T07:41:13.412687Z",
+      "crawl_duration_ms": 6158,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Tauri",
+      "slug": "tauri",
+      "source_url": "https://tauri.app/v1/guides/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/tauri/docs.md",
+        "text_path": "/registry/docs/tauri/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T07:41:13.416209Z",
+      "last_successful_crawled_at": "2026-03-10T07:41:14.444087Z",
+      "crawl_duration_ms": 1027,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Tauri v2",
+      "slug": "tauri-v2",
+      "source_url": "https://v2.tauri.app/start/",
+      "pages": 15,
+      "content_size_chars": 96328,
+      "artifacts": {
+        "markdown_path": "/registry/docs/tauri-v2/docs.md",
+        "text_path": "/registry/docs/tauri-v2/docs.txt",
+        "markdown_bytes": 97083,
+        "text_bytes": 97083,
+        "markdown_sha256": "8d0e369ad196d17d87bb18bc7338d4f661a67489b8724f670355cbab33790f9b",
+        "text_sha256": "8d0e369ad196d17d87bb18bc7338d4f661a67489b8724f670355cbab33790f9b"
+      },
+      "last_crawled_at": "2026-03-10T07:41:14.448171Z",
+      "last_successful_crawled_at": "2026-03-10T07:41:15.412568Z",
+      "crawl_duration_ms": 964,
+      "status": "success",
+      "error_message": null
+    }
+  ]
+}

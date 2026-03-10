@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use compact_str::CompactString;
+use spider::compact_str::CompactString;
 use rayon::prelude::*;
 use regex::Regex;
 use scraper::{Html, Selector};
@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use spider::configuration::Configuration;
 use spider::website::Website;
+use std::env;
 use std::error::Error;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -144,6 +145,7 @@ struct ArtifactMetadata {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
+    let slug_filter = parse_slug_filter()?;
     let builder_root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     let registry_root = builder_root
         .parent()
@@ -158,26 +160,93 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let public_registry_root = site_root.join("public").join("registry");
     let public_docs_root = public_registry_root.join("docs");
     fs::create_dir_all(&public_docs_root)?;
+    fs::create_dir_all(&public_registry_root)?;
 
     let sources: SourcesFile = serde_json::from_str(&fs::read_to_string(&sources_path)?)?;
-    let mut entries = Vec::new();
-
-    for source in sources.entries.into_iter().filter(|entry| entry.enabled) {
-        println!("Crawling {} ({})", source.slug, source.source_url);
-        let result = crawl_registry_entry(&source, &public_docs_root).await;
-        entries.push(result);
-    }
-
-    let index = IndexFile {
+    let mut index = IndexFile {
         version: sources.version,
         generated_at: Utc::now(),
-        entries,
+        entries: Vec::new(),
     };
 
-    let index_path = public_registry_root.join("index.json");
-    fs::create_dir_all(&public_registry_root)?;
-    fs::write(index_path, serde_json::to_string_pretty(&index)?)?;
+    for source in sources
+        .entries
+        .into_iter()
+        .filter(|entry| entry.enabled)
+        .filter(|entry| slug_filter.as_ref().is_none_or(|slug| slug == &entry.slug))
+    {
+        println!("Crawling {} ({})", source.slug, source.source_url);
+        let result = crawl_registry_entry(&source, &public_docs_root).await;
+        println!("Done crawling {}", source.slug);
+        index.entries.push(result);
+        index.generated_at = Utc::now();
+        write_index_file(&public_registry_root, &index)?;
+    }
+
+    print_run_summary(&index);
     Ok(())
+}
+
+fn write_index_file(output_root: &Path, index: &IndexFile) -> Result<(), Box<dyn Error>> {
+    let tmp_path = output_root.join("index.json.tmp");
+    let final_path = output_root.join("index.json");
+    fs::write(&tmp_path, serde_json::to_string_pretty(index)?)?;
+    fs::rename(tmp_path, final_path)?;
+    Ok(())
+}
+
+fn print_run_summary(index: &IndexFile) {
+    let total = index.entries.len();
+    let succeeded = index
+        .entries
+        .iter()
+        .filter(|entry| entry.status == "success")
+        .count();
+    let failed_entries: Vec<&IndexEntry> = index
+        .entries
+        .iter()
+        .filter(|entry| entry.status == "failed")
+        .collect();
+
+    println!();
+    println!("Registry crawl complete.");
+    println!("Processed: {}", total);
+    println!("Succeeded: {}", succeeded);
+    println!("Failed: {}", failed_entries.len());
+
+    if !failed_entries.is_empty() {
+        println!();
+        println!("Failed entries:");
+        for entry in failed_entries {
+            match &entry.error_message {
+                Some(message) => println!("- {}: {}", entry.slug, message),
+                None => println!("- {}", entry.slug),
+            }
+        }
+    }
+}
+
+fn parse_slug_filter() -> Result<Option<String>, Box<dyn Error>> {
+    let mut args = env::args().skip(1);
+    let mut slug = None;
+    while let Some(arg) = args.next() {
+        match arg.as_str() {
+            "--slug" => {
+                let value = args
+                    .next()
+                    .ok_or("--slug requires a value")?;
+                slug = Some(value);
+            }
+            "--help" | "-h" => {
+                println!("Usage: cargo run --manifest-path site/registry/builder/Cargo.toml -- [--slug <slug>]");
+                std::process::exit(0);
+            }
+            other => {
+                return Err(format!("Unknown argument: {}", other).into());
+            }
+        }
+    }
+    Ok(slug)
 }
 
 async fn crawl_registry_entry(

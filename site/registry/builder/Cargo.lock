@@ -242,7 +242,7 @@ version = "0.2.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ca6260a8cc32da29c626ce456aad5c579c3a36294722f00cccceeb64968820f7"
 dependencies = [
- "compact_str 0.8.1",
+ "compact_str",
  "serde",
 ]
 
@@ -341,20 +341,6 @@ dependencies = [
  "rustversion",
  "ryu",
  "serde",
- "static_assertions",
-]
-
-[[package]]
-name = "compact_str"
-version = "0.9.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3fdb1325a1cece981e8a296ab8f0f9b63ae357bd0784a9faaf548cc7b480707a"
-dependencies = [
- "castaway",
- "cfg-if",
- "itoa",
- "rustversion",
- "ryu",
  "static_assertions",
 ]
 
@@ -2039,7 +2025,6 @@ name = "plshelp-registry-builder"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "compact_str 0.9.0",
  "html2md",
  "rayon",
  "regex",

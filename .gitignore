@@ -4,3 +4,4 @@ plshelp.db
 artifacts/
 .fastembed_cache
 scratch/
+site/public/registry/docs
