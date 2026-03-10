@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>plshelp — local-first documentation context</title>
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <title>plshelp docs</title>
     <style>
         @font-face {
             font-family: 'CommitMono';
@@ -84,7 +83,6 @@
             line-height: 1.7;
         }
 
-        /* ── DASH FIELD CANVAS ── */
         #dash-canvas {
             position: fixed;
             inset: 0;
@@ -120,7 +118,6 @@
             background-clip: text;
         }
 
-        /* ── NAV ── */
         nav {
             position: sticky;
             top: 0;
@@ -174,11 +171,11 @@
             transition: color 0.1s;
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: var(--text);
         }
 
-        /* ── CONTENT COLUMN ── */
         .col {
             position: relative;
             z-index: 1;
@@ -193,23 +190,20 @@
             background: var(--border);
         }
 
-        /* ── HERO ── */
         .hero {
             padding: 88px var(--pad) 72px;
-            text-align: center;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            gap: 14px;
         }
 
         .hero h1 {
             font-size: 32px;
             font-weight: 700;
-            line-height: 1.3;
+            line-height: 1.25;
             letter-spacing: -0.02em;
-            margin-bottom: 14px;
-            max-width: 540px;
             color: #ffffff;
+            max-width: 680px;
         }
 
         .hero h1 em {
@@ -222,12 +216,10 @@
 
         .hero-sub {
             color: var(--text-2);
-            max-width: 500px;
-            margin-bottom: 36px;
-            line-height: 1.8;
+            max-width: 620px;
+            line-height: 1.85;
         }
 
-        /* Install block */
         .install-block {
             border: 1px solid var(--border);
             border-radius: 3px;
@@ -236,6 +228,7 @@
             max-width: 460px;
             background: var(--bg-2);
             text-align: left;
+            margin-top: 14px;
         }
 
         .install-tabs {
@@ -340,7 +333,6 @@
             display: block;
         }
 
-        /* ── SECTIONS ── */
         .section-inner {
             padding: 52px var(--pad);
         }
@@ -360,17 +352,16 @@
             content: '';
             display: inline-block;
             height: 1px;
-            width: var(--pad);
+            width: calc(var(--pad) - 10px);
             margin-left: calc(-1 * var(--pad));
             margin-right: 10px;
-            width: calc(var(--pad) - 10px);
             background: var(--accent-grad);
             flex-shrink: 0;
         }
 
         .prose {
             color: var(--text-2);
-            max-width: 580px;
+            max-width: 660px;
             line-height: 1.9;
         }
 
@@ -384,7 +375,6 @@
             font-family: var(--mono);
         }
 
-        /* Feature table */
         .feature-table {
             width: 100%;
             border-collapse: collapse;
@@ -404,7 +394,7 @@
         }
 
         .feature-table td:first-child {
-            width: 220px;
+            width: 240px;
             font-weight: 700;
             color: var(--text);
             padding-right: 24px;
@@ -416,27 +406,6 @@
             line-height: 1.7;
         }
 
-        /* Use list */
-        .use-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-        }
-
-        .use-list li {
-            display: flex;
-            gap: 12px;
-            color: var(--text-2);
-        }
-
-        .use-list li::before {
-            content: '—';
-            color: var(--text-3);
-            flex-shrink: 0;
-        }
-
-        /* Workflows */
         .workflow-list {
             display: flex;
             flex-direction: column;
@@ -479,101 +448,15 @@
             font-style: italic;
         }
 
-        /* FAQ */
-        .faq-item {
-            border-bottom: 1px solid var(--border);
-        }
-
-        .faq-item:first-child {
-            border-top: 1px solid var(--border);
-        }
-
-        .faq-q {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            gap: 16px;
-            padding: 16px 0;
-            font-weight: 700;
-            color: var(--text);
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .faq-q::after {
-            content: '+';
-            color: var(--text-3);
-            flex-shrink: 0;
-            transition: transform 0.15s;
-        }
-
-        .faq-item.open .faq-q::after {
-            transform: rotate(45deg);
-        }
-
-        .faq-a {
-            display: none;
+        .callout {
+            border: 1px solid var(--border);
+            background: var(--bg-2);
             color: var(--text-2);
+            padding: 16px 18px;
             line-height: 1.8;
-            padding-bottom: 14px;
+            border-radius: 3px;
         }
 
-        .faq-item.open .faq-a {
-            display: block;
-        }
-
-        .faq-a ul {
-            list-style: none;
-            margin-top: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .faq-a li {
-            color: var(--text-2);
-        }
-
-        .faq-a li::before {
-            content: '— ';
-            color: var(--text-3);
-        }
-
-        /* Registry */
-        .registry-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-
-        .registry-row p {
-            color: var(--text-2);
-            max-width: 400px;
-            line-height: 1.8;
-            margin-top: 6px;
-        }
-
-        .link-out {
-            background: var(--accent-grad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: inherit;
-            white-space: nowrap;
-            flex-shrink: 0;
-            padding-bottom: 2px;
-            position: relative;
-            border-bottom: 1px solid #ec8b49;
-            transition: filter 0.15s;
-        }
-
-        .link-out:hover {
-            filter: brightness(1.3);
-        }
-
-        /* ── FOOTER ── */
         footer {
             padding: 26px 0;
             position: relative;
@@ -630,17 +513,6 @@
             color: var(--text-3);
         }
 
-        /* ── BREAKPOINTS ── */
-        @media (max-width: 599px) {
-            body {
-                font-size: 13px;
-            }
-
-            .hero h1 {
-                font-size: 24px;
-            }
-        }
-
         .nav-hamburger {
             display: none;
             background: none;
@@ -691,6 +563,16 @@
             color: var(--text);
         }
 
+        @media (max-width: 599px) {
+            body {
+                font-size: 13px;
+            }
+
+            .hero h1 {
+                font-size: 24px;
+            }
+        }
+
         @media (max-width: 479px) {
             .nav-links {
                 display: none;
@@ -704,37 +586,34 @@
 </head>
 
 <body>
-
     <canvas id="dash-canvas"></canvas>
     <div class="rails"></div>
 
     <nav>
         <div class="nav-border"></div>
         <div class="nav-inner">
-            <span class="nav-logo grad-text">plshelp</span>
+            <a href="/" class="nav-logo grad-text">plshelp</a>
             <ul class="nav-links">
                 <li><a href="https://github.com/HariharPrasadd/plshelp" target="_blank">GitHub</a></li>
-                <li><a href="/docs">Docs</a></li>
+                <li><a href="/docs.html" class="active">Docs</a></li>
                 <li><a href="/registry">Registry</a></li>
             </ul>
             <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">+</button>
         </div>
         <div class="nav-mobile" id="nav-mobile">
             <a href="https://github.com/HariharPrasadd/plshelp" target="_blank">GitHub</a>
-            <a href="/docs">Docs</a>
+            <a href="/docs.html">Docs</a>
             <a href="/registry">Registry</a>
         </div>
         <div class="nav-border"></div>
     </nav>
 
     <div class="col">
-
-        <!-- HERO -->
         <section class="hero">
-            <h1>Local-first documentation search for <em>agents and humans</em></h1>
+            <h1>Minimal docs for <em>everything that works today</em></h1>
             <p class="hero-sub">
-                Crawl, index, and query documentation blazing fast, <br>
-                all while keeping your data on your machine.
+                <span class="ci">plshelp</span> crawls documentation, indexes local files, exports cleaned artifacts,
+                and returns local context through BM25, embeddings, or hybrid retrieval.
             </p>
             <div class="install-block">
                 <div class="install-tabs">
@@ -745,15 +624,12 @@
                 </div>
                 <div class="install-cmd active" id="tab-curl">
                     <code><span class="d">curl -fsSL</span> https://plshelp.run/install.sh <span class="d">|</span> sh</code>
-                    <button class="copy-btn" data-copy="curl -fsSL https://plshelp.run/install.sh | sh"
-                        aria-label="Copy">
-                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <button class="copy-btn" data-copy="curl -fsSL https://plshelp.run/install.sh | sh" aria-label="Copy">
+                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="9" y="9" width="13" height="13" rx="2" />
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                         </svg>
-                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="20 6 9 17 4 12" />
                         </svg>
                     </button>
@@ -761,13 +637,11 @@
                 <div class="install-cmd" id="tab-npm">
                     <code><span class="d">npm install -g</span> plshelp</code>
                     <button class="copy-btn" data-copy="npm install -g plshelp" aria-label="Copy">
-                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="9" y="9" width="13" height="13" rx="2" />
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                         </svg>
-                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="20 6 9 17 4 12" />
                         </svg>
                     </button>
@@ -775,13 +649,11 @@
                 <div class="install-cmd" id="tab-bun">
                     <code><span class="d">bun add -g</span> plshelp</code>
                     <button class="copy-btn" data-copy="bun add -g plshelp" aria-label="Copy">
-                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="9" y="9" width="13" height="13" rx="2" />
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                         </svg>
-                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="20 6 9 17 4 12" />
                         </svg>
                     </button>
@@ -789,13 +661,11 @@
                 <div class="install-cmd" id="tab-brew">
                     <code><span class="d">brew install</span> plshelp</code>
                     <button class="copy-btn" data-copy="brew install plshelp" aria-label="Copy">
-                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="9" y="9" width="13" height="13" rx="2" />
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                         </svg>
-                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="20 6 9 17 4 12" />
                         </svg>
                     </button>
@@ -805,90 +675,20 @@
 
         <div class="divider"></div>
 
-        <!-- WHAT IS -->
         <div class="section-inner">
-            <div class="label">What is plshelp?</div>
+            <div class="label">What it does</div>
             <p class="prose">
-                <span class="ci">plshelp</span> is an open source CLI tool that turns documentation websites, Markdown,
-                and plain text files into a local searchable corpus for coding assistants and RAG workflows.
-                It handles crawling, cleaning, chunking, and indexing — so your agent has accurate context
-                without hitting the internet at query time.
+                <span class="ci">plshelp</span> is a local-first documentation engine. It crawls docs sites,
+                compiles cleaned markdown and text artifacts, chunks and embeds content locally, and answers
+                queries against that local corpus. It also supports local Markdown and text files, merged libraries,
+                and structured <span class="ci">--json</span> output for agent tooling.
             </p>
-            <div style="margin-top: 20px;">
-                <a href="/docs" class="link-out">Read docs →</a>
-            </div>
         </div>
 
         <div class="divider"></div>
 
-        <!-- REGISTRY -->
         <div class="section-inner">
-            <div class="label">the plshelp Registry</div>
-            <p class="prose">
-                A repository of 1000+ pre-crawled documentation pages. Use them for custom workflows, finetuning,
-                or pipe directly to an LLM.
-            </p>
-            <div style="margin-top: 20px;">
-                <a href="/registry" class="link-out">Browse registry →</a>
-            </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <!-- WHY -->
-        <div class="section-inner">
-            <div class="label">Why plshelp?</div>
-            <table class="feature-table">
-                <tr>
-                    <td>Local-first</td>
-                    <td>Indexed docs live in SQLite and local files on your machine. No cloud sync, no vendor lock-in.
-                    </td>
-                </tr>
-                <tr>
-                    <td>Built for documentation</td>
-                    <td>Crawls docs sites, strips boilerplate, preserves technical content, exports clean <span
-                            class="ci">.md</span> and <span class="ci">.txt</span>.</td>
-                </tr>
-                <tr>
-                    <td>Hybrid retrieval</td>
-                    <td>Use BM25, embeddings, or hybrid ranking. Tune the blend based on your workflow and latency
-                        budget.</td>
-                </tr>
-                <tr>
-                    <td>Agent-friendly</td>
-                    <td>Query from the terminal or pipe <span class="ci">--json</span> output directly into Codex,
-                        Claude Code, or your own tooling.</td>
-                </tr>
-                <tr>
-                    <td>Bring your own sources</td>
-                    <td>Index docs sites, local Markdown, or plain text. Merge multiple libraries into one corpus.</td>
-                </tr>
-                <tr>
-                    <td>Transparent storage</td>
-                    <td>Your DB, artifacts, model cache, and config are all visible, portable, and configurable.</td>
-                </tr>
-            </table>
-        </div>
-
-        <div class="divider"></div>
-
-        <!-- USE CASES -->
-        <div class="section-inner">
-            <div class="label">What can I do with plshelp?</div>
-            <ul class="use-list">
-                <li>Crawl a docs site and query it locally</li>
-                <li>Build local context for coding agents</li>
-                <li>Export cleaned docs as <span class="ci">docs.md</span> and <span class="ci">docs.txt</span></li>
-                <li>Merge multiple libraries into one searchable corpus</li>
-                <li>Index personal notes or project docs from local files</li>
-            </ul>
-        </div>
-
-        <div class="divider"></div>
-
-        <!-- WORKFLOWS -->
-        <div class="section-inner">
-            <div class="label">Example workflows</div>
+            <div class="label">Quickstart</div>
             <div class="workflow-list">
                 <div class="workflow">
                     <div class="wf-label">Index a docs site</div>
@@ -916,54 +716,66 @@
 
         <div class="divider"></div>
 
-        <!-- FAQ -->
         <div class="section-inner">
-            <div class="label">FAQ</div>
-            <div class="faq">
-                <div class="faq-item">
-                    <div class="faq-q">What can I index?</div>
-                    <div class="faq-a">
-                        You can index documentation websites, local Markdown files, local text files, any url you
-                        crawled, any text on your machine - anything you want, really.
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-q">Does plshelp require a hosted vector database?</div>
-                    <div class="faq-a">No. It uses local SQLite storage with local embedding generation. Everything runs
-                        on your machine.</div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-q">Can I use it without embeddings?</div>
-                    <div class="faq-a">Yes. BM25 search works immediately after chunking, but only returns exact
-                        matches. Embeddings are optional for hybrid or vector-only retrieval, but highly recommended.
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-q">Does it work well for coding agents?</div>
-                    <div class="faq-a">Yes. The structured <span class="ci">--json</span> output is meant specifically
-                        for agent tooling.</div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-q">Where does data live?</div>
-                    <div class="faq-a">
-                        By default, <span class="ci">plshelp</span> stores all of its runtime state in your local
-                        application data directory. On macOS this is
-                        typically <span class="ci">~/Library/Application Support/plshelp</span>, on Linux it is usually
-                        <span class="ci">~/.local/share/plshelp</span> or the XDG data
-                        directory, and on Windows it would normally live under <span
-                            class="ci">%APPDATA%\plshelp</span>.
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-q">Is plshelp open source?</div>
-                    <div class="faq-a">Yes. MIT licensed and available on <a
-                            href="https://github.com/HariharPrasadd/plshelp" target="_blank">GitHub</a>.</div>
-                </div>
+            <div class="label">Command surface</div>
+            <table class="feature-table">
+                <tr><td><span class="ci">add</span></td><td>Crawl a documentation site, chunk it, embed it, and make it queryable in one command.</td></tr>
+                <tr><td><span class="ci">crawl</span></td><td>Only crawl and compile pages for a library without chunking or embedding yet.</td></tr>
+                <tr><td><span class="ci">index</span></td><td>Chunk and embed an existing library, or index a local file via <span class="ci">--file</span>.</td></tr>
+                <tr><td><span class="ci">chunk</span></td><td>Generate parent and child chunks and build the lexical index.</td></tr>
+                <tr><td><span class="ci">embed</span></td><td>Generate embeddings for child chunks using the configured local model.</td></tr>
+                <tr><td><span class="ci">query</span></td><td>Search one library using hybrid, vector-only, or keyword-only retrieval.</td></tr>
+                <tr><td><span class="ci">trace</span></td><td>Inspect ranking internals, scores, and chunk/parent provenance for a query.</td></tr>
+                <tr><td><span class="ci">ask</span></td><td>Run one question across multiple libraries or the entire local corpus.</td></tr>
+                <tr><td><span class="ci">merge</span></td><td>Create a merged logical library from multiple indexed libraries.</td></tr>
+                <tr><td><span class="ci">export</span></td><td>Write the compiled documentation artifacts back out as <span class="ci">docs.md</span> and <span class="ci">docs.txt</span>.</td></tr>
+                <tr><td><span class="ci">show</span> / <span class="ci">list</span></td><td>Inspect library stats, rollups, and what is currently indexed locally.</td></tr>
+                <tr><td><span class="ci">open</span></td><td>Open a child chunk and its parent metadata by chunk id.</td></tr>
+            </table>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section-inner">
+            <div class="label">Retrieval model</div>
+            <table class="feature-table">
+                <tr><td>Keyword</td><td>BM25-style lexical retrieval works immediately after chunking and does not require embeddings.</td></tr>
+                <tr><td>Vector</td><td>Embeddings run on child chunks and return the matching parent text for coherence.</td></tr>
+                <tr><td>Hybrid</td><td>The default mode blends lexical and vector scores, with weights controlled by config.</td></tr>
+                <tr><td>JSON output</td><td>Use <span class="ci">--json</span> on read and write commands for machine-readable output in agents and scripts.</td></tr>
+            </table>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section-inner">
+            <div class="label">Configuration</div>
+            <p class="prose">
+                <span class="ci">plshelp</span> creates and reads a local <span class="ci">config.toml</span> at startup.
+                You can configure paths, embedding model and batch size, parent and child chunk sizes, retrieval defaults,
+                SQLite settings, and ONNX threading without touching the code.
+            </p>
+            <div style="margin-top: 18px;" class="callout">
+                By default, runtime data lives in your local application data directory. On macOS that is typically
+                <span class="ci">~/Library/Application Support/plshelp</span>, on Linux it is usually
+                <span class="ci">~/.local/share/plshelp</span> or the XDG data directory, and on Windows it would
+                normally live under <span class="ci">%APPDATA%\plshelp</span>.
             </div>
         </div>
 
         <div class="divider"></div>
 
+        <div class="section-inner">
+            <div class="label">Registry</div>
+            <p class="prose">
+                The <span class="ci">plshelp</span> registry is a static collection of pre-crawled documentation artifacts.
+                Each entry exposes compiled <span class="ci">docs.md</span> and <span class="ci">docs.txt</span> files plus
+                a public <span class="ci">index.json</span> manifest that the website can browse without loading raw docs until
+                a user requests them.
+            </p>
+        </div>
+
+        <div class="divider"></div>
     </div>
 
     <footer>
@@ -971,7 +783,7 @@
             <span class="footer-logo">plshelp</span>
             <ul class="footer-links">
                 <li><a href="https://github.com/HariharPrasadd/plshelp" target="_blank">GitHub</a></li>
-                <li><a href="/docs">Docs</a></li>
+                <li><a href="/docs.html">Docs</a></li>
                 <li><a href="/registry">Registry</a></li>
             </ul>
             <span class="footer-copy">© 2026 plshelp</span>
@@ -979,7 +791,6 @@
     </footer>
 
     <script>
-        // ── DASH FIELD ────────────────────────────────────────────────────────
         const canvas = document.getElementById('dash-canvas');
         const ctx = canvas.getContext('2d');
 
@@ -1040,11 +851,9 @@
                 const easeStrength = 0.04 + weight * 0.1;
                 d.angle += angleDiff(d.angle, d.targetAngle) * easeStrength;
 
-                // Brightness: smooth cubic falloff, floor at 0.44
                 const proximity = Math.max(0, 1 - dist / OUTER_FADE);
                 const alpha = 0.44 + proximity * proximity * proximity * 1.5;
 
-                // Color: orange → red → gray
                 let r, g, b;
                 if (dist < INFLUENCE * 0.4) {
                     const t = dist / (INFLUENCE * 0.4);
@@ -1079,7 +888,6 @@
         resize();
         draw();
 
-        // ── NAV HAMBURGER ─────────────────────────────────────────────────────
         const hamburger = document.getElementById('hamburger');
         const navMobile = document.getElementById('nav-mobile');
         hamburger.addEventListener('click', () => {
@@ -1087,7 +895,6 @@
             hamburger.classList.toggle('open', isOpen);
         });
 
-        // ── INSTALL TABS ──────────────────────────────────────────────────────
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
@@ -1097,7 +904,6 @@
             });
         });
 
-        // ── COPY BUTTONS ──────────────────────────────────────────────────────
         document.querySelectorAll('.copy-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 navigator.clipboard.writeText(btn.dataset.copy).then(() => {
@@ -1105,11 +911,6 @@
                     setTimeout(() => btn.classList.remove('copied'), 1800);
                 });
             });
-        });
-
-        // ── FAQ ───────────────────────────────────────────────────────────────
-        document.querySelectorAll('.faq-q').forEach(q => {
-            q.addEventListener('click', () => q.parentElement.classList.toggle('open'));
         });
     </script>
 </body>
