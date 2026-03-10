@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>plshelp — local-first documentation context</title>
+    <style>
+        @font-face {
+            font-family: 'CommitMono';
+            src: url('/fonts/CommitMono-400-Regular.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'CommitMono';
+            src: url('/fonts/CommitMono-400-Italic.woff2') format('woff2');
+            font-weight: 400;
+            font-style: italic;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'CommitMono';
+            src: url('/fonts/CommitMono-700-Regular.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'CommitMono';
+            src: url('/fonts/CommitMono-700-Italic.woff2') format('woff2');
+            font-weight: 700;
+            font-style: italic;
+            font-display: swap;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --base-950: #1C1B1A;
+            --base-900: #282726;
+            --base-850: #343331;
+            --base-700: #575653;
+            --base-500: #878580;
+            --base-200: #CECDC3;
+
+            --accent-grad: linear-gradient(90deg, #af3029, #ec8b49);
+            --success-grad: linear-gradient(90deg, #004426, #00c632);
+            --cyan-400: #3AA99F;
+
+            --bg: #000000;
+            --bg-2: var(--base-950);
+            --bg-3: var(--base-900);
+            --border: var(--base-850);
+            --text: var(--base-200);
+            --text-2: var(--base-500);
+            --text-3: var(--base-700);
+            --mono: 'CommitMono', monospace;
+
+            --content: 900px;
+            --pad: 40px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--mono);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /*
+      Two vertical rail lines, fixed, running the full height of the viewport
+      including behind the sticky nav. z-index 200 puts them above the nav
+      backdrop so they're always visible as continuous lines.
+    */
+        .rails {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 200;
+            width: var(--content);
+            margin: 0 auto;
+            border-left: 1px solid var(--base-850);
+            border-right: 1px solid var(--base-850);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .grad-text {
+            background: var(--accent-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #000000f0;
+            backdrop-filter: blur(8px);
+            border-top: 1px solid var(--border);
+        }
+
+        /* nav bottom border constrained to content column, like the dividers */
+        .nav-border {
+            max-width: var(--content);
+            margin: 0 auto;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .nav-inner {
+            max-width: var(--content);
+            margin: 0 auto;
+            padding: 0 var(--pad);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 46px;
+        }
+
+        .nav-logo {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-2);
+            font-size: 13px;
+            transition: color 0.1s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        /* ── CONTENT COLUMN ── */
+        .col {
+            position: relative;
+            z-index: 1;
+            max-width: var(--content);
+            margin: 0 auto;
+        }
+
+        /* Horizontal divider — spans exactly the content column width */
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* ── HERO ── */
+        .hero {
+            padding: 88px var(--pad) 72px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(20px, 3vw, 30px);
+            font-weight: 700;
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+            margin-bottom: 14px;
+            max-width: 480px;
+            color: #ffffff;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            background: var(--accent-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            color: var(--text-2);
+            max-width: 420px;
+            margin-bottom: 36px;
+            line-height: 1.8;
+        }
+
+        /* Install block */
+        .install-block {
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 460px;
+            background: var(--bg-2);
+            text-align: left;
+        }
+
+        .install-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-3);
+            font-family: var(--mono);
+            font-size: 12px;
+            padding: 8px 14px;
+            cursor: pointer;
+            transition: color 0.1s;
+            margin-bottom: -1px;
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-2);
+        }
+
+        .tab-btn.active {
+            color: #ec8b49;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-grad);
+        }
+
+        .install-cmd {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px 16px;
+            gap: 12px;
+        }
+
+        .install-cmd.active {
+            display: flex;
+        }
+
+        .install-cmd code {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--text);
+        }
+
+        .install-cmd code .d {
+            color: var(--text-2);
+        }
+
+        .copy-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-3);
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 3px 9px;
+            border-radius: 2px;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: color 0.1s, border-color 0.1s;
+        }
+
+        .copy-btn:hover {
+            color: var(--text-2);
+        }
+
+        .copy-btn.copied {
+            color: #00c632;
+            border-color: #00c632;
+        }
+
+        /* ── SECTIONS ── */
+        .section-inner {
+            padding: 52px var(--pad);
+        }
+
+        /*
+      Label: white text, with a short gradient line to its left.
+      The line starts at the left edge of the padding (i.e. the rail),
+      so all body text beneath is flush-left aligned.
+    */
+        .label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #ffffff;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+        }
+
+        .label::before {
+            content: '';
+            display: inline-block;
+            height: 1px;
+            width: var(--pad);
+            margin-left: calc(-1 * var(--pad));
+            margin-right: 10px;
+            width: calc(var(--pad) - 10px);
+            background: var(--accent-grad);
+            flex-shrink: 0;
+        }
+
+        /* Prose */
+        .prose {
+            color: var(--text-2);
+            max-width: 540px;
+            line-height: 1.9;
+        }
+
+        .ci {
+            background: var(--bg-3);
+            border: 1px solid var(--border);
+            padding: 1px 5px;
+            border-radius: 2px;
+            font-size: 11px;
+            color: var(--text);
+            font-family: var(--mono);
+        }
+
+        /* Feature table */
+        .feature-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .feature-table tr {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .feature-table tr:first-child {
+            border-top: 1px solid var(--border);
+        }
+
+        .feature-table td {
+            padding: 13px 0;
+            vertical-align: top;
+        }
+
+        .feature-table td:first-child {
+            width: 190px;
+            font-weight: 700;
+            font-size: 12px;
+            color: var(--text);
+            padding-right: 24px;
+            white-space: nowrap;
+        }
+
+        .feature-table td:last-child {
+            color: var(--text-2);
+            line-height: 1.7;
+        }
+
+        /* Use list */
+        .use-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .use-list li {
+            display: flex;
+            gap: 12px;
+            color: var(--text-2);
+        }
+
+        .use-list li::before {
+            content: '—';
+            color: var(--text-3);
+            flex-shrink: 0;
+        }
+
+        /* Workflows */
+        .workflow-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .wf-label {
+            font-size: 11px;
+            color: var(--text-3);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .workflow pre {
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: 14px 16px;
+            overflow-x: auto;
+            font-family: var(--mono);
+            font-size: 12px;
+            line-height: 1.9;
+            color: var(--text);
+        }
+
+        .cmd {
+            background: var(--accent-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .arg {
+            color: var(--cyan-400);
+        }
+
+        .cmt {
+            color: var(--text-3);
+            font-style: italic;
+        }
+
+        /* FAQ */
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq-item:first-child {
+            border-top: 1px solid var(--border);
+        }
+
+        .faq-q {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 16px;
+            padding: 14px 0;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .faq-q::after {
+            content: '+';
+            color: var(--text-3);
+            flex-shrink: 0;
+            transition: transform 0.15s;
+        }
+
+        .faq-item.open .faq-q::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-a {
+            display: none;
+            color: var(--text-2);
+            line-height: 1.8;
+            padding-bottom: 14px;
+            max-width: 540px;
+        }
+
+        .faq-item.open .faq-a {
+            display: block;
+        }
+
+        .faq-a ul {
+            list-style: none;
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .faq-a li {
+            color: var(--text-2);
+        }
+
+        .faq-a li::before {
+            content: '— ';
+            color: var(--text-3);
+        }
+
+        /* Registry */
+        .registry-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .registry-row p {
+            color: var(--text-2);
+            max-width: 400px;
+            line-height: 1.8;
+            margin-top: 6px;
+        }
+
+        .link-out {
+            background: var(--accent-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 13px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            border-bottom: 1px solid #ec8b49;
+            padding-bottom: 1px;
+            transition: opacity 0.1s;
+        }
+
+        .link-out:hover {
+            opacity: 0.7;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            padding: 26px 0;
+        }
+
+        .footer-inner {
+            max-width: var(--content);
+            margin: 0 auto;
+            padding: 0 var(--pad);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .footer-logo {
+            font-weight: 700;
+            font-size: 13px;
+            background: var(--accent-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 18px;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--text-3);
+            font-size: 12px;
+            transition: color 0.1s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-2);
+        }
+
+        .footer-copy {
+            color: var(--text-3);
+            font-size: 12px;
+        }
+
+        @media (max-width: 560px) {
+            :root {
+                --content: 100vw;
+            }
+
+            .rails {
+                display: none;
+            }
+
+            .feature-table td:first-child {
+                width: auto;
+                display: block;
+                padding-bottom: 4px;
+                white-space: normal;
+            }
+
+            .feature-table td:last-child {
+                display: block;
+                padding-top: 0;
+            }
+
+            .hero h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Rails: fixed overlay, z-index above nav so lines are continuous -->
+    <div class="rails"></div>
+
+    <nav>
+        <div class="nav-border"></div>
+        <div class="nav-inner">
+            <span class="nav-logo grad-text">plshelp</span>
+            <ul class="nav-links">
+                <li><a href="https://github.com/HariharPrasadd/plshelp" target="_blank">GitHub</a></li>
+                <li><a href="/docs">Docs</a></li>
+                <li><a href="/registry">Registry</a></li>
+            </ul>
+        </div>
+        <div class="nav-border"></div>
+    </nav>
+
+    <div class="col">
+
+        <!-- HERO -->
+        <section class="hero">
+            <h1>Local-first documentation context<br>for <em>coding agents</em></h1>
+            <p class="hero-sub">
+                Crawl docs once, index them locally, query fast with BM25 + embeddings.
+                No hosted database. No API calls at retrieval time.
+            </p>
+            <div class="install-block">
+                <div class="install-tabs">
+                    <button class="tab-btn active" data-tab="curl">curl</button>
+                    <button class="tab-btn" data-tab="npm">npm</button>
+                    <button class="tab-btn" data-tab="bun">bun</button>
+                    <button class="tab-btn" data-tab="brew">brew</button>
+                </div>
+                <div class="install-cmd active" id="tab-curl">
+                    <code><span class="d">curl -fsSL</span> https://plshelp.run/install.sh <span class="d">|</span> sh</code>
+                    <button class="copy-btn" data-copy="curl -fsSL https://plshelp.run/install.sh | sh">copy</button>
+                </div>
+                <div class="install-cmd" id="tab-npm">
+                    <code><span class="d">npm install -g</span> plshelp</code>
+                    <button class="copy-btn" data-copy="npm install -g plshelp">copy</button>
+                </div>
+                <div class="install-cmd" id="tab-bun">
+                    <code><span class="d">bun add -g</span> plshelp</code>
+                    <button class="copy-btn" data-copy="bun add -g plshelp">copy</button>
+                </div>
+                <div class="install-cmd" id="tab-brew">
+                    <code><span class="d">brew install</span> plshelp</code>
+                    <button class="copy-btn" data-copy="brew install plshelp">copy</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- WHAT IS -->
+        <div class="section-inner">
+            <div class="label">What is plshelp?</div>
+            <p class="prose">
+                <span class="ci">plshelp</span> is an open source CLI that turns documentation websites, Markdown,
+                and plain text files into a local searchable corpus for coding assistants and RAG workflows.
+                It handles crawling, cleaning, chunking, and indexing — so your agent has accurate context
+                without hitting the internet at query time.
+            </p>
+            <div style="margin-top: 20px;">
+                <a href="/docs" class="link-out">Read docs →</a>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- WHY -->
+        <div class="section-inner">
+            <div class="label">Why plshelp?</div>
+            <table class="feature-table">
+                <tr>
+                    <td>Local-first</td>
+                    <td>Indexed docs live in SQLite and local files on your machine. No cloud sync, no vendor lock-in.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Built for documentation</td>
+                    <td>Crawls docs sites, strips boilerplate, preserves technical content, exports clean <span
+                            class="ci">.md</span> and <span class="ci">.txt</span>.</td>
+                </tr>
+                <tr>
+                    <td>Hybrid retrieval</td>
+                    <td>Use BM25, embeddings, or hybrid ranking. Tune the blend based on your workflow and latency
+                        budget.</td>
+                </tr>
+                <tr>
+                    <td>Agent-friendly</td>
+                    <td>Query from the terminal or pipe <span class="ci">--json</span> output directly into Codex,
+                        Claude Code, or your own tooling.</td>
+                </tr>
+                <tr>
+                    <td>Bring your own sources</td>
+                    <td>Index docs sites, local Markdown, or plain text. Merge multiple libraries into one corpus.</td>
+                </tr>
+                <tr>
+                    <td>Transparent storage</td>
+                    <td>Your DB, artifacts, model cache, and config are all visible, portable, and configurable.</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- USE CASES -->
+        <div class="section-inner">
+            <div class="label">What can I do with plshelp?</div>
+            <ul class="use-list">
+                <li>Crawl a docs site and query it locally</li>
+                <li>Build local context for coding agents</li>
+                <li>Export cleaned docs as <span class="ci">docs.md</span> and <span class="ci">docs.txt</span></li>
+                <li>Merge multiple libraries into one searchable corpus</li>
+                <li>Index internal notes or project docs from local files</li>
+            </ul>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- WORKFLOWS -->
+        <div class="section-inner">
+            <div class="label">Example workflows</div>
+            <div class="workflow-list">
+                <div class="workflow">
+                    <div class="wf-label">Index a docs site</div>
+                    <pre><span class="cmd">plshelp</span> add <span class="arg">nextjs</span> https://nextjs.org/docs
+<span class="cmd">plshelp</span> query <span class="arg">nextjs</span> "how does app router work"</pre>
+                </div>
+                <div class="workflow">
+                    <div class="wf-label">Index a local Markdown file</div>
+                    <pre><span class="cmd">plshelp</span> index <span class="arg">mynotes</span> --file ./notes/rust.md
+<span class="cmd">plshelp</span> query <span class="arg">mynotes</span> "what did i write about ownership"</pre>
+                </div>
+                <div class="workflow">
+                    <div class="wf-label">Merge multiple libraries</div>
+                    <pre><span class="cmd">plshelp</span> merge <span class="arg">numpy</span> numpyuser numpyref
+<span class="cmd">plshelp</span> query <span class="arg">numpy</span> "what is broadcasting"</pre>
+                </div>
+                <div class="workflow">
+                    <div class="wf-label">Export cleaned docs</div>
+                    <pre><span class="cmd">plshelp</span> export <span class="arg">numpyuser</span>
+<span class="cmt"># → artifacts/numpyuser/docs.md</span>
+<span class="cmt"># → artifacts/numpyuser/docs.txt</span></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- FAQ -->
+        <div class="section-inner">
+            <div class="label">FAQ</div>
+            <div class="faq">
+                <div class="faq-item">
+                    <div class="faq-q">What can I index?</div>
+                    <div class="faq-a">
+                        <ul>
+                            <li>documentation websites</li>
+                            <li>local Markdown files</li>
+                            <li>local text files</li>
+                            <li>merged collections of multiple libraries</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Does plshelp require a hosted vector database?</div>
+                    <div class="faq-a">No. It uses local SQLite storage with local embedding generation. Everything runs
+                        on your machine.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Can I use it without embeddings?</div>
+                    <div class="faq-a">Yes. BM25 search works immediately after chunking. Embeddings are optional for
+                        hybrid or vector-only retrieval.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Does it work well for coding agents?</div>
+                    <div class="faq-a">Yes. Designed for local documentation context with structured <span
+                            class="ci">--json</span> output for agent tooling.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Where does data live?</div>
+                    <div class="faq-a">
+                        By default in your local application data directory:
+                        <ul>
+                            <li>SQLite database</li>
+                            <li>doc artifacts (<span class="ci">.md</span> / <span class="ci">.txt</span>)</li>
+                            <li>embedding model cache</li>
+                            <li>config file</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Is plshelp open source?</div>
+                    <div class="faq-a">Yes. MIT licensed and available on GitHub.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- REGISTRY -->
+        <div class="section-inner">
+            <div class="label">Registry</div>
+            <div class="registry-row">
+                <div>
+                    <p>Download pre-crawled documentation artifacts. Skip the crawl step and start querying immediately.
+                    </p>
+                </div>
+                <a href="/registry" class="link-out">Browse registry →</a>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+    </div>
+
+    <footer>
+        <div class="footer-inner">
+            <span class="footer-logo">plshelp</span>
+            <ul class="footer-links">
+                <li><a href="https://github.com/HariharPrasadd/plshelp" target="_blank">GitHub</a></li>
+                <li><a href="/docs">Docs</a></li>
+                <li><a href="/registry">Registry</a></li>
+            </ul>
+            <span class="footer-copy">© 2026 plshelp</span>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.install-cmd').forEach(c => c.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                navigator.clipboard.writeText(btn.dataset.copy).then(() => {
+                    btn.textContent = 'copied';
+                    btn.classList.add('copied');
+                    setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1800);
+                });
+            });
+        });
+
+        document.querySelectorAll('.faq-q').forEach(q => {
+            q.addEventListener('click', () => q.parentElement.classList.toggle('open'));
+        });
+    </script>
+</body>
+
+</html>
