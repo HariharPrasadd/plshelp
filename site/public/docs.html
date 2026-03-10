@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>plshelp docs</title>
+    <title>plshelp — docs</title>
     <style>
         @font-face {
             font-family: 'CommitMono';
@@ -55,7 +55,6 @@
             --base-200: #CECDC3;
 
             --accent-grad: linear-gradient(90deg, #af3029, #ec8b49);
-            --success-grad: linear-gradient(90deg, #004426, #00c632);
             --cyan-400: #3AA99F;
 
             --bg: #000000;
@@ -67,8 +66,9 @@
             --text-3: var(--base-700);
             --mono: 'CommitMono', monospace;
 
-            --content: 900px;
-            --pad: 40px;
+            --sidebar-w: 240px;
+            --toc-w: 200px;
+            --topbar-h: 48px;
         }
 
         html {
@@ -79,31 +79,8 @@
             background: var(--bg);
             color: var(--text);
             font-family: var(--mono);
-            font-size: 15px;
-            line-height: 1.7;
-        }
-
-        #dash-canvas {
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .rails {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            z-index: 200;
-            width: var(--content);
-            margin: 0 auto;
-            border-left: 1px solid var(--base-850);
-            border-right: 1px solid var(--base-850);
+            font-size: 14px;
+            line-height: 1.75;
         }
 
         a {
@@ -118,251 +95,208 @@
             background-clip: text;
         }
 
-        nav {
-            position: sticky;
+        /* ── TOPBAR ── */
+        .topbar {
+            position: fixed;
             top: 0;
-            z-index: 100;
-            background: transparent;
-            border-top: 1px solid var(--border);
-        }
-
-        nav::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            width: var(--content);
-            transform: translateX(-50%);
-            background: #000000f0;
-            backdrop-filter: blur(8px);
-            z-index: -1;
-        }
-
-        .nav-border {
-            max-width: var(--content);
-            margin: 0 auto;
-            height: 1px;
-            background: var(--border);
-        }
-
-        .nav-inner {
-            max-width: var(--content);
-            margin: 0 auto;
-            padding: 0 var(--pad);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 46px;
-        }
-
-        .nav-logo {
-            font-weight: 700;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 24px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-2);
-            transition: color 0.1s;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--text);
-        }
-
-        .col {
-            position: relative;
-            z-index: 1;
-            max-width: var(--content);
-            margin: 0 auto;
-            background: var(--bg);
-        }
-
-        .divider {
-            width: 100%;
-            height: 1px;
-            background: var(--border);
-        }
-
-        .hero {
-            padding: 88px var(--pad) 72px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .hero h1 {
-            font-size: 32px;
-            font-weight: 700;
-            line-height: 1.25;
-            letter-spacing: -0.02em;
-            color: #ffffff;
-            max-width: 680px;
-        }
-
-        .hero h1 em {
-            font-style: italic;
-            background: var(--accent-grad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-sub {
-            color: var(--text-2);
-            max-width: 620px;
-            line-height: 1.85;
-        }
-
-        .install-block {
-            border: 1px solid var(--border);
-            border-radius: 3px;
-            overflow: hidden;
-            width: 100%;
-            max-width: 460px;
-            background: var(--bg-2);
-            text-align: left;
-            margin-top: 14px;
-        }
-
-        .install-tabs {
-            display: flex;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .tab-btn {
-            background: none;
-            border: none;
-            border-bottom: 2px solid transparent;
-            color: var(--text-3);
-            font-family: var(--mono);
-            font-size: 12px;
-            padding: 8px 14px;
-            cursor: pointer;
-            transition: color 0.1s;
-            margin-bottom: -1px;
-            position: relative;
-        }
-
-        .tab-btn:hover {
-            color: var(--text-2);
-        }
-
-        .tab-btn.active {
-            color: #ec8b49;
-            border-bottom: 2px solid transparent;
-        }
-
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
             left: 0;
             right: 0;
-            height: 2px;
-            background: var(--accent-grad);
-        }
-
-        .install-cmd {
-            display: none;
+            height: var(--topbar-h);
+            background: #000000ee;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 13px 16px;
-            gap: 12px;
+            padding: 0 20px;
+            z-index: 300;
         }
 
-        .install-cmd.active {
+        .topbar-left {
             display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
-        .install-cmd code {
-            font-family: var(--mono);
-            font-size: 12px;
+        .topbar-logo {
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .topbar-sep {
+            color: var(--text-3);
+            font-size: 18px;
+            font-weight: 300;
+        }
+
+        .topbar-section {
+            color: var(--text-2);
+            font-size: 13px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .topbar-right a {
+            color: var(--text-2);
+            transition: color 0.1s;
+            font-size: 13px;
+        }
+
+        .topbar-right a:hover {
             color: var(--text);
         }
 
-        .install-cmd code .d {
-            color: var(--text-2);
+        /* ── LAYOUT ── */
+        .layout {
+            display: grid;
+            grid-template-columns: var(--sidebar-w) 1fr var(--toc-w);
+            min-height: 100vh;
+            padding-top: var(--topbar-h);
         }
 
-        .copy-btn {
-            background: none;
-            border: none;
-            color: var(--text-3);
-            padding: 0;
-            cursor: pointer;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            transition: color 0.15s;
+        /* ── SIDEBAR ── */
+        .sidebar {
+            position: sticky;
+            top: var(--topbar-h);
+            height: calc(100vh - var(--topbar-h));
+            overflow-y: auto;
+            border-right: 1px solid var(--border);
+            padding: 24px 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
         }
 
-        .copy-btn:hover {
-            color: var(--text-2);
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
         }
 
-        .copy-btn svg {
-            width: 16px;
-            height: 16px;
-            display: block;
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
         }
 
-        .copy-btn .icon-copy {
-            display: block;
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
         }
 
-        .copy-btn .icon-check {
-            display: none;
+        .sidebar-group {
+            margin-bottom: 8px;
         }
 
-        .copy-btn.copied {
-            color: #00c632;
-        }
-
-        .copy-btn.copied .icon-copy {
-            display: none;
-        }
-
-        .copy-btn.copied .icon-check {
-            display: block;
-        }
-
-        .section-inner {
-            padding: 52px var(--pad);
-        }
-
-        .label {
-            font-size: 12px;
+        .sidebar-group-label {
+            font-size: 11px;
             font-weight: 700;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            color: #ffffff;
-            margin-bottom: 22px;
-            display: flex;
-            align-items: center;
+            color: var(--text-3);
+            padding: 8px 20px 4px;
         }
 
-        .label::before {
+        .sidebar-link {
+            display: block;
+            padding: 5px 20px;
+            font-size: 13px;
+            color: var(--text-2);
+            transition: color 0.1s, background 0.1s;
+            border-left: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .sidebar-link:hover {
+            color: var(--text);
+            background: var(--bg-2);
+        }
+
+        .sidebar-link.active {
+            color: var(--text);
+            background: var(--bg-2);
+            border-left: 2px solid #ec8b49;
+        }
+
+        .sidebar-sublink {
+            display: block;
+            padding: 4px 20px 4px 32px;
+            font-size: 12px;
+            color: var(--text-3);
+            transition: color 0.1s;
+            cursor: pointer;
+        }
+
+        .sidebar-sublink:hover {
+            color: var(--text-2);
+        }
+
+        .sidebar-sublink.active {
+            color: var(--text-2);
+        }
+
+        /* ── MAIN CONTENT ── */
+        .main {
+            padding: 52px 60px 80px;
+            min-width: 0;
+        }
+
+        .doc-header {
+            margin-bottom: 36px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .doc-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .doc-subtitle {
+            color: var(--text-2);
+            font-size: 14px;
+        }
+
+        /* Content sections */
+        .doc-section {
+            margin-bottom: 48px;
+        }
+
+        .doc-h2 {
+            font-size: 17px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 14px;
+            padding-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .doc-h2::before {
             content: '';
             display: inline-block;
             height: 1px;
-            width: calc(var(--pad) - 10px);
-            margin-left: calc(-1 * var(--pad));
-            margin-right: 10px;
+            width: 20px;
             background: var(--accent-grad);
             flex-shrink: 0;
         }
 
-        .prose {
+        .doc-h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            margin: 20px 0 8px;
+        }
+
+        .doc-p {
             color: var(--text-2);
-            max-width: 660px;
-            line-height: 1.9;
+            line-height: 1.85;
+            margin-bottom: 14px;
+            max-width: 620px;
         }
 
         .ci {
@@ -375,60 +309,80 @@
             font-family: var(--mono);
         }
 
-        .feature-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .feature-table tr {
-            border-bottom: 1px solid var(--border);
-        }
-
-        .feature-table tr:first-child {
-            border-top: 1px solid var(--border);
-        }
-
-        .feature-table td {
-            padding: 13px 0;
-            vertical-align: top;
-        }
-
-        .feature-table td:first-child {
-            width: 240px;
-            font-weight: 700;
-            color: var(--text);
-            padding-right: 24px;
-            white-space: nowrap;
-        }
-
-        .feature-table td:last-child {
-            color: var(--text-2);
-            line-height: 1.7;
-        }
-
-        .workflow-list {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .wf-label {
-            font-size: 13px;
-            color: var(--text-3);
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            margin-bottom: 6px;
-        }
-
-        .workflow pre {
+        /* Code block */
+        .code-block {
             background: var(--bg-2);
             border: 1px solid var(--border);
             border-radius: 3px;
-            padding: 14px 16px;
+            overflow: hidden;
+            margin: 16px 0;
+            max-width: 660px;
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-3);
+        }
+
+        .code-block-label {
+            font-size: 11px;
+            color: var(--text-3);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .code-copy-btn {
+            background: none;
+            border: none;
+            color: var(--text-3);
+            font-family: var(--mono);
+            font-size: 11px;
+            cursor: pointer;
+            padding: 0;
+            transition: color 0.1s;
+            display: flex;
+            align-items: center;
+        }
+
+        .code-copy-btn:hover {
+            color: var(--text-2);
+        }
+
+        .code-copy-btn svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .code-copy-btn .icon-copy {
+            display: block;
+        }
+
+        .code-copy-btn .icon-check {
+            display: none;
+        }
+
+        .code-copy-btn.copied {
+            color: #00c632;
+        }
+
+        .code-copy-btn.copied .icon-copy {
+            display: none;
+        }
+
+        .code-copy-btn.copied .icon-check {
+            display: block;
+        }
+
+        .code-block pre {
+            padding: 16px;
             overflow-x: auto;
             font-family: var(--mono);
-            font-size: inherit;
-            line-height: 1.9;
+            font-size: 13px;
+            line-height: 1.8;
             color: var(--text);
         }
 
@@ -448,72 +402,186 @@
             font-style: italic;
         }
 
+        .flag {
+            color: #b7c4cf;
+        }
+
+        /* Callout */
         .callout {
             border: 1px solid var(--border);
+            border-left: 3px solid #ec8b49;
             background: var(--bg-2);
-            color: var(--text-2);
-            padding: 16px 18px;
-            line-height: 1.8;
-            border-radius: 3px;
+            border-radius: 0 3px 3px 0;
+            padding: 14px 18px;
+            margin: 16px 0;
+            max-width: 660px;
         }
 
-        footer {
-            padding: 26px 0;
-            position: relative;
-            z-index: 1;
-        }
-
-        footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            width: var(--content);
-            transform: translateX(-50%);
-            background: var(--bg);
-            z-index: -1;
-        }
-
-        .footer-inner {
-            max-width: var(--content);
-            margin: 0 auto;
-            padding: 0 var(--pad);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 14px;
-        }
-
-        .footer-logo {
+        .callout-label {
+            font-size: 11px;
             font-weight: 700;
-            background: var(--accent-grad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #ec8b49;
+            margin-bottom: 6px;
         }
 
-        .footer-links {
-            display: flex;
-            gap: 18px;
-            list-style: none;
-        }
-
-        .footer-links a {
+        .callout p {
             color: var(--text-2);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        /* Options table */
+        .opt-table {
+            width: 100%;
+            max-width: 660px;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 13px;
+        }
+
+        .opt-table tr {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .opt-table tr:first-child {
+            border-top: 1px solid var(--border);
+        }
+
+        .opt-table td {
+            padding: 10px 0;
+            vertical-align: top;
+        }
+
+        .opt-table td:first-child {
+            width: 180px;
+            padding-right: 20px;
+            white-space: nowrap;
+        }
+
+        .opt-table td:last-child {
+            color: var(--text-2);
+        }
+
+        /* Nav breadcrumb at bottom */
+        .doc-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+            margin-top: 48px;
+            max-width: 660px;
+        }
+
+        .doc-nav-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .doc-nav-btn span:first-child {
+            font-size: 11px;
+            color: var(--text-3);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .doc-nav-btn span:last-child {
+            color: var(--text-2);
+            font-size: 13px;
             transition: color 0.1s;
         }
 
-        .footer-links a:hover {
+        .doc-nav-btn:hover span:last-child {
             color: var(--text);
         }
 
-        .footer-copy {
-            color: var(--text-3);
+        .doc-nav-btn.next {
+            text-align: right;
         }
 
-        .nav-hamburger {
+        /* ── TOC ── */
+        .toc {
+            position: sticky;
+            top: var(--topbar-h);
+            height: calc(100vh - var(--topbar-h));
+            overflow-y: auto;
+            padding: 24px 20px;
+            border-left: 1px solid var(--border);
+        }
+
+        .toc-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-3);
+            margin-bottom: 12px;
+        }
+
+        .toc-link {
+            display: block;
+            font-size: 12px;
+            color: var(--text-3);
+            padding: 3px 0;
+            transition: color 0.1s;
+            cursor: pointer;
+        }
+
+        .toc-link:hover {
+            color: var(--text-2);
+        }
+
+        .toc-link.active {
+            color: #ec8b49;
+        }
+
+        .toc-sublink {
+            display: block;
+            font-size: 11px;
+            color: var(--text-3);
+            padding: 2px 0 2px 12px;
+            transition: color 0.1s;
+            cursor: pointer;
+        }
+
+        .toc-sublink:hover {
+            color: var(--text-2);
+        }
+
+        /* scrollbar */
+        .toc::-webkit-scrollbar {
+            width: 0;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: var(--sidebar-w) 1fr;
+            }
+
+            .toc {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                padding: 32px 24px 60px;
+            }
+        }
+
+        .sidebar-toggle {
             display: none;
             background: none;
             border: none;
@@ -527,58 +595,54 @@
             user-select: none;
         }
 
-        .nav-hamburger:hover {
+        .sidebar-toggle:hover {
             color: var(--text);
         }
 
-        .nav-hamburger.open {
+        .sidebar-toggle.open {
             transform: rotate(45deg);
         }
 
-        .nav-mobile {
-            display: none;
-            flex-direction: column;
-            max-width: var(--content);
-            margin: 0 auto;
-            padding: 0 var(--pad);
-            border-top: 1px solid var(--border);
-        }
-
-        .nav-mobile.open {
-            display: flex;
-        }
-
-        .nav-mobile a {
-            color: var(--text-2);
-            padding: 14px 0;
-            border-bottom: 1px solid var(--border);
-            transition: color 0.1s;
-        }
-
-        .nav-mobile a:last-child {
-            border-bottom: none;
-        }
-
-        .nav-mobile a:hover {
-            color: var(--text);
-        }
-
-        @media (max-width: 599px) {
-            body {
-                font-size: 13px;
+        @media (max-width: 600px) {
+            .sidebar-toggle {
+                display: block;
             }
 
-            .hero h1 {
-                font-size: 24px;
-            }
-        }
-
-        @media (max-width: 479px) {
-            .nav-links {
+            .topbar-nav-links {
                 display: none;
             }
 
-            .nav-hamburger {
+            .sidebar {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: var(--topbar-h);
+                right: 0;
+                bottom: 0;
+                width: 260px;
+                background: #000000f4;
+                backdrop-filter: blur(12px);
+                border-left: 1px solid var(--border);
+                z-index: 250;
+                transform: translateX(100%);
+                transition: transform 0.22s ease;
+                overflow-y: auto;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                top: var(--topbar-h);
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 240;
+            }
+
+            .sidebar-overlay.open {
                 display: block;
             }
         }
@@ -586,330 +650,323 @@
 </head>
 
 <body>
-    <canvas id="dash-canvas"></canvas>
-    <div class="rails"></div>
 
-    <nav>
-        <div class="nav-border"></div>
-        <div class="nav-inner">
-            <a href="/" class="nav-logo grad-text">plshelp</a>
-            <ul class="nav-links">
-                <li><a href="https://github.com/HariharPrasadd/plshelp" target="_blank">GitHub</a></li>
-                <li><a href="/docs.html" class="active">Docs</a></li>
-                <li><a href="/registry">Registry</a></li>
-            </ul>
-            <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">+</button>
+    <!-- TOPBAR -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <a href="/" class="topbar-logo grad-text">plshelp</a>
+            <span class="topbar-sep">/</span>
+            <span class="topbar-section">docs</span>
         </div>
-        <div class="nav-mobile" id="nav-mobile">
-            <a href="https://github.com/HariharPrasadd/plshelp" target="_blank">GitHub</a>
-            <a href="/docs.html">Docs</a>
-            <a href="/registry">Registry</a>
+        <div class="topbar-right">
+            <a class="topbar-nav-links" href="https://github.com/HariharPrasadd/plshelp" target="_blank">GitHub</a>
+            <a class="topbar-nav-links" href="/registry">Registry</a>
+            <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle menu">+</button>
         </div>
-        <div class="nav-border"></div>
-    </nav>
+    </header>
 
-    <div class="col">
-        <section class="hero">
-            <h1>Minimal docs for <em>everything that works today</em></h1>
-            <p class="hero-sub">
-                <span class="ci">plshelp</span> crawls documentation, indexes local files, exports cleaned artifacts,
-                and returns local context through BM25, embeddings, or hybrid retrieval.
-            </p>
-            <div class="install-block">
-                <div class="install-tabs">
-                    <button class="tab-btn active" data-tab="curl">curl</button>
-                    <button class="tab-btn" data-tab="npm">npm</button>
-                    <button class="tab-btn" data-tab="bun">bun</button>
-                    <button class="tab-btn" data-tab="brew">brew</button>
-                </div>
-                <div class="install-cmd active" id="tab-curl">
-                    <code><span class="d">curl -fsSL</span> https://plshelp.run/install.sh <span class="d">|</span> sh</code>
-                    <button class="copy-btn" data-copy="curl -fsSL https://plshelp.run/install.sh | sh" aria-label="Copy">
-                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="9" y="9" width="13" height="13" rx="2" />
-                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                        </svg>
-                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="install-cmd" id="tab-npm">
-                    <code><span class="d">npm install -g</span> plshelp</code>
-                    <button class="copy-btn" data-copy="npm install -g plshelp" aria-label="Copy">
-                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="9" y="9" width="13" height="13" rx="2" />
-                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                        </svg>
-                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="install-cmd" id="tab-bun">
-                    <code><span class="d">bun add -g</span> plshelp</code>
-                    <button class="copy-btn" data-copy="bun add -g plshelp" aria-label="Copy">
-                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="9" y="9" width="13" height="13" rx="2" />
-                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                        </svg>
-                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="install-cmd" id="tab-brew">
-                    <code><span class="d">brew install</span> plshelp</code>
-                    <button class="copy-btn" data-copy="brew install plshelp" aria-label="Copy">
-                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="9" y="9" width="13" height="13" rx="2" />
-                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                        </svg>
-                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                    </button>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <div class="layout">
+
+        <!-- SIDEBAR -->
+        <nav class="sidebar">
+            <div class="sidebar-group">
+                <div class="sidebar-group-label">Getting started</div>
+                <a class="sidebar-link active" href="#intro">Introduction</a>
+                <a class="sidebar-link" href="#install">Installation</a>
+                <a class="sidebar-link" href="#quickstart">Quickstart</a>
+            </div>
+
+            <div class="sidebar-group">
+                <div class="sidebar-group-label">Commands</div>
+                <a class="sidebar-link" href="#cmd-add">add</a>
+                <a class="sidebar-link" href="#cmd-index">index</a>
+                <a class="sidebar-link" href="#cmd-query">query</a>
+                <a class="sidebar-link" href="#cmd-merge">merge</a>
+                <a class="sidebar-link" href="#cmd-export">export</a>
+                <a class="sidebar-link" href="#cmd-list">list</a>
+                <a class="sidebar-link" href="#cmd-remove">remove</a>
+            </div>
+
+            <div class="sidebar-group">
+                <div class="sidebar-group-label">Retrieval</div>
+                <a class="sidebar-link" href="#bm25">BM25</a>
+                <a class="sidebar-link" href="#embeddings">Embeddings</a>
+                <a class="sidebar-link" href="#hybrid">Hybrid search</a>
+                <a class="sidebar-link" href="#scoring">Score tuning</a>
+            </div>
+
+            <div class="sidebar-group">
+                <div class="sidebar-group-label">Agents</div>
+                <a class="sidebar-link" href="#json-output">JSON output</a>
+                <a class="sidebar-link" href="#codex">Codex integration</a>
+                <a class="sidebar-link" href="#claude-code">Claude Code</a>
+                <a class="sidebar-link" href="#mcp">MCP server</a>
+            </div>
+
+            <div class="sidebar-group">
+                <div class="sidebar-group-label">Configuration</div>
+                <a class="sidebar-link" href="#config">Config file</a>
+                <a class="sidebar-link" href="#storage">Storage layout</a>
+                <a class="sidebar-link" href="#models">Embedding models</a>
+            </div>
+
+            <div class="sidebar-group">
+                <div class="sidebar-group-label">Reference</div>
+                <a class="sidebar-link" href="#faq">FAQ</a>
+                <a class="sidebar-link" href="#changelog">Changelog</a>
+            </div>
+        </nav>
+
+        <!-- MAIN -->
+        <main class="main">
+
+            <div class="doc-header">
+                <h1 class="doc-title">Introduction</h1>
+                <p class="doc-subtitle">Get started with plshelp.</p>
+            </div>
+
+            <!-- OVERVIEW -->
+            <div class="doc-section" id="intro">
+                <h2 class="doc-h2">Overview</h2>
+                <p class="doc-p">
+                    <span class="ci">plshelp</span> is an open source CLI tool that turns documentation websites,
+                    Markdown files, and plain text into a local searchable corpus for coding assistants and RAG
+                    workflows.
+                    It handles crawling, cleaning, chunking, and indexing — so your agent has accurate context
+                    without hitting the internet at query time.
+                </p>
+                <p class="doc-p">
+                    Everything runs on your machine. No hosted database, no API calls at retrieval time,
+                    no vendor lock-in. Your indexed docs live in a local SQLite database alongside
+                    human-readable <span class="ci">.md</span> and <span class="ci">.txt</span> artifacts.
+                </p>
+                <div class="callout">
+                    <div class="callout-label">Note</div>
+                    <p>plshelp is in active development. Commands and config options may change between minor versions.
+                        Check the <a href="#changelog" style="color: #ec8b49;">changelog</a> before upgrading.</p>
                 </div>
             </div>
-        </section>
 
-        <div class="divider"></div>
+            <!-- INSTALL -->
+            <div class="doc-section" id="install">
+                <h2 class="doc-h2">Installation</h2>
+                <p class="doc-p">Install plshelp using any of the following methods.</p>
 
-        <div class="section-inner">
-            <div class="label">What it does</div>
-            <p class="prose">
-                <span class="ci">plshelp</span> is a local-first documentation engine. It crawls docs sites,
-                compiles cleaned markdown and text artifacts, chunks and embeds content locally, and answers
-                queries against that local corpus. It also supports local Markdown and text files, merged libraries,
-                and structured <span class="ci">--json</span> output for agent tooling.
-            </p>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="section-inner">
-            <div class="label">Quickstart</div>
-            <div class="workflow-list">
-                <div class="workflow">
-                    <div class="wf-label">Index a docs site</div>
-                    <pre><span class="cmd">plshelp</span> add <span class="arg">nextjs</span> https://nextjs.org/docs
-<span class="cmd">plshelp</span> query <span class="arg">nextjs</span> "how does app router work"</pre>
+                <h3 class="doc-h3">curl (macOS / Linux)</h3>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="curl -fsSL https://plshelp.run/install.sh | sh"
+                            aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmt"># Download and run the install script</span>
+<span class="cmd">curl</span> <span class="flag">-fsSL</span> https://plshelp.run/install.sh <span class="flag">|</span> sh</pre>
                 </div>
-                <div class="workflow">
-                    <div class="wf-label">Index a local Markdown file</div>
-                    <pre><span class="cmd">plshelp</span> index <span class="arg">mynotes</span> --file ./notes/rust.md
-<span class="cmd">plshelp</span> query <span class="arg">mynotes</span> "what did i write about ownership"</pre>
+
+                <h3 class="doc-h3">npm / bun</h3>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="npm install -g plshelp" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmd">npm</span> install <span class="flag">-g</span> plshelp
+<span class="cmt"># or</span>
+<span class="cmd">bun</span> add <span class="flag">-g</span> plshelp</pre>
                 </div>
-                <div class="workflow">
-                    <div class="wf-label">Merge multiple libraries</div>
-                    <pre><span class="cmd">plshelp</span> merge <span class="arg">numpy</span> numpyuser numpyref
-<span class="cmd">plshelp</span> query <span class="arg">numpy</span> "what is broadcasting"</pre>
+
+                <h3 class="doc-h3">Homebrew</h3>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="brew install plshelp" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmd">brew</span> install plshelp</pre>
                 </div>
-                <div class="workflow">
-                    <div class="wf-label">Export cleaned docs</div>
-                    <pre><span class="cmd">plshelp</span> export <span class="arg">numpyuser</span>
-<span class="cmt"># → artifacts/numpyuser/docs.md</span>
-<span class="cmt"># → artifacts/numpyuser/docs.txt</span></pre>
+
+                <h3 class="doc-h3">Windows (PowerShell)</h3>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-label">powershell</span>
+                        <button class="code-copy-btn" data-copy="irm https://plshelp.run/install.ps1 | iex"
+                            aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmd">irm</span> https://plshelp.run/install.ps1 <span class="flag">|</span> iex</pre>
                 </div>
             </div>
-        </div>
 
-        <div class="divider"></div>
+            <!-- QUICKSTART -->
+            <div class="doc-section" id="quickstart">
+                <h2 class="doc-h2">Quickstart</h2>
+                <p class="doc-p">
+                    Index a documentation site and query it in two commands.
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-label">shell</span>
+                        <button class="code-copy-btn"
+                            data-copy="plshelp add nextjs https://nextjs.org/docs&#10;plshelp query nextjs &quot;how does app router work&quot;"
+                            aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmt"># Crawl and index the Next.js docs</span>
+<span class="cmd">plshelp</span> add <span class="arg">nextjs</span> https://nextjs.org/docs
 
-        <div class="section-inner">
-            <div class="label">Command surface</div>
-            <table class="feature-table">
-                <tr><td><span class="ci">add</span></td><td>Crawl a documentation site, chunk it, embed it, and make it queryable in one command.</td></tr>
-                <tr><td><span class="ci">crawl</span></td><td>Only crawl and compile pages for a library without chunking or embedding yet.</td></tr>
-                <tr><td><span class="ci">index</span></td><td>Chunk and embed an existing library, or index a local file via <span class="ci">--file</span>.</td></tr>
-                <tr><td><span class="ci">chunk</span></td><td>Generate parent and child chunks and build the lexical index.</td></tr>
-                <tr><td><span class="ci">embed</span></td><td>Generate embeddings for child chunks using the configured local model.</td></tr>
-                <tr><td><span class="ci">query</span></td><td>Search one library using hybrid, vector-only, or keyword-only retrieval.</td></tr>
-                <tr><td><span class="ci">trace</span></td><td>Inspect ranking internals, scores, and chunk/parent provenance for a query.</td></tr>
-                <tr><td><span class="ci">ask</span></td><td>Run one question across multiple libraries or the entire local corpus.</td></tr>
-                <tr><td><span class="ci">merge</span></td><td>Create a merged logical library from multiple indexed libraries.</td></tr>
-                <tr><td><span class="ci">export</span></td><td>Write the compiled documentation artifacts back out as <span class="ci">docs.md</span> and <span class="ci">docs.txt</span>.</td></tr>
-                <tr><td><span class="ci">show</span> / <span class="ci">list</span></td><td>Inspect library stats, rollups, and what is currently indexed locally.</td></tr>
-                <tr><td><span class="ci">open</span></td><td>Open a child chunk and its parent metadata by chunk id.</td></tr>
-            </table>
-        </div>
+<span class="cmt"># Query with natural language</span>
+<span class="cmd">plshelp</span> query <span class="arg">nextjs</span> <span class="flag">"how does app router work"</span>
 
-        <div class="divider"></div>
+<span class="cmt"># Output as JSON for agent consumption</span>
+<span class="cmd">plshelp</span> query <span class="arg">nextjs</span> <span class="flag">"how does app router work"</span> <span class="flag">--json</span></pre>
+                </div>
 
-        <div class="section-inner">
-            <div class="label">Retrieval model</div>
-            <table class="feature-table">
-                <tr><td>Keyword</td><td>BM25-style lexical retrieval works immediately after chunking and does not require embeddings.</td></tr>
-                <tr><td>Vector</td><td>Embeddings run on child chunks and return the matching parent text for coherence.</td></tr>
-                <tr><td>Hybrid</td><td>The default mode blends lexical and vector scores, with weights controlled by config.</td></tr>
-                <tr><td>JSON output</td><td>Use <span class="ci">--json</span> on read and write commands for machine-readable output in agents and scripts.</td></tr>
-            </table>
-        </div>
+                <p class="doc-p">
+                    The <span class="ci">add</span> command crawls the site, strips boilerplate, chunks the content,
+                    generates embeddings, and writes everything to your local SQLite database.
+                    Subsequent queries hit only local storage — no network required.
+                </p>
 
-        <div class="divider"></div>
-
-        <div class="section-inner">
-            <div class="label">Configuration</div>
-            <p class="prose">
-                <span class="ci">plshelp</span> creates and reads a local <span class="ci">config.toml</span> at startup.
-                You can configure paths, embedding model and batch size, parent and child chunk sizes, retrieval defaults,
-                SQLite settings, and ONNX threading without touching the code.
-            </p>
-            <div style="margin-top: 18px;" class="callout">
-                By default, runtime data lives in your local application data directory. On macOS that is typically
-                <span class="ci">~/Library/Application Support/plshelp</span>, on Linux it is usually
-                <span class="ci">~/.local/share/plshelp</span> or the XDG data directory, and on Windows it would
-                normally live under <span class="ci">%APPDATA%\plshelp</span>.
+                <h3 class="doc-h3">Query flags</h3>
+                <table class="opt-table">
+                    <tr>
+                        <td><span class="ci">--json</span></td>
+                        <td>Output results as newline-delimited JSON. Suitable for piping into agent tooling.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="ci">--top N</span></td>
+                        <td>Return the top N results (default: 5).</td>
+                    </tr>
+                    <tr>
+                        <td><span class="ci">--mode</span></td>
+                        <td>Retrieval mode: <span class="ci">bm25</span>, <span class="ci">vector</span>, or <span
+                                class="ci">hybrid</span> (default).</td>
+                    </tr>
+                    <tr>
+                        <td><span class="ci">--alpha</span></td>
+                        <td>Blend weight for hybrid mode. 0.0 = pure BM25, 1.0 = pure vector (default: 0.5).</td>
+                    </tr>
+                </table>
             </div>
-        </div>
 
-        <div class="divider"></div>
+            <!-- BOTTOM NAV -->
+            <div class="doc-nav">
+                <div></div>
+                <a class="doc-nav-btn next" href="#install">
+                    <span>Next</span>
+                    <span>Commands →</span>
+                </a>
+            </div>
 
-        <div class="section-inner">
-            <div class="label">Registry</div>
-            <p class="prose">
-                The <span class="ci">plshelp</span> registry is a static collection of pre-crawled documentation artifacts.
-                Each entry exposes compiled <span class="ci">docs.md</span> and <span class="ci">docs.txt</span> files plus
-                a public <span class="ci">index.json</span> manifest that the website can browse without loading raw docs until
-                a user requests them.
-            </p>
-        </div>
+        </main>
 
-        <div class="divider"></div>
+        <!-- TOC -->
+        <aside class="toc">
+            <div class="toc-label">On this page</div>
+            <a class="toc-link active" href="#intro">Overview</a>
+            <a class="toc-link" href="#install">Installation</a>
+            <a class="toc-sublink" href="#install">curl</a>
+            <a class="toc-sublink" href="#install">npm / bun</a>
+            <a class="toc-sublink" href="#install">Homebrew</a>
+            <a class="toc-sublink" href="#install">Windows</a>
+            <a class="toc-link" href="#quickstart">Quickstart</a>
+            <a class="toc-sublink" href="#quickstart">Query flags</a>
+        </aside>
+
     </div>
 
-    <footer>
-        <div class="footer-inner">
-            <span class="footer-logo">plshelp</span>
-            <ul class="footer-links">
-                <li><a href="https://github.com/HariharPrasadd/plshelp" target="_blank">GitHub</a></li>
-                <li><a href="/docs.html">Docs</a></li>
-                <li><a href="/registry">Registry</a></li>
-            </ul>
-            <span class="footer-copy">© 2026 plshelp</span>
-        </div>
-    </footer>
-
     <script>
-        const canvas = document.getElementById('dash-canvas');
-        const ctx = canvas.getContext('2d');
+        // Sidebar mobile toggle
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
 
-        const SPACING = 28;
-        const DASH_LEN = 10;
-        const IDLE_SPEED = 0.004;
-        const INFLUENCE = 340;
-        const OUTER_FADE = 600;
-
-        let W, H, dashes;
-        let mouse = { x: -9999, y: -9999 };
-
-        function resize() {
-            W = canvas.width = window.innerWidth;
-            H = canvas.height = window.innerHeight;
-            buildGrid();
+        function toggleSidebar(open) {
+            sidebar.classList.toggle('open', open);
+            overlay.classList.toggle('open', open);
+            sidebarToggle.classList.toggle('open', open);
         }
 
-        function buildGrid() {
-            dashes = [];
-            const offsetX = (W % SPACING) / 2;
-            const offsetY = (H % SPACING) / 2;
-            for (let x = offsetX + SPACING / 2; x < W; x += SPACING) {
-                for (let y = offsetY + SPACING / 2; y < H; y += SPACING) {
-                    dashes.push({
-                        x, y,
-                        angle: Math.random() * Math.PI * 2,
-                        targetAngle: 0,
-                    });
-                }
-            }
-        }
+        sidebarToggle.addEventListener('click', () => toggleSidebar(!sidebar.classList.contains('open')));
+        overlay.addEventListener('click', () => toggleSidebar(false));
 
-        function angleDiff(a, b) {
-            return ((b - a) % (Math.PI * 2) + Math.PI * 3) % (Math.PI * 2) - Math.PI;
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, W, H);
-
-            for (const d of dashes) {
-                const dx = mouse.x - d.x;
-                const dy = mouse.y - d.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-
-                const towardCursor = Math.atan2(dy, dx);
-                const weight = dist < INFLUENCE
-                    ? 1
-                    : dist < OUTER_FADE
-                        ? 1 - (dist - INFLUENCE) / (OUTER_FADE - INFLUENCE)
-                        : 0;
-
-                const idleAngle = d.angle + IDLE_SPEED;
-                d.targetAngle = weight > 0
-                    ? towardCursor + (1 - weight) * angleDiff(towardCursor, idleAngle) * 0.5
-                    : idleAngle;
-
-                const easeStrength = 0.04 + weight * 0.1;
-                d.angle += angleDiff(d.angle, d.targetAngle) * easeStrength;
-
-                const proximity = Math.max(0, 1 - dist / OUTER_FADE);
-                const alpha = 0.44 + proximity * proximity * proximity * 1.5;
-
-                let r, g, b;
-                if (dist < INFLUENCE * 0.4) {
-                    const t = dist / (INFLUENCE * 0.4);
-                    r = 236; g = Math.round(139 - t * 60); b = Math.round(73 - t * 30);
-                } else if (dist < INFLUENCE) {
-                    const t = (dist - INFLUENCE * 0.4) / (INFLUENCE * 0.6);
-                    r = Math.round(175 - t * (175 - 87));
-                    g = Math.round(48 - t * (48 - 86));
-                    b = Math.round(41 - t * (41 - 83));
-                } else {
-                    r = 87; g = 86; b = 83;
-                }
-
-                const cos = Math.cos(d.angle);
-                const sin = Math.sin(d.angle);
-                ctx.beginPath();
-                ctx.moveTo(d.x - cos * DASH_LEN, d.y - sin * DASH_LEN);
-                ctx.lineTo(d.x + cos * DASH_LEN, d.y + sin * DASH_LEN);
-                ctx.strokeStyle = `rgba(${r},${g},${b},${alpha.toFixed(3)})`;
-                ctx.lineWidth = 1.2;
-                ctx.lineCap = 'round';
-                ctx.stroke();
-            }
-
-            requestAnimationFrame(draw);
-        }
-
-        window.addEventListener('resize', resize);
-        window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-        window.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
-
-        resize();
-        draw();
-
-        const hamburger = document.getElementById('hamburger');
-        const navMobile = document.getElementById('nav-mobile');
-        hamburger.addEventListener('click', () => {
-            const isOpen = navMobile.classList.toggle('open');
-            hamburger.classList.toggle('open', isOpen);
-        });
-
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.install-cmd').forEach(c => c.classList.remove('active'));
-                btn.classList.add('active');
-                document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+        // Close sidebar when a link is clicked on mobile
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 600) toggleSidebar(false);
             });
         });
 
-        document.querySelectorAll('.copy-btn').forEach(btn => {
+        // Copy buttons
+        document.querySelectorAll('.code-copy-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 navigator.clipboard.writeText(btn.dataset.copy).then(() => {
                     btn.classList.add('copied');
                     setTimeout(() => btn.classList.remove('copied'), 1800);
                 });
+            });
+        });
+
+        // Sidebar active state on click
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+
+        // TOC active state on click
+        document.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
             });
         });
     </script>

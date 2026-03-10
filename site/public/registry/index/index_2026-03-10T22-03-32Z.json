@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "generated_at": "2026-03-10T21:59:50.913551Z",
+  "entries": [
+    {
+      "name": "Firebase",
+      "slug": "firebase",
+      "source_url": "https://firebase.google.com/docs",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/firebase/docs.md",
+        "text_path": "/registry/docs/firebase/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": null,
+        "text_sha256": null
+      },
+      "last_crawled_at": "2026-03-10T21:46:54.788844Z",
+      "last_successful_crawled_at": null,
+      "crawl_duration_ms": 300476,
+      "status": "failed",
+      "error_message": "crawl timed out after 300 seconds"
+    },
+    {
+      "name": "Vercel",
+      "slug": "vercel",
+      "source_url": "https://vercel.com/docs",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/vercel/docs.md",
+        "text_path": "/registry/docs/vercel/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": null,
+        "text_sha256": null
+      },
+      "last_crawled_at": "2026-03-10T21:51:54.929686Z",
+      "last_successful_crawled_at": null,
+      "crawl_duration_ms": 300122,
+      "status": "failed",
+      "error_message": "crawl timed out after 300 seconds"
+    },
+    {
+      "name": "Viper",
+      "slug": "viper",
+      "source_url": "https://github.com/spf13/viper",
+      "pages": 5000,
+      "content_size_chars": 57341612,
+      "artifacts": {
+        "markdown_path": "/registry/docs/viper/docs.md",
+        "text_path": "/registry/docs/viper/docs.txt",
+        "markdown_bytes": 57420236,
+        "text_bytes": 57420236,
+        "markdown_sha256": "6a7f5fc9b3d68a488ffba9ad9e96c0c98466d532d7fbfea87012e7078e41704b",
+        "text_sha256": "6a7f5fc9b3d68a488ffba9ad9e96c0c98466d532d7fbfea87012e7078e41704b"
+      },
+      "last_crawled_at": "2026-03-10T21:51:54.937696Z",
+      "last_successful_crawled_at": "2026-03-10T21:54:24.376919Z",
+      "crawl_duration_ms": 149438,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Spring Boot",
+      "slug": "spring-boot",
+      "source_url": "https://docs.spring.io/spring-boot/docs/current/reference/html/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/spring-boot/docs.md",
+        "text_path": "/registry/docs/spring-boot/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": null,
+        "text_sha256": null
+      },
+      "last_crawled_at": "2026-03-10T21:59:24.919243Z",
+      "last_successful_crawled_at": null,
+      "crawl_duration_ms": 300299,
+      "status": "failed",
+      "error_message": "crawl timed out after 300 seconds"
+    },
+    {
+      "name": "Ruby on Rails",
+      "slug": "rails",
+      "source_url": "https://guides.rubyonrails.org/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/rails/docs.md",
+        "text_path": "/registry/docs/rails/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": null,
+        "text_sha256": null
+      },
+      "last_crawled_at": "2026-03-10T21:59:50.913527Z",
+      "last_successful_crawled_at": null,
+      "crawl_duration_ms": 25991,
+      "status": "failed",
+      "error_message": "worker process exited with status signal: 6 (SIGABRT)"
+    }
+  ]
+}

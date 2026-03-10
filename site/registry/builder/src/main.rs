@@ -10,9 +10,11 @@ use spider::website::Website;
 use std::env;
 use std::error::Error;
 use std::fs;
+use std::process::{Command, Stdio};
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
-use std::time::Instant;
+use std::thread;
+use std::time::{Duration, Instant};
 use url::Url;
 
 static CONTENT_SELECTORS: LazyLock<Vec<Selector>> = LazyLock::new(|| {
@@ -97,13 +99,17 @@ static MARKDOWN_HINTS: &[&str] = &[
     "supported.",
 ];
 
+const CRAWL_TIMEOUT: Duration = Duration::from_secs(5 * 60);
+const MIN_PUBLISHED_ARTIFACT_SIZE: u64 = 200;
+const MIN_PUBLISHED_CONTENT_CHARS: usize = 200;
+
 #[derive(Debug, Deserialize)]
 struct SourcesFile {
     version: u32,
     entries: Vec<SourceEntry>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 struct SourceEntry {
     name: String,
     slug: String,
@@ -111,14 +117,14 @@ struct SourceEntry {
     enabled: bool,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct IndexFile {
     version: u32,
     generated_at: DateTime<Utc>,
     entries: Vec<IndexEntry>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct IndexEntry {
     name: String,
     slug: String,
@@ -129,11 +135,11 @@ struct IndexEntry {
     last_crawled_at: DateTime<Utc>,
     last_successful_crawled_at: Option<DateTime<Utc>>,
     crawl_duration_ms: u128,
-    status: &'static str,
+    status: String,
     error_message: Option<String>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct ArtifactMetadata {
     markdown_path: String,
     text_path: String,
@@ -145,7 +151,33 @@ struct ArtifactMetadata {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    let slug_filter = parse_slug_filter()?;
+    let run_mode = parse_run_mode()?;
+    if let RunMode::Worker {
+        name,
+        slug,
+        source_url,
+        output,
+    } = run_mode
+    {
+        let docs_root = output
+            .parent()
+            .ok_or("worker output path has no parent directory")?
+            .to_path_buf();
+        let source = SourceEntry {
+            name,
+            slug,
+            source_url,
+            enabled: true,
+        };
+        let result = crawl_registry_entry_direct(&source, &docs_root).await;
+        fs::write(output, serde_json::to_string_pretty(&result)?)?;
+        return Ok(());
+    }
+
+    let slug_filter = match run_mode {
+        RunMode::Parent { slug_filter } => slug_filter,
+        RunMode::Worker { .. } => unreachable!(),
+    };
     let builder_root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     let registry_root = builder_root
         .parent()
@@ -161,6 +193,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let public_docs_root = public_registry_root.join("docs");
     fs::create_dir_all(&public_docs_root)?;
     fs::create_dir_all(&public_registry_root)?;
+    archive_existing_index_file(&public_registry_root)?;
 
     let sources: SourcesFile = serde_json::from_str(&fs::read_to_string(&sources_path)?)?;
     let mut index = IndexFile {
@@ -176,7 +209,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .filter(|entry| slug_filter.as_ref().is_none_or(|slug| slug == &entry.slug))
     {
         println!("Crawling {} ({})", source.slug, source.source_url);
-        let result = crawl_registry_entry(&source, &public_docs_root).await;
+        let result = crawl_registry_entry_hard_timeout(&source, &public_docs_root)?;
         println!("Done crawling {}", source.slug);
         index.entries.push(result);
         index.generated_at = Utc::now();
@@ -187,11 +220,35 @@ async fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+enum RunMode {
+    Parent { slug_filter: Option<String> },
+    Worker {
+        name: String,
+        slug: String,
+        source_url: String,
+        output: PathBuf,
+    },
+}
+
 fn write_index_file(output_root: &Path, index: &IndexFile) -> Result<(), Box<dyn Error>> {
     let tmp_path = output_root.join("index.json.tmp");
     let final_path = output_root.join("index.json");
     fs::write(&tmp_path, serde_json::to_string_pretty(index)?)?;
     fs::rename(tmp_path, final_path)?;
+    Ok(())
+}
+
+fn archive_existing_index_file(output_root: &Path) -> Result<(), Box<dyn Error>> {
+    let current_path = output_root.join("index.json");
+    if !current_path.exists() {
+        return Ok(());
+    }
+
+    let archive_dir = output_root.join("index");
+    fs::create_dir_all(&archive_dir)?;
+    let timestamp = Utc::now().format("%Y-%m-%dT%H-%M-%SZ");
+    let archive_path = archive_dir.join(format!("index_{}.json", timestamp));
+    fs::copy(current_path, archive_path)?;
     Ok(())
 }
 
@@ -226,9 +283,13 @@ fn print_run_summary(index: &IndexFile) {
     }
 }
 
-fn parse_slug_filter() -> Result<Option<String>, Box<dyn Error>> {
+fn parse_run_mode() -> Result<RunMode, Box<dyn Error>> {
     let mut args = env::args().skip(1);
     let mut slug = None;
+    let mut worker_name = None;
+    let mut worker_slug = None;
+    let mut worker_source_url = None;
+    let mut worker_output = None;
     while let Some(arg) = args.next() {
         match arg.as_str() {
             "--slug" => {
@@ -236,6 +297,23 @@ fn parse_slug_filter() -> Result<Option<String>, Box<dyn Error>> {
                     .next()
                     .ok_or("--slug requires a value")?;
                 slug = Some(value);
+            }
+            "--worker-name" => {
+                worker_name = Some(args.next().ok_or("--worker-name requires a value")?);
+            }
+            "--worker-slug" => {
+                worker_slug = Some(args.next().ok_or("--worker-slug requires a value")?);
+            }
+            "--worker-source-url" => {
+                worker_source_url = Some(
+                    args.next()
+                        .ok_or("--worker-source-url requires a value")?,
+                );
+            }
+            "--worker-output" => {
+                worker_output = Some(PathBuf::from(
+                    args.next().ok_or("--worker-output requires a value")?,
+                ));
             }
             "--help" | "-h" => {
                 println!("Usage: cargo run --manifest-path site/registry/builder/Cargo.toml -- [--slug <slug>]");
@@ -246,10 +324,122 @@ fn parse_slug_filter() -> Result<Option<String>, Box<dyn Error>> {
             }
         }
     }
-    Ok(slug)
+
+    match (worker_name, worker_slug, worker_source_url, worker_output) {
+        (Some(name), Some(slug), Some(source_url), Some(output)) => Ok(RunMode::Worker {
+            name,
+            slug,
+            source_url,
+            output,
+        }),
+        (None, None, None, None) => Ok(RunMode::Parent { slug_filter: slug }),
+        _ => Err("Worker mode requires --worker-name, --worker-slug, --worker-source-url, and --worker-output.".into()),
+    }
 }
 
-async fn crawl_registry_entry(
+fn crawl_registry_entry_hard_timeout(
+    source: &SourceEntry,
+    docs_root: &Path,
+) -> Result<IndexEntry, Box<dyn Error>> {
+    let temp_output = docs_root.join(format!("{}.result.json", source.slug));
+    if temp_output.exists() {
+        let _ = fs::remove_file(&temp_output);
+    }
+
+    let exe = env::current_exe()?;
+    let mut child = Command::new(exe)
+        .arg("--worker-name")
+        .arg(&source.name)
+        .arg("--worker-slug")
+        .arg(&source.slug)
+        .arg("--worker-source-url")
+        .arg(&source.source_url)
+        .arg("--worker-output")
+        .arg(&temp_output)
+        .stdout(Stdio::inherit())
+        .stderr(Stdio::inherit())
+        .spawn()?;
+
+    let started = Instant::now();
+    loop {
+        if let Some(status) = child.try_wait()? {
+            if !status.success() {
+                let _ = fs::remove_file(&temp_output);
+                return Ok(failed_entry(
+                    source,
+                    format!("worker process exited with status {}", status),
+                    started.elapsed().as_millis(),
+                ));
+            }
+            let result_json = fs::read_to_string(&temp_output)?;
+            let result: IndexEntry = serde_json::from_str(&result_json)?;
+            let _ = fs::remove_file(&temp_output);
+            return Ok(result);
+        }
+
+        if started.elapsed() >= CRAWL_TIMEOUT {
+            let _ = child.kill();
+            let _ = child.wait();
+            let _ = fs::remove_file(&temp_output);
+            return Ok(failed_entry(
+                source,
+                format!("crawl timed out after {} seconds", CRAWL_TIMEOUT.as_secs()),
+                started.elapsed().as_millis(),
+            ));
+        }
+
+        thread::sleep(Duration::from_millis(250));
+    }
+}
+
+fn failed_entry(source: &SourceEntry, message: String, duration_ms: u128) -> IndexEntry {
+    let markdown_path = format!("/registry/docs/{}/docs.md", source.slug);
+    let text_path = format!("/registry/docs/{}/docs.txt", source.slug);
+    IndexEntry {
+        name: source.name.clone(),
+        slug: source.slug.clone(),
+        source_url: source.source_url.clone(),
+        pages: 0,
+        content_size_chars: 0,
+        artifacts: ArtifactMetadata {
+            markdown_path,
+            text_path,
+            markdown_bytes: 0,
+            text_bytes: 0,
+            markdown_sha256: None,
+            text_sha256: None,
+        },
+        last_crawled_at: Utc::now(),
+        last_successful_crawled_at: None,
+        crawl_duration_ms: duration_ms,
+        status: "failed".to_string(),
+        error_message: Some(message),
+    }
+}
+
+fn artifact_validation_error(
+    markdown_bytes: u64,
+    text_bytes: u64,
+    content_size_chars: usize,
+) -> Option<String> {
+    if markdown_bytes == 0 || text_bytes == 0 || content_size_chars == 0 {
+        return Some("empty published artifact".to_string());
+    }
+
+    if markdown_bytes < MIN_PUBLISHED_ARTIFACT_SIZE
+        || text_bytes < MIN_PUBLISHED_ARTIFACT_SIZE
+        || content_size_chars < MIN_PUBLISHED_CONTENT_CHARS
+    {
+        return Some(format!(
+            "published artifact below minimum threshold ({} bytes/chars)",
+            MIN_PUBLISHED_ARTIFACT_SIZE
+        ));
+    }
+
+    None
+}
+
+async fn crawl_registry_entry_direct(
     source: &SourceEntry,
     docs_root: &Path,
 ) -> IndexEntry {
@@ -279,7 +469,7 @@ async fn crawl_registry_entry(
                     last_crawled_at: started_at,
                     last_successful_crawled_at: None,
                     crawl_duration_ms: timer.elapsed().as_millis(),
-                    status: "failed",
+                    status: "failed".to_string(),
                     error_message: Some(err.to_string()),
                 };
             }
@@ -290,6 +480,12 @@ async fn crawl_registry_entry(
             let text_bytes = file_len(&text_file).unwrap_or(0);
             let markdown_sha256 = sha256_file(&markdown_file).ok();
             let text_sha256 = sha256_file(&text_file).ok();
+            let validation_error = artifact_validation_error(
+                markdown_bytes,
+                text_bytes,
+                result.content_size_chars,
+            );
+            let succeeded = validation_error.is_none();
 
             IndexEntry {
                 name: source.name.clone(),
@@ -306,10 +502,14 @@ async fn crawl_registry_entry(
                     text_sha256,
                 },
                 last_crawled_at: started_at,
-                last_successful_crawled_at: Some(Utc::now()),
+                last_successful_crawled_at: if succeeded { Some(Utc::now()) } else { None },
                 crawl_duration_ms: timer.elapsed().as_millis(),
-                status: "success",
-                error_message: None,
+                status: if succeeded {
+                    "success".to_string()
+                } else {
+                    "failed".to_string()
+                },
+                error_message: validation_error,
             }
         }
         Err(err) => IndexEntry {
@@ -329,7 +529,7 @@ async fn crawl_registry_entry(
             last_crawled_at: started_at,
             last_successful_crawled_at: None,
             crawl_duration_ms: timer.elapsed().as_millis(),
-            status: "failed",
+            status: "failed".to_string(),
             error_message: Some(err.to_string()),
         },
     }

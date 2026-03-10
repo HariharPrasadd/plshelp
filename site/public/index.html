@@ -74,6 +74,7 @@
 
         html {
             scroll-behavior: smooth;
+            overflow-x: hidden;
         }
 
         body {
@@ -82,6 +83,8 @@
             font-family: var(--mono);
             font-size: 15px;
             line-height: 1.7;
+            overflow-x: hidden;
+            width: 100%;
         }
 
         /* ── DASH FIELD CANVAS ── */
@@ -185,6 +188,7 @@
             max-width: var(--content);
             margin: 0 auto;
             background: var(--bg);
+            width: 100%;
         }
 
         .divider {
@@ -282,6 +286,7 @@
             justify-content: space-between;
             padding: 13px 16px;
             gap: 12px;
+            min-width: 0;
         }
 
         .install-cmd.active {
@@ -292,6 +297,10 @@
             font-family: var(--mono);
             font-size: 12px;
             color: var(--text);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            min-width: 0;
         }
 
         .install-cmd code .d {
@@ -382,6 +391,8 @@
             font-size: inherit;
             color: var(--text);
             font-family: var(--mono);
+            display: inline;
+            word-break: break-all;
         }
 
         /* Feature table */
@@ -428,6 +439,7 @@
             display: flex;
             gap: 12px;
             color: var(--text-2);
+            align-items: baseline;
         }
 
         .use-list li::before {
@@ -638,6 +650,40 @@
 
             .hero h1 {
                 font-size: 24px;
+            }
+
+            /* Fix feature table: stack cells vertically */
+            .feature-table td:first-child {
+                width: auto;
+                white-space: normal;
+                padding-right: 0;
+                padding-bottom: 2px;
+                display: block;
+            }
+
+            .feature-table td:last-child {
+                display: block;
+                padding-top: 0;
+            }
+
+            .feature-table tr {
+                display: block;
+                padding: 12px 0;
+            }
+
+            .feature-table tr:first-child {
+                padding-top: 12px;
+            }
+
+            /* Fix ci inline overflow in lists */
+            .use-list li {
+                flex-wrap: wrap;
+                word-break: break-word;
+            }
+
+            .ci {
+                word-break: break-word;
+                white-space: normal;
             }
         }
 
@@ -947,11 +993,10 @@
                     <div class="faq-q">Where does data live?</div>
                     <div class="faq-a">
                         By default, <span class="ci">plshelp</span> stores all of its runtime state in your local
-                        application data directory. On macOS this is
-                        typically <span class="ci">~/Library/Application Support/plshelp</span>, on Linux it is usually
-                        <span class="ci">~/.local/share/plshelp</span> or the XDG data
-                        directory, and on Windows it would normally live under <span
-                            class="ci">%APPDATA%\plshelp</span>.
+                        application data directory. On macOS this is typically <span class="ci">~/Library/Application
+                            Support/plshelp</span>,
+                        on Linux it is usually <span class="ci">~/.local/share/plshelp</span> or the XDG data directory,
+                        and on Windows it would normally live under <span class="ci">%APPDATA%\plshelp</span>.
                     </div>
                 </div>
                 <div class="faq-item">
@@ -1040,11 +1085,9 @@
                 const easeStrength = 0.04 + weight * 0.1;
                 d.angle += angleDiff(d.angle, d.targetAngle) * easeStrength;
 
-                // Brightness: smooth cubic falloff, floor at 0.44
                 const proximity = Math.max(0, 1 - dist / OUTER_FADE);
                 const alpha = 0.44 + proximity * proximity * proximity * 1.5;
 
-                // Color: orange → red → gray
                 let r, g, b;
                 if (dist < INFLUENCE * 0.4) {
                     const t = dist / (INFLUENCE * 0.4);

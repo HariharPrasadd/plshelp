@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "generated_at": "2026-03-10T19:04:40.194102Z",
+  "entries": [
+    {
+      "name": "ArgoCD",
+      "slug": "argocd",
+      "source_url": "https://argo-cd.readthedocs.io/en/stable/",
+      "pages": 462,
+      "content_size_chars": 5848885,
+      "artifacts": {
+        "markdown_path": "/registry/docs/argocd/docs.md",
+        "text_path": "/registry/docs/argocd/docs.txt",
+        "markdown_bytes": 5865532,
+        "text_bytes": 5865532,
+        "markdown_sha256": "7ea6a3dd0028fd1eee51857307698c72ecea88b24ed41826119c0ecb10f99d4c",
+        "text_sha256": "7ea6a3dd0028fd1eee51857307698c72ecea88b24ed41826119c0ecb10f99d4c"
+      },
+      "last_crawled_at": "2026-03-10T19:03:54.051523Z",
+      "last_successful_crawled_at": "2026-03-10T19:04:07.161760Z",
+      "crawl_duration_ms": 13110,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Flux",
+      "slug": "flux",
+      "source_url": "https://fluxcd.io/flux/get-started/",
+      "pages": 1,
+      "content_size_chars": 9152,
+      "artifacts": {
+        "markdown_path": "/registry/docs/flux/docs.md",
+        "text_path": "/registry/docs/flux/docs.txt",
+        "markdown_bytes": 9246,
+        "text_bytes": 9246,
+        "markdown_sha256": "6356f8fe524f44dfb338734a5b959b35d0fd81441fca876b75782dc8ee44406e",
+        "text_sha256": "6356f8fe524f44dfb338734a5b959b35d0fd81441fca876b75782dc8ee44406e"
+      },
+      "last_crawled_at": "2026-03-10T19:04:07.228673Z",
+      "last_successful_crawled_at": "2026-03-10T19:04:07.613476Z",
+      "crawl_duration_ms": 384,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "NGINX",
+      "slug": "nginx",
+      "source_url": "https://nginx.org/en/docs/",
+      "pages": 139,
+      "content_size_chars": 1090049,
+      "artifacts": {
+        "markdown_path": "/registry/docs/nginx/docs.md",
+        "text_path": "/registry/docs/nginx/docs.txt",
+        "markdown_bytes": 1094671,
+        "text_bytes": 1094671,
+        "markdown_sha256": "4947fa2d486efdcc5d26e7dc6a093457bf1e6a9034e103a7fc196a3f7ed808e9",
+        "text_sha256": "4947fa2d486efdcc5d26e7dc6a093457bf1e6a9034e103a7fc196a3f7ed808e9"
+      },
+      "last_crawled_at": "2026-03-10T19:04:07.734690Z",
+      "last_successful_crawled_at": "2026-03-10T19:04:10.284501Z",
+      "crawl_duration_ms": 2549,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Caddy",
+      "slug": "caddy",
+      "source_url": "https://caddyserver.com/docs/",
+      "pages": 122,
+      "content_size_chars": 648011,
+      "artifacts": {
+        "markdown_path": "/registry/docs/caddy/docs.md",
+        "text_path": "/registry/docs/caddy/docs.txt",
+        "markdown_bytes": 648553,
+        "text_bytes": 648553,
+        "markdown_sha256": "81138de980817b0d84956b14b8d53726826c3f7cdac24d7425f11564e12c298c",
+        "text_sha256": "81138de980817b0d84956b14b8d53726826c3f7cdac24d7425f11564e12c298c"
+      },
+      "last_crawled_at": "2026-03-10T19:04:10.531686Z",
+      "last_successful_crawled_at": "2026-03-10T19:04:14.248659Z",
+      "crawl_duration_ms": 3716,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Traefik",
+      "slug": "traefik",
+      "source_url": "https://doc.traefik.io/traefik/",
+      "pages": 769,
+      "content_size_chars": 9081685,
+      "artifacts": {
+        "markdown_path": "/registry/docs/traefik/docs.md",
+        "text_path": "/registry/docs/traefik/docs.txt",
+        "markdown_bytes": 9089575,
+        "text_bytes": 9089575,
+        "markdown_sha256": "bebd77d8132e443fcac2ccce76ea2dfb48c39f7f7673401958acd5c8af018714",
+        "text_sha256": "bebd77d8132e443fcac2ccce76ea2dfb48c39f7f7673401958acd5c8af018714"
+      },
+      "last_crawled_at": "2026-03-10T19:04:14.342750Z",
+      "last_successful_crawled_at": "2026-03-10T19:04:39.399550Z",
+      "crawl_duration_ms": 25056,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Prometheus",
+      "slug": "prometheus",
+      "source_url": "https://prometheus.io/docs/introduction/overview/",
+      "pages": 1,
+      "content_size_chars": 5108,
+      "artifacts": {
+        "markdown_path": "/registry/docs/prometheus/docs.md",
+        "text_path": "/registry/docs/prometheus/docs.txt",
+        "markdown_bytes": 5119,
+        "text_bytes": 5119,
+        "markdown_sha256": "b85afc88cce39bca390ee7657b0afa9ef75484761e8b7b84291ef9b12ead2847",
+        "text_sha256": "b85afc88cce39bca390ee7657b0afa9ef75484761e8b7b84291ef9b12ead2847"
+      },
+      "last_crawled_at": "2026-03-10T19:04:39.436703Z",
+      "last_successful_crawled_at": "2026-03-10T19:04:40.085503Z",
+      "crawl_duration_ms": 648,
+      "status": "success",
+      "error_message": null
+    }
+  ]
+}
