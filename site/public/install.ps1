@@ -64,8 +64,17 @@ try {
     }
 
     Expand-Archive -Path $ArchivePath -DestinationPath $TempDir -Force
-    Copy-Item (Join-Path $TempDir 'plshelp.exe') (Join-Path $InstallDir 'plshelp.exe') -Force
+    $ExtractedBinary = Join-Path $TempDir 'plshelp.exe'
+    if (-not (Test-Path $ExtractedBinary)) {
+        Fail 'Extracted archive does not contain plshelp.exe'
+    }
+
+    Copy-Item $ExtractedBinary (Join-Path $InstallDir 'plshelp.exe') -Force
     Write-Host "Installed plshelp to $(Join-Path $InstallDir 'plshelp.exe')"
+    $pathDirs = $env:PATH -split ';'
+    if ($InstallDir -notin $pathDirs) {
+        Write-Host "Add $InstallDir to your PATH if it is not already there."
+    }
     Write-Host 'Run: plshelp --help'
 }
 finally {

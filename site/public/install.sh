@@ -29,6 +29,11 @@ need_cmd() {
 
 latest_version() {
   need_cmd curl
+  if command -v jq >/dev/null 2>&1; then
+    curl -fsSL "https://api.github.com/repos/${REPO}/releases/latest" \
+      | jq -r '.tag_name // empty'
+    return
+  fi
   curl -fsSL "https://api.github.com/repos/${REPO}/releases/latest" \
     | sed -n 's/.*"tag_name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' \
     | head -n 1
@@ -91,12 +96,23 @@ curl -fsSL "$ASSET_URL" -o "$ARCHIVE_PATH"
 log "Downloading checksums"
 curl -fsSL "$CHECKSUMS_URL" -o "$CHECKSUMS_PATH"
 
-expected=$(awk -v asset="$ASSET" '$2 == asset {print $1}' "$CHECKSUMS_PATH")
+expected=$(
+  awk -v asset="$ASSET" '
+    {
+      gsub(/.*\//, "", $2)
+      if ($2 == asset) {
+        print $1
+        exit
+      }
+    }
+  ' "$CHECKSUMS_PATH"
+)
 [ -n "$expected" ] || fail "checksum entry not found for $ASSET"
 actual=$(sha256_file "$ARCHIVE_PATH")
 [ "$expected" = "$actual" ] || fail "checksum verification failed"
 
 tar -xzf "$ARCHIVE_PATH" -C "$TMP_DIR"
+[ -f "$TMP_DIR/plshelp" ] || fail "extracted archive does not contain plshelp binary"
 install -m 0755 "$TMP_DIR/plshelp" "$INSTALL_DIR/plshelp"
 
 log "Installed plshelp to $INSTALL_DIR/plshelp"
