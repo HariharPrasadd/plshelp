@@ -1,26 +1,0 @@
-Loading cli-test-numpy... |                                                                                                                                                                {
-  "avg_chunks_per_page": 1.0,
-  "bm25_indexed_chunk_count": 2,
-  "chunk_count": 2,
-  "command": "show",
-  "content_size_chars": 575,
-  "embedded_chunk_count": 2,
-  "embedding_dim": 1024,
-  "indexed_model": "AllMiniLML6V2Q",
-  "kind": "group",
-  "last_crawled_at": null,
-  "last_indexed_at": null,
-  "last_refreshed_at": null,
-  "latest_job_status": "merged",
-  "library_name": "cli-test-numpy",
-  "max_chunks_per_page": 1,
-  "members": [
-    "cli-test-numpyuser",
-    "cli-test-numpyref"
-  ],
-  "min_chunks_per_page": 1,
-  "page_count": 2,
-  "pages_with_no_chunks": 0,
-  "parent_count": 2,
-  "source_url": "merged group"
-}

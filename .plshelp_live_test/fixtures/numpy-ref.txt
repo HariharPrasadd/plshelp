@@ -1,7 +1,0 @@
-NumPy Reference
-
-numpy.array creates an array object.
-
-numpy.zeros returns a new array of given shape and type, filled with zeros.
-
-numpy.ones returns a new array of given shape and type, filled with ones.

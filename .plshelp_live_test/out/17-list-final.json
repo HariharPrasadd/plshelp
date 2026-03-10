@@ -1,52 +1,0 @@
-Loading libraries... |                                                                                                                                                                {
-  "command": "list",
-  "libraries": [
-    {
-      "bm25_indexed_chunk_count": 1,
-      "chunk_count": 1,
-      "content_size_chars": 206,
-      "kind": "library",
-      "last_refreshed_at": "1773092756",
-      "library_name": "cli-test-numpyref",
-      "page_count": 1,
-      "source_url": "file:///Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/.plshelp_live_test/fixtures/numpy-ref.txt",
-      "status": "success"
-    },
-    {
-      "bm25_indexed_chunk_count": 1,
-      "chunk_count": 1,
-      "content_size_chars": 369,
-      "kind": "library",
-      "last_refreshed_at": "1773092756",
-      "library_name": "cli-test-numpyuser",
-      "page_count": 1,
-      "source_url": "file:///Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/.plshelp_live_test/fixtures/numpy-user.md",
-      "status": "success"
-    },
-    {
-      "bm25_indexed_chunk_count": 877,
-      "chunk_count": 877,
-      "content_size_chars": 606662,
-      "kind": "library",
-      "last_refreshed_at": "1773088873",
-      "library_name": "numpyuser",
-      "page_count": 33,
-      "source_url": "https://numpy.org/doc/2.4/user",
-      "status": "success"
-    },
-    {
-      "chunk_count": 2,
-      "content_size_chars": 575,
-      "kind": "group",
-      "last_refreshed_at": null,
-      "library_name": "cli-test-numpy",
-      "members": [
-        "cli-test-numpyuser",
-        "cli-test-numpyref"
-      ],
-      "page_count": 2,
-      "source_url": "merged group",
-      "status": "merged"
-    }
-  ]
-}

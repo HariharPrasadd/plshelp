@@ -1,8 +1,0 @@
-Preparing chunks for cli-test-numpyuser... |                                                                                                                                                                Loading chunks for cli-test-numpyuser... |Loading chunks for cli-test-numpyuser... /                                                                                                                                                                {
-  "command": "index",
-  "result": {
-    "file": "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/.plshelp_live_test/fixtures/numpy-user.md",
-    "input_name": "cli-test-numpyuser"
-  },
-  "status": "success"
-}

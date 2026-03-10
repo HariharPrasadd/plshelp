@@ -1,24 +1,0 @@
-Loading cli-test-numpyuser... |                                                                                                                                                                {
-  "aliases": [],
-  "avg_chunks_per_page": 1.0,
-  "bm25_indexed_chunk_count": 1,
-  "chunk_count": 1,
-  "command": "show",
-  "content_size_chars": 369,
-  "embedded_chunk_count": 1,
-  "embedding_dim": 1024,
-  "indexed_model": "AllMiniLML6V2Q",
-  "kind": "library",
-  "last_crawled_at": null,
-  "last_indexed_at": "1773092721",
-  "last_refreshed_at": "1773092721",
-  "latest_error": null,
-  "latest_job_status": "success",
-  "library_name": "cli-test-numpyuser",
-  "max_chunks_per_page": 1,
-  "min_chunks_per_page": 1,
-  "page_count": 1,
-  "pages_with_no_chunks": 0,
-  "parent_count": 1,
-  "source_url": "file:///Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/.plshelp_live_test/fixtures/numpy-user.md"
-}

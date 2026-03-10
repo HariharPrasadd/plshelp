@@ -1,16 +1,0 @@
-Reading numpyuser... |                                                                                                                                                                {
-  "command": "list",
-  "libraries": [
-    {
-      "bm25_indexed_chunk_count": 877,
-      "chunk_count": 877,
-      "content_size_chars": 606662,
-      "kind": "library",
-      "last_refreshed_at": "1773088873",
-      "library_name": "numpyuser",
-      "page_count": 33,
-      "source_url": "https://numpy.org/doc/2.4/user",
-      "status": "success"
-    }
-  ]
-}
