@@ -5,6 +5,7 @@ pub(crate) fn print_help() {
     println!("plshelp <command>");
     println!("  add <library_name> <source_url> [--include-artifacts[=/path]] [--json]");
     println!("  crawl <library_name> <source_url> [--include-artifacts[=/path]] [--json]");
+    println!("  init [--agents] [--claude] [--print] [--json]");
     println!("  index <library_name> [--file /path/to/file] [--json]");
     println!("  chunk <library_name> [--file /path/to/file] [--json]");
     println!("  embed <library_name> [--json]");

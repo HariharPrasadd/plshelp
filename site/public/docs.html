@@ -743,6 +743,7 @@
                     <tr><td><span class="ci">alias &lt;library&gt; &lt;alias&gt;</span></td><td>Add an alternate lookup name for a library.</td></tr>
                     <tr><td><span class="ci">refresh</span></td><td>Recompute and backfill stats without crawling again.</td></tr>
                     <tr><td><span class="ci">config</span></td><td>Print the active <span class="ci">config.toml</span> path and contents. Use <span class="ci">--json</span> for tooling.</td></tr>
+                    <tr><td><span class="ci">init</span></td><td>Create or update <span class="ci">AGENTS.md</span> and <span class="ci">CLAUDE.md</span> in the current directory. Use <span class="ci">--agents</span>, <span class="ci">--claude</span>, or <span class="ci">--print</span> as needed.</td></tr>
                     <tr><td><span class="ci">chunk</span></td><td>Run only the chunking and BM25 indexing stage.</td></tr>
                     <tr><td><span class="ci">embed</span></td><td>Run only the embedding stage for a library that is already chunked.</td></tr>
                 </table>
@@ -770,8 +771,9 @@
                     <span class="ci">--json</span>, success and failure can both be consumed programmatically.
                 </p>
                 <div class="code-block">
-                    <div class="code-block-header"><span class="code-block-label">command reference</span><button class="code-copy-btn" data-copy="plshelp help&#10;plshelp add <library> <url> [--include-artifacts[=/path]] [--json]&#10;plshelp crawl <library> <url> [--include-artifacts[=/path]] [--json]&#10;plshelp index <library> [--file /path/to/file] [--json]&#10;plshelp chunk <library> [--file /path/to/file] [--json]&#10;plshelp embed <library> [--json]&#10;plshelp refresh [library_name ...] [--json]&#10;plshelp merge <new_library> <library1> <library2> [library3 ...] [--replace] [--include-artifacts[=/path]] [--json]&#10;plshelp export <library> [path] [--json]&#10;plshelp query <library> "<question>" [--mode hybrid|vector|keyword] [--top-k N] [--context N] [--json]&#10;plshelp <library> "<question>"&#10;plshelp ask "<question>" [--libraries a,b,c] [--mode ...] [--top-k N] [--context N] [--json]&#10;plshelp trace <library> "<question>" [--mode ...] [--top-k N] [--context N] [--json]&#10;plshelp alias <library> <alias> [--json]&#10;plshelp list [--json]&#10;plshelp config [--json]&#10;plshelp show <library> [--json]&#10;plshelp remove <library> [--json]&#10;plshelp open <chunk_id> [--json]" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
+                    <div class="code-block-header"><span class="code-block-label">command reference</span><button class="code-copy-btn" data-copy="plshelp help&#10;plshelp init [--agents] [--claude] [--print] [--json]&#10;plshelp add <library> <url> [--include-artifacts[=/path]] [--json]&#10;plshelp crawl <library> <url> [--include-artifacts[=/path]] [--json]&#10;plshelp index <library> [--file /path/to/file] [--json]&#10;plshelp chunk <library> [--file /path/to/file] [--json]&#10;plshelp embed <library> [--json]&#10;plshelp refresh [library_name ...] [--json]&#10;plshelp merge <new_library> <library1> <library2> [library3 ...] [--replace] [--include-artifacts[=/path]] [--json]&#10;plshelp export <library> [path] [--json]&#10;plshelp query <library> "<question>" [--mode hybrid|vector|keyword] [--top-k N] [--context N] [--json]&#10;plshelp <library> "<question>"&#10;plshelp ask "<question>" [--libraries a,b,c] [--mode ...] [--top-k N] [--context N] [--json]&#10;plshelp trace <library> "<question>" [--mode ...] [--top-k N] [--context N] [--json]&#10;plshelp alias <library> <alias> [--json]&#10;plshelp list [--json]&#10;plshelp config [--json]&#10;plshelp show <library> [--json]&#10;plshelp remove <library> [--json]&#10;plshelp open <chunk_id> [--json]" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
                     <pre><span class="cmd">plshelp</span> <span class="arg">help</span>
+<span class="cmd">plshelp</span> init <span class="flag">[--agents] [--claude] [--print] [--json]</span>
 <span class="cmd">plshelp</span> add <span class="arg">&lt;library&gt;</span> <span class="arg">&lt;url&gt;</span> <span class="flag">[--include-artifacts[=/path]] [--json]</span>
 <span class="cmd">plshelp</span> crawl <span class="arg">&lt;library&gt;</span> <span class="arg">&lt;url&gt;</span> <span class="flag">[--include-artifacts[=/path]] [--json]</span>
 <span class="cmd">plshelp</span> index <span class="arg">&lt;library&gt;</span> <span class="flag">[--file /path/to/file] [--json]</span>
@@ -797,6 +799,7 @@
                     <span class="ci">crawl</span>, <span class="ci">chunk</span>, and <span class="ci">embed</span> also exist as individual stages when you want control or debugging visibility.
                 </p>
                 <table class="opt-table">
+                    <tr><td><span class="ci">init</span></td><td>Write or print repo-local <span class="ci">AGENTS.md</span> and <span class="ci">CLAUDE.md</span> guidance for agent workflows.</td></tr>
                     <tr><td><span class="ci">add</span></td><td>URL source, full pipeline: crawl → chunk/BM25 → embed.</td></tr>
                     <tr><td><span class="ci">crawl</span></td><td>URL source, crawl only. Populates pages and optional artifacts but stops before chunking.</td></tr>
                     <tr><td><span class="ci">index</span></td><td>Library or file source, chunk + embed. The right wrapper for local files.</td></tr>
@@ -951,6 +954,47 @@
                 </div>
             </div>
 
+            <div class="doc-section" id="agent-init">
+                <h2 class="doc-h2">Agent setup and init</h2>
+                <p class="doc-p">
+                    <span class="ci">plshelp init</span> is the lowest-friction way to expose <span class="ci">plshelp</span> to terminal coding agents. It writes
+                    repo-local instruction files for agent workflows directly into the current directory and keeps the <span class="ci">plshelp</span> section
+                    updateable with marker blocks instead of blindly overwriting the full file.
+                </p>
+                <p class="doc-p">
+                    By default, <span class="ci">plshelp init</span> writes both <span class="ci">AGENTS.md</span> and <span class="ci">CLAUDE.md</span>. Use
+                    <span class="ci">--agents</span> or <span class="ci">--claude</span> if you only want one file, and use <span class="ci">--print</span> when
+                    you want to inspect the generated content without writing anything to disk.
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">shell</span><button class="code-copy-btn" data-copy="plshelp init&#10;plshelp init --agents&#10;plshelp init --claude&#10;plshelp init --print&#10;plshelp init --print --json" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
+                    <pre><span class="cmd">plshelp</span> <span class="arg">init</span>
+<span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">--agents</span>
+<span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">--claude</span>
+<span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">--print</span>
+<span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">--print --json</span></pre>
+                </div>
+                <h3 class="doc-h3">What gets written</h3>
+                <p class="doc-p">
+                    The generated files tell agents to prefer <span class="ci">plshelp ... --json</span> for local documentation retrieval, to inspect indexing
+                    state with <span class="ci">show</span> before assuming a query is wrong, and to use <span class="ci">trace</span> only when ranking or retrieval
+                    quality needs debugging. The embedded templates also include a setup block for brand-new repos:
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">generated guidance</span><button class="code-copy-btn" data-copy="### Setup (if no libraries are indexed yet)&#10;- `plshelp add <name> <docs-url>` to index a library&#10;- `plshelp show <name> --json` to confirm it's ready before querying" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
+                    <pre>### Setup (if no libraries are indexed yet)
+- <span class="ci">plshelp add &lt;name&gt; &lt;docs-url&gt;</span> to index a library
+- <span class="ci">plshelp show &lt;name&gt; --json</span> to confirm it's ready before querying</pre>
+                </div>
+                <h3 class="doc-h3">How to use this in practice</h3>
+                <p class="doc-p">
+                    Run <span class="ci">plshelp init</span> once at the project root after you have a library indexed, commit the generated files if you want the
+                    instructions to travel with the repo, and then let agents call <span class="ci">query</span>, <span class="ci">trace</span>, <span class="ci">show</span>,
+                    <span class="ci">list</span>, <span class="ci">open</span>, and <span class="ci">config</span> through JSON mode. This keeps retrieval local,
+                    deterministic, and inspectable.
+                </p>
+            </div>
+
             <div class="doc-section" id="config">
                 <h2 class="doc-h2">Config file</h2>
                 <p class="doc-p">
@@ -958,9 +1002,12 @@
                     Missing or malformed values fall back to built-in defaults, so the config file is an override layer rather than a fragile required dependency.
                 </p>
                 <div class="code-block">
-                    <div class="code-block-header"><span class="code-block-label">shell</span><button class="code-copy-btn" data-copy="plshelp config&#10;plshelp config --json" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
+                    <div class="code-block-header"><span class="code-block-label">shell</span><button class="code-copy-btn" data-copy="plshelp config&#10;plshelp config --json&#10;plshelp init&#10;plshelp init --claude&#10;plshelp init --print" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
                     <pre><span class="cmd">plshelp</span> <span class="arg">config</span>
-<span class="cmd">plshelp</span> <span class="arg">config</span> <span class="flag">--json</span></pre>
+<span class="cmd">plshelp</span> <span class="arg">config</span> <span class="flag">--json</span>
+<span class="cmd">plshelp</span> <span class="arg">init</span>
+<span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">--claude</span>
+<span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">--print</span></pre>
                 </div>
                 <div class="code-block">
                     <div class="code-block-header"><span class="code-block-label">toml</span><button class="code-copy-btn" data-copy="[embedding]\nmodel = \"AllMiniLML6V2Q\"\nbatch_size = 128\n\n[chunking]\nparent_min_chars = 1400\nparent_max_chars = 3000\nchild_min_chars = 400\nchild_max_chars = 800\nchild_split_window_chars = 50\n\n[retrieval]\ndefault_mode = \"hybrid\"\ndefault_top_k = 1\ndefault_context_window = 0\nhybrid_vector_weight = 0.9\nhybrid_bm25_weight = 0.1\n\n[sqlite]\njournal_mode = \"WAL\"\nbusy_timeout_ms = 5000" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
@@ -1063,6 +1110,7 @@ busy_timeout_ms = <span class="arg">5000</span></pre>
             <a class="toc-link" href="#data-model">Data model</a>
             <a class="toc-link" href="#artifacts-and-output">Artifacts and output</a>
             <a class="toc-link" href="#json-output">JSON output</a>
+            <a class="toc-link" href="#agent-init">Agent setup</a>
             <a class="toc-link" href="#config">Config file</a>
             <a class="toc-link" href="#faq">FAQ</a>
         </aside>

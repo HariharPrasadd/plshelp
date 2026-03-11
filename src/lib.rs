@@ -36,6 +36,81 @@ pub(crate) const APP_NAME: &str = "plshelp";
 pub(crate) const CONFIG_FILE_NAME: &str = "config.toml";
 pub(crate) const DEFAULT_PARENT_MIN_CHARS: usize = 1400;
 pub(crate) const DEFAULT_PARENT_MAX_CHARS: usize = 3000;
+pub(crate) const PLSHELP_AGENT_BLOCK_START: &str = "<!-- plshelp:start -->";
+pub(crate) const PLSHELP_AGENT_BLOCK_END: &str = "<!-- plshelp:end -->";
+pub(crate) const AGENTS_TEMPLATE: &str = r#"<!-- plshelp:start -->
+## plshelp
+
+Use `plshelp` as the local documentation retrieval tool for this repository.
+
+### Setup (if no libraries are indexed yet)
+
+- `plshelp add <name> <docs-url>` to index a library
+- `plshelp show <name> --json` to confirm it's ready before querying
+
+Preferred command pattern:
+
+- `plshelp query <library> "<question>" --json`
+- `plshelp trace <library> "<question>" --json` when debugging ranking or retrieval quality
+- `plshelp ask "<question>" --libraries a,b,c --json` when the answer may span multiple libraries
+- `plshelp show <library> --json` to inspect indexing state and chunk / embedding counts
+- `plshelp list --json` to discover available libraries
+- `plshelp open <chunk_id> --json` to inspect a specific retrieved child chunk and its parent
+- `plshelp config --json` to inspect active runtime configuration
+
+### Setup (if no libraries are indexed yet)
+
+- `plshelp add <name> <docs-url>` to index a library
+- `plshelp show <name> --json` to confirm it's ready before querying
+
+Operational guidance:
+
+- Prefer `--json` for any agent-driven call.
+- Prefer `query` before `trace`; use `trace` only when retrieval seems wrong or you need scores.
+- `query` ranks child chunks but returns parent content. Treat the returned `content` field as the user-facing context block.
+- `source_url` is the canonical citation for a returned result.
+- `keyword` mode is BM25 / FTS-based lexical retrieval.
+- `vector` mode requires embeddings.
+- `hybrid` combines both and is usually the default choice.
+- If a library is not ready or retrieval seems stale, check `show <library> --json` before assuming the query is wrong.
+
+Do not assume remote search is needed if `plshelp` can answer the question locally.
+<!-- plshelp:end -->
+"#;
+pub(crate) const CLAUDE_TEMPLATE: &str = r#"<!-- plshelp:start -->
+## plshelp
+
+Use `plshelp` for local documentation retrieval in this project.
+
+### Setup (if no libraries are indexed yet)
+
+- `plshelp add <name> <docs-url>` to index a library
+- `plshelp show <name> --json` to confirm it's ready before querying
+
+Recommended commands:
+
+- `plshelp query <library> "<question>" --json`
+- `plshelp trace <library> "<question>" --json`
+- `plshelp ask "<question>" --libraries a,b,c --json`
+- `plshelp list --json`
+- `plshelp show <library> --json`
+- `plshelp open <chunk_id> --json`
+- `plshelp config --json`
+
+### Setup (if no libraries are indexed yet)
+
+- `plshelp add <name> <docs-url>` to index a library
+- `plshelp show <name> --json` to confirm it's ready before querying
+
+Guidelines:
+
+- Default to `query --json` for documentation questions tied to indexed libraries.
+- Use `trace --json` when results look wrong and you need to inspect scores or ranking.
+- Returned results are parent chunks; use `source_url` for citations.
+- `hybrid` is usually the right retrieval mode unless there is a reason to force `keyword` or `vector`.
+- Keep retrieval local through `plshelp` before reaching for external search.
+<!-- plshelp:end -->
+"#;
 
 pub(crate) static CONTENT_SELECTORS: LazyLock<Vec<Selector>> = LazyLock::new(|| {
     [
@@ -295,6 +370,67 @@ pub(crate) use runtime::*;
 pub(crate) use search::*;
 pub(crate) use ui::*;
 
+fn parse_init_flags(flags: &[String]) -> Result<(bool, bool, bool), Box<dyn Error>> {
+    let mut write_agents = false;
+    let mut write_claude = false;
+    let mut print_only = false;
+
+    for flag in flags {
+        match flag.as_str() {
+            "--agents" => write_agents = true,
+            "--claude" => write_claude = true,
+            "--print" => print_only = true,
+            _ => return Err("Usage: plshelp init [--agents] [--claude] [--print] [--json]".into()),
+        }
+    }
+
+    if !write_agents && !write_claude {
+        write_agents = true;
+        write_claude = true;
+    }
+
+    Ok((write_agents, write_claude, print_only))
+}
+
+fn upsert_marked_block(existing: &str, block: &str) -> String {
+    if let (Some(start), Some(end)) = (
+        existing.find(PLSHELP_AGENT_BLOCK_START),
+        existing.find(PLSHELP_AGENT_BLOCK_END),
+    ) {
+        let end = end + PLSHELP_AGENT_BLOCK_END.len();
+        let mut updated = String::new();
+        updated.push_str(&existing[..start]);
+        if !updated.is_empty() && !updated.ends_with('\n') {
+            updated.push('\n');
+        }
+        updated.push_str(block);
+        if end < existing.len() {
+            if !updated.ends_with('\n') {
+                updated.push('\n');
+            }
+            updated.push_str(existing[end..].trim_start_matches('\n'));
+        }
+        return updated;
+    }
+
+    if existing.trim().is_empty() {
+        return format!("{block}\n");
+    }
+
+    let mut updated = existing.trim_end().to_string();
+    updated.push_str("\n\n");
+    updated.push_str(block);
+    updated.push('\n');
+    updated
+}
+
+fn write_agent_file(path: &Path, block: &str) -> Result<(), Box<dyn Error>> {
+    let existing = fs::read_to_string(path).unwrap_or_default();
+    let updated = upsert_marked_block(&existing, block);
+    fs::write(path, updated)?;
+    Ok(())
+}
+
 pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
     let _echo_guard = TerminalEchoGuard::new();
     initialize_runtime_paths()?;
@@ -345,6 +481,66 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
                     "source_url": args[2],
                 }),
             )?;
+        }
+        "init" => {
+            let (output_json, flags) = extract_json_flag(&args[1..]);
+            let (write_agents, write_claude, print_only) = parse_init_flags(&flags)?;
+            let cwd = env::current_dir()?;
+            let agents_path = cwd.join("AGENTS.md");
+            let claude_path = cwd.join("CLAUDE.md");
+
+            if !print_only {
+                if write_agents {
+                    write_agent_file(&agents_path, AGENTS_TEMPLATE)?;
+                }
+                if write_claude {
+                    write_agent_file(&claude_path, CLAUDE_TEMPLATE)?;
+                }
+            }
+
+            let mut written = Vec::new();
+            let mut templates = serde_json::Map::new();
+
+            if write_agents {
+                if !print_only {
+                    written.push(agents_path.clone());
+                }
+                templates.insert("AGENTS.md".to_string(), Value::String(AGENTS_TEMPLATE.to_string()));
+            }
+            if write_claude {
+                if !print_only {
+                    written.push(claude_path.clone());
+                }
+                templates.insert("CLAUDE.md".to_string(), Value::String(CLAUDE_TEMPLATE.to_string()));
+            }
+
+            if output_json {
+                print_json(&json!({
+                    "command": "init",
+                    "status": "success",
+                    "result": {
+                        "print_only": print_only,
+                        "files": written,
+                        "templates": templates,
+                    }
+                }))?;
+            } else if print_only {
+                if write_agents {
+                    println!("--- AGENTS.md ---\n");
+                    print!("{}", AGENTS_TEMPLATE);
+                    if write_claude {
+                        println!();
+                    }
+                }
+                if write_claude {
+                    println!("--- CLAUDE.md ---\n");
+                    print!("{}", CLAUDE_TEMPLATE);
+                }
+            } else {
+                for path in &written {
+                    println!("{}", path.display());
+                }
+            }
         }
         "index" => {
             if args.len() < 2 {
