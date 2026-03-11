@@ -392,12 +392,6 @@
       "enabled": false
     },
     {
-      "name": "Racket Documentation",
-      "slug": "racket",
-      "source_url": "https://docs.racket-lang.org/",
-      "enabled": false
-    },
-    {
       "name": "Crystal Documentation",
       "slug": "crystal",
       "source_url": "https://crystal-lang.org/docs/",
@@ -3932,7 +3926,7 @@
       "enabled": false
     },
     {
-      "name": "L\u00d6VE 2D",
+      "name": "LÖVE 2D",
       "slug": "love2d",
       "source_url": "https://love2d.org/wiki/Main_Page",
       "enabled": false

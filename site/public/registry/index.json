@@ -7223,7 +7223,7 @@
       "error_message": null
     },
     {
-      "name": "L\u00d6VE 2D",
+      "name": "LÖVE 2D",
       "slug": "love2d",
       "source_url": "https://love2d.org/wiki/Main_Page",
       "pages": 0,
@@ -10499,26 +10499,6 @@
       "last_crawled_at": "2026-03-10T19:10:00.012956Z",
       "last_successful_crawled_at": "2026-03-10T19:10:27.558702Z",
       "crawl_duration_ms": 27545,
-      "status": "success",
-      "error_message": null
-    },
-    {
-      "name": "Racket Documentation",
-      "slug": "racket",
-      "source_url": "https://docs.racket-lang.org/",
-      "pages": 0,
-      "content_size_chars": 5972038247,
-      "artifacts": {
-        "markdown_path": "/registry/docs/racket/docs.md",
-        "text_path": "/registry/docs/racket/docs.txt",
-        "markdown_bytes": 5973672896,
-        "text_bytes": 5973672896,
-        "markdown_sha256": "c21b8bf71b4a6196932d8714e0d0cb8240c38728c2a4bb16157ee66c5b033241",
-        "text_sha256": "c21b8bf71b4a6196932d8714e0d0cb8240c38728c2a4bb16157ee66c5b033241"
-      },
-      "last_crawled_at": "2026-03-10T07:12:04.897192Z",
-      "last_successful_crawled_at": "2026-03-10T07:12:04.897192Z",
-      "crawl_duration_ms": 0,
       "status": "success",
       "error_message": null
     },

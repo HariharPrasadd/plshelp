@@ -474,6 +474,68 @@
             width: 0;
         }
 
+        /* ── MOBILE TOC ── */
+        .mobile-toc-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-2);
+            font-family: var(--mono);
+            font-size: 22px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            transition: color 0.1s, transform 0.2s;
+            user-select: none;
+        }
+
+        .mobile-toc-btn:hover {
+            color: var(--text);
+        }
+
+        .mobile-toc-btn.open {
+            transform: rotate(45deg);
+        }
+
+        .mobile-toc-drawer {
+            display: none;
+            position: fixed;
+            top: var(--topbar-h);
+            right: 0;
+            width: 220px;
+            background: var(--bg-2);
+            border-left: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            z-index: 299;
+            padding: 20px;
+            box-shadow: -4px 8px 24px rgba(0, 0, 0, 0.4);
+            max-height: calc(100vh - var(--topbar-h));
+            overflow-y: auto;
+            opacity: 0;
+            transform: translateY(-6px);
+            transition: opacity 0.15s, transform 0.15s;
+            pointer-events: none;
+        }
+
+        .mobile-toc-drawer.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .mobile-toc-drawer::-webkit-scrollbar {
+            width: 0;
+        }
+
+        .mobile-toc-drawer .toc-label {
+            margin-bottom: 10px;
+        }
+
+        .mobile-toc-drawer .toc-link {
+            padding: 5px 0;
+            font-size: 12px;
+        }
+
         /* ── RESPONSIVE ── */
         @media (max-width: 900px) {
             .layout {
@@ -482,6 +544,18 @@
 
             .toc {
                 display: none;
+            }
+
+            .topbar-right a {
+                display: none;
+            }
+
+            .mobile-toc-btn {
+                display: flex;
+            }
+
+            .mobile-toc-drawer {
+                display: block;
             }
         }
 
@@ -509,6 +583,7 @@
         <div class="topbar-right">
             <a class="topbar-nav-links" href="https://github.com/HariharPrasadd/plshelp" target="_blank">GitHub</a>
             <a class="topbar-nav-links" href="/registry">Registry</a>
+            <button class="mobile-toc-btn" id="mobileTocBtn" aria-label="Table of contents">+</button>
         </div>
     </header>
 
@@ -517,47 +592,56 @@
 
             <div class="doc-header">
                 <h1 class="doc-title">Documentation</h1>
-                <p class="doc-subtitle">Local-first documentation indexing and retrieval for coding agents.</p>
+                <p class="doc-subtitle">Search your docs locally. Use it yourself, or wire it up to a coding agent.</p>
             </div>
 
-            <div class="doc-section" id="intro">
-                <h2 class="doc-h2">Introduction</h2>
+            <!-- WHAT IS IT -->
+            <div class="doc-section" id="what-is-it">
+                <h2 class="doc-h2">What is plshelp?</h2>
                 <p class="doc-p">
-                    <span class="ci">plshelp</span> crawls documentation websites, ingests local Markdown and text files,
-                    cleans the content, stores it locally, and gives you a query interface that works well for coding
-                    agents. The goal is simple: scrape once, index locally, and stop depending on remote docs search
-                    during development.
+                    plshelp is a local documentation search tool. Point it at any docs website — or your own notes and
+                    Markdown files — and it indexes everything locally so you can search it instantly from your
+                    terminal.
                 </p>
                 <p class="doc-p">
-                    The tool is local-first by design. It stores pages, chunks, embeddings, and library metadata in
-                    SQLite, keeps exported artifacts as plain <span class="ci">.md</span> and <span class="ci">.txt</span>
-                    files, and exposes both human-readable terminal output and machine-readable <span class="ci">--json</span>
-                    responses. Query-time retrieval can use BM25, embeddings, or hybrid scoring.
+                    You can use it yourself, just like you'd use a search box on a docs site, except it works offline
+                    and across everything you've indexed at once. And because it speaks JSON, coding agents like Claude
+                    Code and Codex can call it too — automatically pulling in the right docs context without ever
+                    touching the web.
+                </p>
+                <p class="doc-p">
+                    Everything stays on your machine. No cloud sync, no third-party vector database, no data leaving
+                    your system. Your docs corpus is yours.
                 </p>
                 <div class="callout">
-                    <div class="callout-label">What plshelp is good at</div>
-                    <p>Use it when you want stable local context for docs-heavy workflows, code assistants, personal notes,
-                        framework references, or merged corpora that would otherwise be spread across many sites or files.</p>
+                    <div class="callout-label">The core workflow</div>
+                    <p>Index a library once with <span class="ci">plshelp add</span>. Search it yourself with <span
+                            class="ci">plshelp query</span>, or run <span class="ci">plshelp init</span> to wire it up
+                        to your coding agent automatically.</p>
                 </div>
             </div>
 
+            <!-- INSTALL -->
             <div class="doc-section" id="install">
                 <h2 class="doc-h2">Installation</h2>
                 <p class="doc-p">
-                    The supported install path today is the hosted shell installer for Unix-like systems and the PowerShell
-                    installer for Windows. Both download a prebuilt release binary and place it in a user bin directory.
+                    Run the one-liner for your platform. It downloads a prebuilt binary and puts it somewhere on your
+                    PATH.
                 </p>
 
                 <h3 class="doc-h3">macOS and Linux</h3>
                 <div class="code-block">
                     <div class="code-block-header">
                         <span class="code-block-label">shell</span>
-                        <button class="code-copy-btn" data-copy="curl -fsSL https://plshelp.run/install.sh | sh" aria-label="Copy">
-                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <button class="code-copy-btn" data-copy="curl -fsSL https://plshelp.run/install.sh | sh"
+                            aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="9" y="9" width="13" height="13" rx="2" />
                                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                             </svg>
-                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12" />
                             </svg>
                         </button>
@@ -565,16 +649,19 @@
                     <pre><span class="cmd">curl</span> <span class="flag">-fsSL</span> https://plshelp.run/install.sh <span class="flag">|</span> sh</pre>
                 </div>
 
-                <h3 class="doc-h3">Windows (PowerShell)</h3>
+                <h3 class="doc-h3">Windows</h3>
                 <div class="code-block">
                     <div class="code-block-header">
                         <span class="code-block-label">powershell</span>
-                        <button class="code-copy-btn" data-copy="irm https://plshelp.run/install.ps1 | iex" aria-label="Copy">
-                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <button class="code-copy-btn" data-copy="irm https://plshelp.run/install.ps1 | iex"
+                            aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="9" y="9" width="13" height="13" rx="2" />
                                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                             </svg>
-                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12" />
                             </svg>
                         </button>
@@ -582,435 +669,604 @@
                     <pre><span class="cmd">irm</span> https://plshelp.run/install.ps1 <span class="flag">|</span> iex</pre>
                 </div>
 
-                <h3 class="doc-h3">Verify the install</h3>
-                <div class="code-block">
-                    <div class="code-block-header">
-                        <span class="code-block-label">shell</span>
-                        <button class="code-copy-btn" data-copy="plshelp help" aria-label="Copy">
-                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="9" y="9" width="13" height="13" rx="2" />
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                            </svg>
-                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                        </button>
-                    </div>
-                    <pre><span class="cmd">plshelp</span> <span class="arg">help</span></pre>
-                </div>
                 <p class="doc-p">
-                    If the binary is installed successfully but the shell cannot find <span class="ci">plshelp</span>, add the
-                    installer’s target directory to your <span class="ci">PATH</span> and retry.
+                    Confirm it worked by running <span class="ci">plshelp help</span>. If the shell says it can't find
+                    the command, you may need to add the install directory to your PATH and open a new terminal.
                 </p>
             </div>
 
+            <!-- QUICKSTART -->
             <div class="doc-section" id="quickstart">
-                <h2 class="doc-h2">Quickstart</h2>
+                <h2 class="doc-h2">Your first library in 2 minutes</h2>
                 <p class="doc-p">
-                    The fastest way to start is a two-command workflow: crawl and index a docs site with <span class="ci">add</span>,
-                    then query it locally.
+                    Pick any docs site. This example uses Next.js, but the same commands work for anything.
                 </p>
                 <div class="code-block">
                     <div class="code-block-header">
                         <span class="code-block-label">shell</span>
-                        <button class="code-copy-btn" data-copy="plshelp add nextjs https://nextjs.org/docs&#10;plshelp query nextjs &quot;how does app router work&quot;" aria-label="Copy">
-                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <button class="code-copy-btn" data-copy="# Step 1: index the docs (this takes a minute)
+plshelp add nextjs https://nextjs.org/docs
+
+# Step 2: ask it something
+plshelp query nextjs &quot;how does the app router work&quot;" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="9" y="9" width="13" height="13" rx="2" />
                                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                             </svg>
-                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12" />
                             </svg>
                         </button>
                     </div>
-                    <pre><span class="cmd">plshelp</span> add <span class="arg">nextjs</span> https://nextjs.org/docs
-<span class="cmd">plshelp</span> query <span class="arg">nextjs</span> <span class="flag">"how does app router work"</span></pre>
+                    <pre><span class="cmt"># Step 1: index the docs (this takes a minute)</span>
+<span class="cmd">plshelp</span> add <span class="arg">nextjs</span> https://nextjs.org/docs
+
+<span class="cmt"># Step 2: ask it something</span>
+<span class="cmd">plshelp</span> query <span class="arg">nextjs</span> <span class="flag">"how does the app router work"</span></pre>
                 </div>
                 <p class="doc-p">
-                    If you already crawled a library, use <span class="ci">index</span> to rebuild chunking and embeddings. If you are
-                    indexing a local file instead of a URL, skip <span class="ci">add</span> entirely and use <span class="ci">index --file</span>.
+                    That's it. <span class="ci">add</span> crawls the site, chunks the content, and builds a search
+                    index. After that, <span class="ci">query</span> is instant — it searches locally, no network
+                    needed.
                 </p>
                 <div class="callout">
-                    <div class="callout-label">Shell note</div>
-                    <p>Quote questions in the shell, especially if they contain characters like <span class="ci">?</span> or <span class="ci">*</span>.
-                        The CLI accepts unquoted multi-word queries in many cases, but quoting is still the safest and most portable form.</p>
+                    <div class="callout-label">Tip</div>
+                    <p>Always quote your questions. It's not strictly required, but it prevents the shell from doing
+                        unexpected things with question marks and special characters.</p>
                 </div>
             </div>
 
-            <div class="doc-section" id="cmd-add">
-                <h2 class="doc-h2">Docs sites</h2>
+            <!-- INDEXING DOCS SITES -->
+            <div class="doc-section" id="indexing-sites">
+                <h2 class="doc-h2">Indexing a docs website</h2>
                 <p class="doc-p">
-                    Use <span class="ci">add</span> when your source is a documentation website. It is the high-level command that runs the
-                    full pipeline: crawl, chunk, embed, and store the library locally.
+                    Use <span class="ci">plshelp add &lt;name&gt; &lt;url&gt;</span> for any documentation website. Give
+                    the library a short name you'll remember — you'll use it in every query.
                 </p>
                 <div class="code-block">
-                    <div class="code-block-header"><span class="code-block-label">shell</span><button class="code-copy-btn" data-copy="plshelp add rust https://doc.rust-lang.org/book/" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
-                    <pre><span class="cmd">plshelp</span> add <span class="arg">rust</span> https://doc.rust-lang.org/book/</pre>
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="plshelp add rust https://doc.rust-lang.org/book/
+plshelp add react https://react.dev/reference/react
+plshelp add tailwind https://tailwindcss.com/docs" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmd">plshelp</span> add <span class="arg">rust</span> https://doc.rust-lang.org/book/
+<span class="cmd">plshelp</span> add <span class="arg">react</span> https://react.dev/reference/react
+<span class="cmd">plshelp</span> add <span class="arg">tailwind</span> https://tailwindcss.com/docs</pre>
                 </div>
                 <p class="doc-p">
-                    If you want the crawl output saved as plain files while indexing, add <span class="ci">--include-artifacts</span>. With no path,
-                    artifacts are written into the library’s compiled directory. You can also pass an explicit output path.
+                    Behind the scenes, <span class="ci">add</span> runs three stages: it crawls the site, splits the
+                    content into chunks, and generates embeddings for semantic search. You can run these stages
+                    separately if you want more control — see the <a href="#pipeline">pipeline section</a> below.
                 </p>
-                <table class="opt-table">
-                    <tr><td><span class="ci">crawl</span></td><td>Crawl a docs site and store pages without chunking or embedding. Use this when you want to separate the pipeline into steps.</td></tr>
-                    <tr><td><span class="ci">add</span></td><td>Run the full URL-based pipeline in one command. This is the default path for documentation sites.</td></tr>
-                    <tr><td><span class="ci">--include-artifacts</span></td><td>Also emit <span class="ci">docs.md</span> and <span class="ci">docs.txt</span> during URL-based workflows.</td></tr>
-                </table>
+                <p class="doc-p">
+                    Once a library is indexed, check on it with <span class="ci">plshelp show &lt;name&gt;</span> to see
+                    page counts, chunk counts, and whether embeddings finished.
+                </p>
             </div>
 
-            <div class="doc-section" id="cmd-index">
-                <h2 class="doc-h2">Local files</h2>
+            <!-- INDEXING LOCAL FILES -->
+            <div class="doc-section" id="indexing-files">
+                <h2 class="doc-h2">Indexing local files</h2>
                 <p class="doc-p">
-                    Use <span class="ci">index --file</span> when your source is already local. This is the clean path for personal notes,
-                    team playbooks, exported docs, or any hand-written Markdown and text you want to query like a library.
+                    plshelp isn't just for docs sites — you can index anything you have locally. Markdown notes, a team
+                    wiki, architecture decision records, exported API specs, internal playbooks. If it's text, you can
+                    search it the same way you'd search any other library.
+                </p>
+                <p class="doc-p">
+                    Use <span class="ci">plshelp index --file</span> instead of <span class="ci">add</span>. It skips
+                    the crawl and goes straight to chunking and indexing.
                 </p>
                 <div class="code-block">
-                    <div class="code-block-header"><span class="code-block-label">shell</span><button class="code-copy-btn" data-copy="plshelp index mynotes --file ./notes/rust.md&#10;plshelp query mynotes &quot;what did i write about ownership&quot;" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
-                    <pre><span class="cmd">plshelp</span> index <span class="arg">mynotes</span> <span class="flag">--file</span> ./notes/rust.md
-<span class="cmd">plshelp</span> query <span class="arg">mynotes</span> <span class="flag">"what did i write about ownership"</span></pre>
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="plshelp index mynotes --file ./notes/architecture.md
+plshelp query mynotes &quot;how is the auth service structured&quot;" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmd">plshelp</span> index <span class="arg">mynotes</span> <span class="flag">--file</span> ./notes/architecture.md
+<span class="cmd">plshelp</span> query <span class="arg">mynotes</span> <span class="flag">"how is the auth service structured"</span></pre>
                 </div>
                 <p class="doc-p">
-                    The same flag shape also works with <span class="ci">chunk</span> if you want to stop before embeddings and inspect the intermediate state.
-                    For local files, <span class="ci">index</span> is generally the right wrapper unless you explicitly want the pipeline stages separated.
+                    Works with <span class="ci">.md</span> and <span class="ci">.txt</span> files. The library name is
+                    yours to choose — pick something short that you'll remember when querying. This is also a good way
+                    to give a coding agent access to private context it wouldn't otherwise have, like internal docs that
+                    aren't on the web.
                 </p>
             </div>
 
-            <div class="doc-section" id="cmd-query">
+            <!-- QUERYING -->
+            <div class="doc-section" id="querying">
                 <h2 class="doc-h2">Querying</h2>
                 <p class="doc-p">
-                    <span class="ci">query</span> searches a single library or merged group. <span class="ci">ask</span> searches across multiple
-                    libraries. <span class="ci">trace</span> shows ranking internals and is the right tool when you need to debug retrieval quality.
+                    The basic query takes a library name and a question. By default it returns the single most relevant
+                    result.
                 </p>
                 <div class="code-block">
-                    <div class="code-block-header"><span class="code-block-label">shell</span><button class="code-copy-btn" data-copy="plshelp query nextjs &quot;data fetching in app router&quot; --mode hybrid --top-k 3 --context 1&#10;plshelp trace nextjs &quot;data fetching in app router&quot; --mode hybrid --top-k 3 --context 1&#10;plshelp ask &quot;what is broadcasting&quot; --libraries numpyuser,numpy-ref --json" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
-                    <pre><span class="cmd">plshelp</span> query <span class="arg">nextjs</span> <span class="flag">"data fetching in app router"</span> <span class="flag">--mode</span> hybrid <span class="flag">--top-k</span> 3 <span class="flag">--context</span> 1
-<span class="cmd">plshelp</span> trace <span class="arg">nextjs</span> <span class="flag">"data fetching in app router"</span> <span class="flag">--mode</span> hybrid <span class="flag">--top-k</span> 3 <span class="flag">--context</span> 1
-<span class="cmd">plshelp</span> ask <span class="flag">"what is broadcasting"</span> <span class="flag">--libraries</span> numpyuser,numpy-ref <span class="flag">--json</span></pre>
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="plshelp query rust &quot;how do lifetimes work&quot;"
+                            aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmd">plshelp</span> query <span class="arg">rust</span> <span class="flag">"how do lifetimes work"</span></pre>
                 </div>
+
+                <h3 class="doc-h3">Getting more results</h3>
+                <p class="doc-p">
+                    Use <span class="ci">--top-k</span> to get more than one result, and <span
+                        class="ci">--context</span> to include neighboring sections alongside each result.
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn"
+                            data-copy="plshelp query rust &quot;how do lifetimes work&quot; --top-k 3 --context 1"
+                            aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmd">plshelp</span> query <span class="arg">rust</span> <span class="flag">"how do lifetimes work"</span> <span class="flag">--top-k</span> 3 <span class="flag">--context</span> 1</pre>
+                </div>
+
+                <h3 class="doc-h3">Searching across multiple libraries</h3>
+                <p class="doc-p">
+                    Use <span class="ci">ask</span> when your question might span multiple docs sets. You can name
+                    specific libraries or leave it out to search everything.
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="# Search specific libraries
+plshelp ask &quot;how do I handle errors&quot; --libraries rust,tokio
+
+# Search everything you've indexed
+plshelp ask &quot;how do I handle errors&quot;" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmt"># Search specific libraries</span>
+<span class="cmd">plshelp</span> ask <span class="flag">"how do I handle errors"</span> <span class="flag">--libraries</span> rust,tokio
+
+<span class="cmt"># Search everything you've indexed</span>
+<span class="cmd">plshelp</span> ask <span class="flag">"how do I handle errors"</span></pre>
+                </div>
+
+                <h3 class="doc-h3">Shorthand</h3>
+                <p class="doc-p">
+                    There's a shorthand form if you don't want to type <span class="ci">query</span> every time:
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="plshelp rust &quot;how do lifetimes work&quot;"
+                            aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmd">plshelp</span> <span class="arg">rust</span> <span class="flag">"how do lifetimes work"</span></pre>
+                </div>
+
+                <h3 class="doc-h3">Query options</h3>
                 <table class="opt-table">
-                    <tr><td><span class="ci">--mode</span></td><td>Choose <span class="ci">hybrid</span>, <span class="ci">vector</span>, or <span class="ci">keyword</span>.</td></tr>
-                    <tr><td><span class="ci">--top-k</span></td><td>Control how many results are returned. The default is <span class="ci">1</span>.</td></tr>
-                    <tr><td><span class="ci">--context</span></td><td>Include neighboring parent chunks with each result. The default is <span class="ci">0</span>.</td></tr>
-                    <tr><td><span class="ci">--libraries</span></td><td>For <span class="ci">ask</span>, provide a comma-separated library list. Without it, <span class="ci">ask</span> searches all available libraries.</td></tr>
-                    <tr><td>alias form</td><td>You can also query directly with <span class="ci">&lt;library_name&gt; "&lt;question&gt;"</span>.</td></tr>
+                    <tr>
+                        <td><span class="ci">--top-k N</span></td>
+                        <td>Return N results instead of just the best one. Default is 1.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="ci">--context N</span></td>
+                        <td>Include N neighboring sections alongside each result, for more surrounding context. Default
+                            is 0.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="ci">--mode</span></td>
+                        <td>Choose <span class="ci">hybrid</span> (default), <span class="ci">vector</span> (semantic
+                            only), or <span class="ci">keyword</span> (exact text match).</td>
+                    </tr>
+                    <tr>
+                        <td><span class="ci">--json</span></td>
+                        <td>Output as JSON. Use this when querying from a script or coding agent.</td>
+                    </tr>
                 </table>
             </div>
 
-            <div class="doc-section" id="cmd-merge">
-                <h2 class="doc-h2">Merged libraries</h2>
+            <!-- AGENT SETUP -->
+            <div class="doc-section" id="agent-setup">
+                <h2 class="doc-h2">Using with coding agents</h2>
                 <p class="doc-p">
-                    <span class="ci">merge</span> builds a new logical library from existing libraries. This is the right pattern when you want one
-                    query target spanning several docs sets, such as a framework guide plus its API reference.
+                    Claude Code, Codex, and other terminal-based agents can use plshelp automatically — but first they
+                    need to know it exists. That's what <span class="ci">plshelp init</span> is for.
+                </p>
+                <p class="doc-p">
+                    Run it once at your project root. It writes instruction files (<span class="ci">CLAUDE.md</span> and
+                    <span class="ci">AGENTS.md</span>) that tell the agent how to call plshelp and when to use it.
+                    Claude Code reads <span class="ci">CLAUDE.md</span> on startup; Codex reads <span
+                        class="ci">AGENTS.md</span>.
                 </p>
                 <div class="code-block">
-                    <div class="code-block-header"><span class="code-block-label">shell</span><button class="code-copy-btn" data-copy="plshelp merge numpy numpyuser numpy-ref&#10;plshelp query numpy &quot;what is broadcasting&quot;" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
-                    <pre><span class="cmd">plshelp</span> merge <span class="arg">numpy</span> <span class="arg">numpyuser</span> <span class="arg">numpy-ref</span>
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="# Write both CLAUDE.md and AGENTS.md
+plshelp init
+
+# Write only one of them
+plshelp init --claude
+plshelp init --agents
+
+# Preview what would be written without touching disk
+plshelp init --print" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmt"># Write both CLAUDE.md and AGENTS.md</span>
+<span class="cmd">plshelp</span> <span class="arg">init</span>
+
+<span class="cmt"># Write only one of them</span>
+<span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">--claude</span>
+<span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">--agents</span>
+
+<span class="cmt"># Preview what would be written without touching disk</span>
+<span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">--print</span></pre>
+                </div>
+                <p class="doc-p">
+                    If you already have a <span class="ci">CLAUDE.md</span>, don't worry — <span class="ci">init</span>
+                    won't overwrite it. It appends a clearly marked plshelp section so your existing content stays
+                    intact.
+                </p>
+                <div class="callout">
+                    <div class="callout-label">Recommended workflow</div>
+                    <p>Index your libraries first, then run <span class="ci">plshelp init</span>. Commit the generated
+                        files to the repo so every teammate (and the agent) gets the same setup automatically.</p>
+                </div>
+                <p class="doc-p">
+                    The <span class="ci">--json</span> flag is specifically for agent use — it makes plshelp output a
+                    structured JSON response that's easy to parse programmatically. When you're querying for yourself,
+                    you don't need it; the default output is formatted for human reading. The generated init files
+                    instruct the agent to always use <span class="ci">--json</span> automatically.
+                </p>
+            </div>
+
+            <!-- MANAGING LIBRARIES -->
+            <div class="doc-section" id="managing">
+                <h2 class="doc-h2">Managing your libraries</h2>
+                <p class="doc-p">
+                    A few commands cover the day-to-day of keeping your local corpus in good shape.
+                </p>
+
+                <h3 class="doc-h3">See what you have</h3>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="# List all indexed libraries
+plshelp list
+
+# Inspect a specific library (page count, chunk count, embedding status)
+plshelp show rust" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmt"># List all indexed libraries</span>
+<span class="cmd">plshelp</span> <span class="arg">list</span>
+
+<span class="cmt"># Inspect a specific library (page count, chunk count, embedding status)</span>
+<span class="cmd">plshelp</span> show <span class="arg">rust</span></pre>
+                </div>
+
+                <h3 class="doc-h3">Combine libraries into one</h3>
+                <p class="doc-p">
+                    If you want one query to cover multiple docs sets — say, numpy's user guide and its API reference —
+                    merge them into a single named library.
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="plshelp merge numpy numpy-userguide numpy-reference
+plshelp query numpy &quot;what is broadcasting&quot;" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmd">plshelp</span> merge <span class="arg">numpy</span> <span class="arg">numpy-userguide</span> <span class="arg">numpy-reference</span>
 <span class="cmd">plshelp</span> query <span class="arg">numpy</span> <span class="flag">"what is broadcasting"</span></pre>
                 </div>
-                <p class="doc-p">
-                    Use <span class="ci">--replace</span> if the merged library already exists and you want to overwrite its membership. Merged libraries
-                    can also be exported like any other library.
-                </p>
-            </div>
 
-            <div class="doc-section" id="cmd-export">
-                <h2 class="doc-h2">Exports</h2>
+                <h3 class="doc-h3">Delete a library</h3>
                 <p class="doc-p">
-                    <span class="ci">export</span> writes the compiled library text back out as plain files. This is useful when you want a cleaned docs snapshot,
-                    a shareable artifact, or source material for another system.
+                    Use <span class="ci">remove</span> to delete a library from the index — useful when docs are stale
+                    or the source URL changed and you want to re-index from scratch.
                 </p>
                 <div class="code-block">
-                    <div class="code-block-header"><span class="code-block-label">shell</span><button class="code-copy-btn" data-copy="plshelp export numpyuser&#10;plshelp export numpyuser ./out/numpyuser" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
-                    <pre><span class="cmd">plshelp</span> export <span class="arg">numpyuser</span>
-<span class="cmd">plshelp</span> export <span class="arg">numpyuser</span> ./out/numpyuser</pre>
-                </div>
-                <p class="doc-p">
-                    By default, exports land in the configured artifacts directory under the library name and use the fixed filenames
-                    <span class="ci">docs.md</span> and <span class="ci">docs.txt</span>.
-                </p>
-            </div>
-
-            <div class="doc-section" id="cmd-list">
-                <h2 class="doc-h2">Inspection and maintenance</h2>
-                <p class="doc-p">
-                    The rest of the CLI is designed to make the local corpus inspectable and scriptable. These commands are useful once the initial
-                    indexing flow is working and you need visibility into what is stored.
-                </p>
-                <table class="opt-table">
-                    <tr><td><span class="ci">list</span></td><td>List all libraries and merged groups.</td></tr>
-                    <tr><td><span class="ci">show &lt;library&gt;</span></td><td>Print rollup stats such as page count, parent count, child chunk count, embedding progress, and BM25 coverage.</td></tr>
-                    <tr><td><span class="ci">open &lt;chunk_id&gt;</span></td><td>Inspect a specific child chunk and its parent context.</td></tr>
-                    <tr><td><span class="ci">alias &lt;library&gt; &lt;alias&gt;</span></td><td>Add an alternate lookup name for a library.</td></tr>
-                    <tr><td><span class="ci">refresh</span></td><td>Recompute and backfill stats without crawling again.</td></tr>
-                    <tr><td><span class="ci">config</span></td><td>Print the active <span class="ci">config.toml</span> path and contents. Use <span class="ci">--json</span> for tooling.</td></tr>
-                    <tr><td><span class="ci">init</span></td><td>Create or update <span class="ci">AGENTS.md</span> and <span class="ci">CLAUDE.md</span> in the current directory. Use <span class="ci">--agents</span>, <span class="ci">--claude</span>, or <span class="ci">--print</span> as needed.</td></tr>
-                    <tr><td><span class="ci">chunk</span></td><td>Run only the chunking and BM25 indexing stage.</td></tr>
-                    <tr><td><span class="ci">embed</span></td><td>Run only the embedding stage for a library that is already chunked.</td></tr>
-                </table>
-            </div>
-
-            <div class="doc-section" id="cmd-remove">
-                <h2 class="doc-h2">Removal</h2>
-                <p class="doc-p">
-                    <span class="ci">remove</span> deletes a library or merged group from the local database. Use it when a crawl is stale, a source URL changed,
-                    or you want to reclaim local storage before rebuilding.
-                </p>
-                <div class="code-block">
-                    <div class="code-block-header"><span class="code-block-label">shell</span><button class="code-copy-btn" data-copy="plshelp remove nextjs" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="plshelp remove nextjs" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
                     <pre><span class="cmd">plshelp</span> remove <span class="arg">nextjs</span></pre>
                 </div>
                 <p class="doc-p">
-                    Removal affects the SQLite corpus only. Exported artifacts on disk are not automatically deleted unless you remove them yourself.
+                    This only removes the library from the database. Any exported files on disk (like <span
+                        class="ci">docs.md</span>) are left alone — delete those yourself if you want them gone.
                 </p>
             </div>
 
-            <div class="doc-section" id="commands-all">
-                <h2 class="doc-h2">Full command reference</h2>
+            <!-- DEBUGGING -->
+            <div class="doc-section" id="debugging">
+                <h2 class="doc-h2">When results seem wrong</h2>
                 <p class="doc-p">
-                    This is the full current command surface. The examples below match the live dispatcher and help output in the current build. Where a command supports
-                    <span class="ci">--json</span>, success and failure can both be consumed programmatically.
+                    If a query returns something that doesn't look right, here's how to investigate.
+                </p>
+
+                <h3 class="doc-h3">Check if the library is fully indexed</h3>
+                <p class="doc-p">
+                    Run <span class="ci">plshelp show &lt;name&gt;</span>. If embeddings aren't done yet, vector search
+                    won't be working — try <span class="ci">--mode keyword</span> as a workaround, or wait for
+                    embeddings to finish.
+                </p>
+
+                <h3 class="doc-h3">See how results are being ranked</h3>
+                <p class="doc-p">
+                    <span class="ci">trace</span> runs the same search as <span class="ci">query</span> but shows you
+                    the scoring details — which chunks matched, what their scores were, and why they ranked where they
+                    did.
                 </p>
                 <div class="code-block">
-                    <div class="code-block-header"><span class="code-block-label">command reference</span><button class="code-copy-btn" data-copy="plshelp help&#10;plshelp init [--agents] [--claude] [--print] [--json]&#10;plshelp add <library> <url> [--include-artifacts[=/path]] [--json]&#10;plshelp crawl <library> <url> [--include-artifacts[=/path]] [--json]&#10;plshelp index <library> [--file /path/to/file] [--json]&#10;plshelp chunk <library> [--file /path/to/file] [--json]&#10;plshelp embed <library> [--json]&#10;plshelp refresh [library_name ...] [--json]&#10;plshelp merge <new_library> <library1> <library2> [library3 ...] [--replace] [--include-artifacts[=/path]] [--json]&#10;plshelp export <library> [path] [--json]&#10;plshelp query <library> "<question>" [--mode hybrid|vector|keyword] [--top-k N] [--context N] [--json]&#10;plshelp <library> "<question>"&#10;plshelp ask "<question>" [--libraries a,b,c] [--mode ...] [--top-k N] [--context N] [--json]&#10;plshelp trace <library> "<question>" [--mode ...] [--top-k N] [--context N] [--json]&#10;plshelp alias <library> <alias> [--json]&#10;plshelp list [--json]&#10;plshelp config [--json]&#10;plshelp show <library> [--json]&#10;plshelp remove <library> [--json]&#10;plshelp open <chunk_id> [--json]" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
-                    <pre><span class="cmd">plshelp</span> <span class="arg">help</span>
-<span class="cmd">plshelp</span> init <span class="flag">[--agents] [--claude] [--print] [--json]</span>
-<span class="cmd">plshelp</span> add <span class="arg">&lt;library&gt;</span> <span class="arg">&lt;url&gt;</span> <span class="flag">[--include-artifacts[=/path]] [--json]</span>
-<span class="cmd">plshelp</span> crawl <span class="arg">&lt;library&gt;</span> <span class="arg">&lt;url&gt;</span> <span class="flag">[--include-artifacts[=/path]] [--json]</span>
-<span class="cmd">plshelp</span> index <span class="arg">&lt;library&gt;</span> <span class="flag">[--file /path/to/file] [--json]</span>
-<span class="cmd">plshelp</span> chunk <span class="arg">&lt;library&gt;</span> <span class="flag">[--file /path/to/file] [--json]</span>
-<span class="cmd">plshelp</span> embed <span class="arg">&lt;library&gt;</span> <span class="flag">[--json]</span>
-<span class="cmd">plshelp</span> refresh <span class="flag">[library_name ...] [--json]</span>
-<span class="cmd">plshelp</span> merge <span class="arg">&lt;new_library&gt;</span> <span class="arg">&lt;library1&gt;</span> <span class="arg">&lt;library2&gt;</span> <span class="flag">[library3 ...] [--replace] [--include-artifacts[=/path]] [--json]</span>
-<span class="cmd">plshelp</span> export <span class="arg">&lt;library&gt;</span> <span class="flag">[path] [--json]</span>
-<span class="cmd">plshelp</span> query <span class="arg">&lt;library&gt;</span> <span class="flag">"&lt;question&gt;" [--mode hybrid|vector|keyword] [--top-k N] [--context N] [--json]</span>
-<span class="cmd">plshelp</span> <span class="arg">&lt;library&gt;</span> <span class="flag">"&lt;question&gt;"</span>
-<span class="cmd">plshelp</span> ask <span class="flag">"&lt;question&gt;" [--libraries a,b,c] [--mode ...] [--top-k N] [--context N] [--json]</span>
-<span class="cmd">plshelp</span> trace <span class="arg">&lt;library&gt;</span> <span class="flag">"&lt;question&gt;" [--mode ...] [--top-k N] [--context N] [--json]</span>
-<span class="cmd">plshelp</span> alias <span class="arg">&lt;library&gt;</span> <span class="arg">&lt;alias&gt;</span> <span class="flag">[--json]</span>
-<span class="cmd">plshelp</span> list <span class="flag">[--json]</span>
-<span class="cmd">plshelp</span> config <span class="flag">[--json]</span>
-<span class="cmd">plshelp</span> show <span class="arg">&lt;library&gt;</span> <span class="flag">[--json]</span>
-<span class="cmd">plshelp</span> remove <span class="arg">&lt;library&gt;</span> <span class="flag">[--json]</span>
-<span class="cmd">plshelp</span> open <span class="arg">&lt;chunk_id&gt;</span> <span class="flag">[--json]</span></pre>
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn"
+                            data-copy="plshelp trace rust &quot;how do lifetimes work&quot; --mode hybrid --top-k 5"
+                            aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmd">plshelp</span> trace <span class="arg">rust</span> <span class="flag">"how do lifetimes work"</span> <span class="flag">--mode</span> hybrid <span class="flag">--top-k</span> 5</pre>
                 </div>
-                <h3 class="doc-h3">Pipeline model</h3>
-                <p class="doc-p">
-                    The command surface is intentionally composable. <span class="ci">add</span> is the URL wrapper over crawl plus indexing. <span class="ci">index</span> is the indexing wrapper over chunking plus embedding.
-                    <span class="ci">crawl</span>, <span class="ci">chunk</span>, and <span class="ci">embed</span> also exist as individual stages when you want control or debugging visibility.
-                </p>
-                <table class="opt-table">
-                    <tr><td><span class="ci">init</span></td><td>Write or print repo-local <span class="ci">AGENTS.md</span> and <span class="ci">CLAUDE.md</span> guidance for agent workflows.</td></tr>
-                    <tr><td><span class="ci">add</span></td><td>URL source, full pipeline: crawl → chunk/BM25 → embed.</td></tr>
-                    <tr><td><span class="ci">crawl</span></td><td>URL source, crawl only. Populates pages and optional artifacts but stops before chunking.</td></tr>
-                    <tr><td><span class="ci">index</span></td><td>Library or file source, chunk + embed. The right wrapper for local files.</td></tr>
-                    <tr><td><span class="ci">chunk</span></td><td>Chunking + BM25 only. Useful when you want immediate lexical search before embeddings.</td></tr>
-                    <tr><td><span class="ci">embed</span></td><td>Embedding only. Assumes chunked child chunks already exist.</td></tr>
-                </table>
-                <h3 class="doc-h3">Read commands</h3>
-                <p class="doc-p">
-                    Read-side commands are the ones agents will use most heavily. They are all local and can all be made machine-readable with <span class="ci">--json</span> where noted.
-                </p>
-                <table class="opt-table">
-                    <tr><td><span class="ci">query</span></td><td>Retrieve from one library or merged group. Returns parent content and source URL.</td></tr>
-                    <tr><td><span class="ci">trace</span></td><td>Same selection path as query, but exposes ranking details for debugging retrieval quality.</td></tr>
-                    <tr><td><span class="ci">ask</span></td><td>Cross-library retrieval. Can search all libraries or a comma-separated subset with <span class="ci">--libraries</span>.</td></tr>
-                    <tr><td><span class="ci">list</span></td><td>Enumerate libraries and merged groups.</td></tr>
-                    <tr><td><span class="ci">show</span></td><td>Inspect one library’s rollups, chunk counts, embedding counts, and model metadata.</td></tr>
-                    <tr><td><span class="ci">open</span></td><td>Open one child chunk by id and show its parent context.</td></tr>
-                    <tr><td><span class="ci">config</span></td><td>Print the active config path and contents so you can verify runtime settings.</td></tr>
-                </table>
-                <h3 class="doc-h3">Write commands</h3>
-                <table class="opt-table">
-                    <tr><td><span class="ci">merge</span></td><td>Create or replace a merged library made from existing libraries.</td></tr>
-                    <tr><td><span class="ci">alias</span></td><td>Add a second lookup name for an existing library.</td></tr>
-                    <tr><td><span class="ci">export</span></td><td>Write a library’s compiled text to <span class="ci">docs.md</span> and <span class="ci">docs.txt</span>.</td></tr>
-                    <tr><td><span class="ci">refresh</span></td><td>Recompute rollups and backfill stats without crawling again.</td></tr>
-                    <tr><td><span class="ci">remove</span></td><td>Delete a library or merged group from the SQLite corpus.</td></tr>
-                </table>
-            </div>
 
-            <div class="doc-section" id="data-model">
-                <h2 class="doc-h2">Data model</h2>
+                <h3 class="doc-h3">Inspect a specific chunk</h3>
                 <p class="doc-p">
-                    Internally, <span class="ci">plshelp</span> stores crawled pages, parent chunks, and child chunks separately. Parents are the coherent units returned to users and agents. Children are the smaller units used for BM25 indexing and embeddings.
-                    Querying ranks child chunks, deduplicates by parent, and then returns the parent content with source metadata.
-                </p>
-                <table class="opt-table">
-                    <tr><td><span class="ci">libraries</span></td><td>One row per library, including rollup stats and current model metadata.</td></tr>
-                    <tr><td><span class="ci">pages</span></td><td>Raw cleaned page-level content captured by crawl.</td></tr>
-                    <tr><td><span class="ci">parents</span></td><td>Heading-aware or size-bounded parent chunks returned by query.</td></tr>
-                    <tr><td><span class="ci">chunks</span></td><td>Child chunks used for BM25 and vector retrieval, each linked to one parent.</td></tr>
-                    <tr><td><span class="ci">chunks_fts</span></td><td>SQLite FTS5 index over child chunk content for BM25-style lexical search.</td></tr>
-                    <tr><td><span class="ci">library_aliases</span></td><td>Alternate names for lookup convenience.</td></tr>
-                    <tr><td><span class="ci">library_groups</span></td><td>Merged library membership.</td></tr>
-                    <tr><td><span class="ci">jobs</span></td><td>Long-running command history and status output.</td></tr>
-                </table>
-            </div>
-
-            <div class="doc-section" id="artifacts-and-output">
-                <h2 class="doc-h2">Artifacts and output</h2>
-                <p class="doc-p">
-                    <span class="ci">plshelp</span> always keeps the database as the canonical indexed corpus, but the file outputs matter too. URL-based commands can optionally write artifacts during crawl. Export writes them on demand. The registry builder writes them as static public outputs.
-                </p>
-                <table class="opt-table">
-                    <tr><td><span class="ci">docs.md</span></td><td>Compiled Markdown-like export of a library or registry source.</td></tr>
-                    <tr><td><span class="ci">docs.txt</span></td><td>Plain-text export, currently identical in content shape to the markdown artifact.</td></tr>
-                    <tr><td>default export path</td><td><span class="ci">artifacts/&lt;library&gt;/docs.md</span> and <span class="ci">artifacts/&lt;library&gt;/docs.txt</span>.</td></tr>
-                    <tr><td>registry path</td><td><span class="ci">/registry/docs/&lt;slug&gt;/docs.md</span> and <span class="ci">/registry/docs/&lt;slug&gt;/docs.txt</span>.</td></tr>
-                </table>
-            </div>
-
-            <div class="doc-section" id="bm25">
-                <h2 class="doc-h2">BM25</h2>
-                <p class="doc-p">
-                    BM25 gives <span class="ci">plshelp</span> an exact-text retrieval path that works immediately after chunking. This is important for documentation,
-                    where exact API names, flags, error strings, and identifiers often matter more than pure semantic similarity.
-                </p>
-                <p class="doc-p">
-                    In practice, BM25 is the fastest way to make a newly chunked library queryable. It also serves as the lexical half of hybrid retrieval.
-                </p>
-            </div>
-
-            <div class="doc-section" id="embeddings">
-                <h2 class="doc-h2">Embeddings</h2>
-                <p class="doc-p">
-                    Embeddings are generated locally and stored in SQLite as child-chunk vectors. The current default model is
-                    <span class="ci">AllMiniLML6V2Q</span>, which is a speed-oriented local choice. Parent chunks are kept for display coherence while
-                    child chunks are used for ranking.
-                </p>
-                <p class="doc-p">
-                    Query-time embeddings are generated on the fly from the question text. If a library has not been embedded yet, keyword mode still works,
-                    and hybrid mode can fall back toward the lexical path.
-                </p>
-            </div>
-
-            <div class="doc-section" id="hybrid">
-                <h2 class="doc-h2">Hybrid search</h2>
-                <p class="doc-p">
-                    Hybrid mode blends vector similarity with BM25. This is usually the right default for technical docs because it captures both semantic intent
-                    and exact identifier matches. In <span class="ci">plshelp</span>, child chunks are ranked and then deduplicated back to their parent chunks for output.
-                </p>
-                <p class="doc-p">
-                    That means retrieval stays granular, while the final returned content remains coherent enough to feed into an agent prompt.
-                </p>
-            </div>
-
-            <div class="doc-section" id="scoring">
-                <h2 class="doc-h2">Scoring and defaults</h2>
-                <p class="doc-p">
-                    The current retrieval defaults are intentionally conservative: hybrid mode, top-k = 1, context window = 0, and a weighting split of 90% vector
-                    to 10% BM25. These are runtime-configurable and are read fresh from <span class="ci">config.toml</span> on every invocation.
-                </p>
-                <table class="opt-table">
-                    <tr><td>default mode</td><td><span class="ci">hybrid</span></td></tr>
-                    <tr><td>default top-k</td><td><span class="ci">1</span></td></tr>
-                    <tr><td>default context</td><td><span class="ci">0</span></td></tr>
-                    <tr><td>hybrid weights</td><td><span class="ci">0.90</span> vector, <span class="ci">0.10</span> BM25</td></tr>
-                </table>
-            </div>
-
-            <div class="doc-section" id="json-output">
-                <h2 class="doc-h2">JSON output</h2>
-                <p class="doc-p">
-                    Every read path and most write paths support <span class="ci">--json</span>. This is the integration surface for automation and agents.
-                    Success responses are structured JSON objects, and when <span class="ci">--json</span> is present, command failures are also emitted as JSON.
+                    If a trace shows a chunk ID you want to look at in full, use <span class="ci">open</span> to pull it
+                    up with its surrounding parent context.
                 </p>
                 <div class="code-block">
-                    <div class="code-block-header"><span class="code-block-label">shell</span><button class="code-copy-btn" data-copy="plshelp query rust &quot;how do generics work&quot; --json&#10;plshelp show rust --json&#10;plshelp add nextjs https://nextjs.org/docs --json" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
-                    <pre><span class="cmd">plshelp</span> query <span class="arg">rust</span> <span class="flag">"how do generics work"</span> <span class="flag">--json</span>
-<span class="cmd">plshelp</span> show <span class="arg">rust</span> <span class="flag">--json</span>
-<span class="cmd">plshelp</span> add <span class="arg">nextjs</span> https://nextjs.org/docs <span class="flag">--json</span></pre>
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="plshelp open chunk_abc123" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmd">plshelp</span> open <span class="arg">chunk_abc123</span></pre>
                 </div>
             </div>
 
-            <div class="doc-section" id="codex">
-                <h2 class="doc-h2">Codex</h2>
+            <!-- PIPELINE -->
+            <div class="doc-section" id="pipeline">
+                <h2 class="doc-h2">The indexing pipeline</h2>
                 <p class="doc-p">
-                    Codex can use <span class="ci">plshelp</span> by shelling out to the CLI and consuming <span class="ci">--json</span> responses. The main useful commands are
-                    <span class="ci">query</span>, <span class="ci">trace</span>, <span class="ci">show</span>, <span class="ci">list</span>, and <span class="ci">open</span>.
+                    <span class="ci">add</span> is convenient, but it's actually three stages running in sequence. You
+                    can run them individually if you want more control.
                 </p>
+                <table class="opt-table">
+                    <tr>
+                        <td><span class="ci">crawl</span></td>
+                        <td>Download pages from a URL. Stops before chunking — useful if you want to inspect the raw
+                            content first.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="ci">chunk</span></td>
+                        <td>Split pages into chunks and build the keyword (BM25) index. After this step, keyword search
+                            works immediately.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="ci">embed</span></td>
+                        <td>Generate embeddings for all chunks. Required for vector and hybrid search.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="ci">index</span></td>
+                        <td>Shortcut for chunk + embed. Use this with <span class="ci">--file</span> for local files.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="ci">add</span></td>
+                        <td>Shortcut for crawl + index. The default for docs websites.</td>
+                    </tr>
+                </table>
                 <p class="doc-p">
-                    If you want agent prompts to stay deterministic, prefer explicit library names and explicit retrieval flags instead of relying on shell aliases or implicit defaults.
+                    A practical reason to use stages separately: chunking is fast, embedding is slow. If you want to
+                    start searching immediately with keyword mode while embeddings run, do <span class="ci">crawl</span>
+                    then <span class="ci">chunk</span> first, and kick off <span class="ci">embed</span> separately.
                 </p>
             </div>
 
-            <div class="doc-section" id="claude-code">
-                <h2 class="doc-h2">Claude Code</h2>
+            <!-- EXPORTS -->
+            <div class="doc-section" id="exports">
+                <h2 class="doc-h2">Exporting</h2>
                 <p class="doc-p">
-                    Claude Code can use the same pattern: invoke <span class="ci">plshelp</span> locally, request JSON, and feed the returned parent content and source URLs into the next step.
-                    The value here is that the docs retrieval stays local and reproducible instead of depending on whatever web search happens to surface.
-                </p>
-            </div>
-
-            <div class="doc-section" id="mcp">
-                <h2 class="doc-h2">MCP and wrappers</h2>
-                <p class="doc-p">
-                    <span class="ci">plshelp</span> does not currently ship with a built-in MCP server. The supported integration surface today is the CLI itself.
-                    If you want MCP, the practical approach is to wrap the JSON commands in a thin local server or adapter layer.
-                </p>
-                <div class="callout">
-                    <div class="callout-label">Practical advice</div>
-                    <p>Build wrappers after the core CLI behavior is stable. The current command surface is already sufficient for most terminal-based agent integrations.</p>
-                </div>
-            </div>
-
-            <div class="doc-section" id="agent-init">
-                <h2 class="doc-h2">Agent setup and init</h2>
-                <p class="doc-p">
-                    <span class="ci">plshelp init</span> is the lowest-friction way to expose <span class="ci">plshelp</span> to terminal coding agents. It writes
-                    repo-local instruction files for agent workflows directly into the current directory and keeps the <span class="ci">plshelp</span> section
-                    updateable with marker blocks instead of blindly overwriting the full file.
-                </p>
-                <p class="doc-p">
-                    By default, <span class="ci">plshelp init</span> writes both <span class="ci">AGENTS.md</span> and <span class="ci">CLAUDE.md</span>. Use
-                    <span class="ci">--agents</span> or <span class="ci">--claude</span> if you only want one file, and use <span class="ci">--print</span> when
-                    you want to inspect the generated content without writing anything to disk.
+                    <span class="ci">export</span> writes a library out as plain files — a <span
+                        class="ci">docs.md</span> and a <span class="ci">docs.txt</span>. Useful if you want a snapshot
+                    you can share, paste into a prompt, or pipe into another tool.
                 </p>
                 <div class="code-block">
-                    <div class="code-block-header"><span class="code-block-label">shell</span><button class="code-copy-btn" data-copy="plshelp init&#10;plshelp init --agents&#10;plshelp init --claude&#10;plshelp init --print&#10;plshelp init --print --json" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
-                    <pre><span class="cmd">plshelp</span> <span class="arg">init</span>
-<span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">--agents</span>
-<span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">--claude</span>
-<span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">--print</span>
-<span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">--print --json</span></pre>
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="# Export to default location (artifacts/rust/)
+plshelp export rust
+
+# Export to a specific path
+plshelp export rust ./exports/rust-docs" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmt"># Export to default location (artifacts/rust/)</span>
+<span class="cmd">plshelp</span> export <span class="arg">rust</span>
+
+<span class="cmt"># Export to a specific path</span>
+<span class="cmd">plshelp</span> export <span class="arg">rust</span> ./exports/rust-docs</pre>
                 </div>
-                <h3 class="doc-h3">What gets written</h3>
                 <p class="doc-p">
-                    The generated files tell agents to prefer <span class="ci">plshelp ... --json</span> for local documentation retrieval, to inspect indexing
-                    state with <span class="ci">show</span> before assuming a query is wrong, and to use <span class="ci">trace</span> only when ranking or retrieval
-                    quality needs debugging. The embedded templates also include a setup block for brand-new repos:
-                </p>
-                <div class="code-block">
-                    <div class="code-block-header"><span class="code-block-label">generated guidance</span><button class="code-copy-btn" data-copy="### Setup (if no libraries are indexed yet)&#10;- `plshelp add <name> <docs-url>` to index a library&#10;- `plshelp show <name> --json` to confirm it's ready before querying" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
-                    <pre>### Setup (if no libraries are indexed yet)
-- <span class="ci">plshelp add &lt;name&gt; &lt;docs-url&gt;</span> to index a library
-- <span class="ci">plshelp show &lt;name&gt; --json</span> to confirm it's ready before querying</pre>
-                </div>
-                <h3 class="doc-h3">How to use this in practice</h3>
-                <p class="doc-p">
-                    Run <span class="ci">plshelp init</span> once at the project root after you have a library indexed, commit the generated files if you want the
-                    instructions to travel with the repo, and then let agents call <span class="ci">query</span>, <span class="ci">trace</span>, <span class="ci">show</span>,
-                    <span class="ci">list</span>, <span class="ci">open</span>, and <span class="ci">config</span> through JSON mode. This keeps retrieval local,
-                    deterministic, and inspectable.
+                    If you want exports generated automatically during indexing, pass <span
+                        class="ci">--include-artifacts</span> to <span class="ci">add</span> or <span
+                        class="ci">crawl</span>.
                 </p>
             </div>
 
+            <!-- CONFIG -->
             <div class="doc-section" id="config">
-                <h2 class="doc-h2">Config file</h2>
+                <h2 class="doc-h2">Configuration</h2>
                 <p class="doc-p">
-                    <span class="ci">plshelp</span> writes a default <span class="ci">config.toml</span> on first run and reloads it every time a new command starts.
-                    Missing or malformed values fall back to built-in defaults, so the config file is an override layer rather than a fragile required dependency.
+                    plshelp writes a <span class="ci">config.toml</span> on first run. Most people never need to touch
+                    it — the defaults are sensible. But if you want to tune retrieval behavior or chunk sizes, this is
+                    where to do it.
+                </p>
+                <p class="doc-p">
+                    See where your config lives and what's in it:
                 </p>
                 <div class="code-block">
-                    <div class="code-block-header"><span class="code-block-label">shell</span><button class="code-copy-btn" data-copy="plshelp config&#10;plshelp config --json&#10;plshelp init&#10;plshelp init --claude&#10;plshelp init --print" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
-                    <pre><span class="cmd">plshelp</span> <span class="arg">config</span>
-<span class="cmd">plshelp</span> <span class="arg">config</span> <span class="flag">--json</span>
-<span class="cmd">plshelp</span> <span class="arg">init</span>
-<span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">--claude</span>
-<span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">--print</span></pre>
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="plshelp config" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmd">plshelp</span> <span class="arg">config</span></pre>
                 </div>
+                <p class="doc-p">The full default config looks like this:</p>
                 <div class="code-block">
-                    <div class="code-block-header"><span class="code-block-label">toml</span><button class="code-copy-btn" data-copy="[embedding]\nmodel = \"AllMiniLML6V2Q\"\nbatch_size = 128\n\n[chunking]\nparent_min_chars = 1400\nparent_max_chars = 3000\nchild_min_chars = 400\nchild_max_chars = 800\nchild_split_window_chars = 50\n\n[retrieval]\ndefault_mode = \"hybrid\"\ndefault_top_k = 1\ndefault_context_window = 0\nhybrid_vector_weight = 0.9\nhybrid_bm25_weight = 0.1\n\n[sqlite]\njournal_mode = \"WAL\"\nbusy_timeout_ms = 5000" aria-label="Copy"><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></button></div>
+                    <div class="code-block-header"><span class="code-block-label">config.toml</span>
+                        <button class="code-copy-btn" data-copy="[embedding]
+model = &quot;AllMiniLML6V2Q&quot;
+batch_size = 128
+
+[chunking]
+parent_min_chars = 1400
+parent_max_chars = 3000
+child_min_chars = 400
+child_max_chars = 800
+child_split_window_chars = 50
+
+[retrieval]
+default_mode = &quot;hybrid&quot;
+default_top_k = 1
+default_context_window = 0
+hybrid_vector_weight = 0.9
+hybrid_bm25_weight = 0.1
+
+[sqlite]
+journal_mode = &quot;WAL&quot;
+busy_timeout_ms = 5000" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
                     <pre>[embedding]
 model = <span class="flag">"AllMiniLML6V2Q"</span>
 batch_size = <span class="arg">128</span>
@@ -1033,88 +1289,218 @@ hybrid_bm25_weight = <span class="arg">0.1</span>
 journal_mode = <span class="flag">"WAL"</span>
 busy_timeout_ms = <span class="arg">5000</span></pre>
                 </div>
+                <p class="doc-p">
+                    The retrieval section is the one you're most likely to tweak. Bump <span
+                        class="ci">default_top_k</span> if you want more results by default, or adjust the hybrid
+                    weights if you find keyword matching is over- or under-contributing.
+                </p>
             </div>
 
+            <!-- HOW SEARCH WORKS -->
+            <div class="doc-section" id="how-search-works">
+                <h2 class="doc-h2">How search works</h2>
+                <p class="doc-p">
+                    plshelp has three search modes. <span class="ci">hybrid</span> is the default and almost always the
+                    right choice.
+                </p>
+                <table class="opt-table">
+                    <tr>
+                        <td><span class="ci">hybrid</span></td>
+                        <td>Blends keyword matching with semantic similarity. Best for technical docs where you need
+                            both exact API names and conceptual questions to work well.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="ci">vector</span></td>
+                        <td>Pure semantic search based on meaning. Good for natural language questions, but can miss
+                            exact identifiers.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="ci">keyword</span></td>
+                        <td>Exact text matching using BM25. Fast, and works as soon as a library is chunked — no
+                            embeddings needed. Best for looking up specific flags, error strings, or function names.
+                        </td>
+                    </tr>
+                </table>
+                <p class="doc-p">
+                    Internally, plshelp splits content into two levels: small <em>child chunks</em> used for matching,
+                    and larger <em>parent chunks</em> returned as results. This means search stays precise while the
+                    content you get back is actually readable.
+                </p>
+            </div>
+
+            <!-- WHERE DATA LIVES -->
             <div class="doc-section" id="storage">
-                <h2 class="doc-h2">Storage layout</h2>
+                <h2 class="doc-h2">Where data lives</h2>
                 <p class="doc-p">
-                    By default, <span class="ci">plshelp</span> stores all of its runtime state in your local application data directory. On macOS this is typically
-                    <span class="ci">~/Library/Application Support/plshelp</span>, on Linux it is usually <span class="ci">~/.local/share/plshelp</span> or the XDG data directory,
-                    and on Windows it would normally live under <span class="ci">%APPDATA%\plshelp</span>.
+                    Everything — the database, embeddings, model cache, and config — lives in your system's app data
+                    directory. The binary itself is installed separately in a bin directory.
                 </p>
+                <table class="opt-table">
+                    <tr>
+                        <td>macOS</td>
+                        <td><span class="ci">~/Library/Application Support/plshelp</span></td>
+                    </tr>
+                    <tr>
+                        <td>Linux</td>
+                        <td><span class="ci">~/.local/share/plshelp</span></td>
+                    </tr>
+                    <tr>
+                        <td>Windows</td>
+                        <td><span class="ci">%APPDATA%\plshelp</span></td>
+                    </tr>
+                </table>
                 <p class="doc-p">
-                    That directory contains the SQLite database, exported artifacts, embedding model cache, and the generated <span class="ci">config.toml</span>.
-                    The installed binary itself lives separately in a bin directory so it can be placed on your shell <span class="ci">PATH</span>.
+                    The database is a single SQLite file. It's yours — back it up, move it, inspect it directly if you
+                    want.
                 </p>
             </div>
 
-            <div class="doc-section" id="models">
-                <h2 class="doc-h2">Models and chunking</h2>
-                <p class="doc-p">
-                    The default embedding model is <span class="ci">AllMiniLML6V2Q</span>. Current chunking defaults are tuned around that model’s practical input size:
-                    parents default to <span class="ci">1400–3000</span> characters, while child chunks default to <span class="ci">400–800</span> characters with a
-                    <span class="ci">50</span>-character whitespace search window.
-                </p>
-                <p class="doc-p">
-                    Parent chunks preserve output coherence. Child chunks are what get embedded and ranked. This split keeps query results readable while still using finer-grained retrieval internally.
-                </p>
+            <!-- FULL COMMAND REFERENCE -->
+            <div class="doc-section" id="reference">
+                <h2 class="doc-h2">Full command reference</h2>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">all commands</span>
+                        <button class="code-copy-btn" data-copy="plshelp help
+plshelp init [--agents] [--claude] [--print] [--json]
+plshelp add <library> <url> [--include-artifacts[=/path]] [--json]
+plshelp crawl <library> <url> [--include-artifacts[=/path]] [--json]
+plshelp index <library> [--file /path/to/file] [--json]
+plshelp chunk <library> [--file /path/to/file] [--json]
+plshelp embed <library> [--json]
+plshelp refresh [library ...] [--json]
+plshelp merge <new> <lib1> <lib2> [...] [--replace] [--json]
+plshelp export <library> [path] [--json]
+plshelp query <library> &quot;<question>&quot; [--mode hybrid|vector|keyword] [--top-k N] [--context N] [--json]
+plshelp <library> &quot;<question>&quot;
+plshelp ask &quot;<question>&quot; [--libraries a,b,c] [--mode ...] [--top-k N] [--context N] [--json]
+plshelp trace <library> &quot;<question>&quot; [--mode ...] [--top-k N] [--context N] [--json]
+plshelp alias <library> <alias> [--json]
+plshelp list [--json]
+plshelp show <library> [--json]
+plshelp open <chunk_id> [--json]
+plshelp config [--json]
+plshelp remove <library> [--json]" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmd">plshelp</span> <span class="arg">help</span>
+<span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">[--agents] [--claude] [--print] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">add</span> <span class="arg">&lt;library&gt;</span> <span class="arg">&lt;url&gt;</span> <span class="flag">[--include-artifacts[=/path]] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">crawl</span> <span class="arg">&lt;library&gt;</span> <span class="arg">&lt;url&gt;</span> <span class="flag">[--include-artifacts[=/path]] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">index</span> <span class="arg">&lt;library&gt;</span> <span class="flag">[--file /path/to/file] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">chunk</span> <span class="arg">&lt;library&gt;</span> <span class="flag">[--file /path/to/file] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">embed</span> <span class="arg">&lt;library&gt;</span> <span class="flag">[--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">refresh</span> <span class="flag">[library ...] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">merge</span> <span class="arg">&lt;new&gt;</span> <span class="arg">&lt;lib1&gt;</span> <span class="arg">&lt;lib2&gt;</span> <span class="flag">[...] [--replace] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">export</span> <span class="arg">&lt;library&gt;</span> <span class="flag">[path] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">query</span> <span class="arg">&lt;library&gt;</span> <span class="flag">"&lt;question&gt;" [--mode hybrid|vector|keyword] [--top-k N] [--context N] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">&lt;library&gt;</span> <span class="flag">"&lt;question&gt;"</span>
+<span class="cmd">plshelp</span> <span class="arg">ask</span> <span class="flag">"&lt;question&gt;" [--libraries a,b,c] [--mode ...] [--top-k N] [--context N] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">trace</span> <span class="arg">&lt;library&gt;</span> <span class="flag">"&lt;question&gt;" [--mode ...] [--top-k N] [--context N] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">alias</span> <span class="arg">&lt;library&gt;</span> <span class="arg">&lt;alias&gt;</span> <span class="flag">[--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">list</span> <span class="flag">[--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">show</span> <span class="arg">&lt;library&gt;</span> <span class="flag">[--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">open</span> <span class="arg">&lt;chunk_id&gt;</span> <span class="flag">[--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">config</span> <span class="flag">[--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">remove</span> <span class="arg">&lt;library&gt;</span> <span class="flag">[--json]</span></pre>
+                </div>
             </div>
 
+            <!-- FAQ -->
             <div class="doc-section" id="faq">
                 <h2 class="doc-h2">FAQ</h2>
-                <h3 class="doc-h3">What can I index?</h3>
-                <p class="doc-p">You can index documentation websites, local Markdown files, local text files, and merged collections built from multiple libraries.</p>
-                <h3 class="doc-h3">Can I query before embeddings finish?</h3>
-                <p class="doc-p">Yes. BM25 is built during chunking, so keyword retrieval works immediately after that stage.</p>
-                <h3 class="doc-h3">Where does data live?</h3>
-                <p class="doc-p">The binary is installed into a user bin directory. Runtime state lives in the application data directory and includes SQLite, artifacts, model cache, and config.</p>
-                <h3 class="doc-h3">Can I use this with coding agents?</h3>
-                <p class="doc-p">Yes. That is one of the main intended workflows. Use <span class="ci">--json</span> and treat <span class="ci">plshelp</span> as a local retrieval subprocess.</p>
-                <h3 class="doc-h3">Does plshelp require a hosted vector database?</h3>
-                <p class="doc-p">No. Retrieval is fully local.</p>
+
+                <h3 class="doc-h3">Can I search before embeddings finish?</h3>
+                <p class="doc-p">
+                    Yes. Keyword search (BM25) is built during chunking, so <span class="ci">--mode keyword</span> works
+                    immediately. Vector and hybrid search require embeddings to be done first.
+                </p>
+
+                <h3 class="doc-h3">Does plshelp need an internet connection to search?</h3>
+                <p class="doc-p">
+                    No. Once a library is indexed, everything runs locally. The only time you need a connection is when
+                    first crawling a docs site with <span class="ci">add</span>.
+                </p>
+
+                <h3 class="doc-h3">What file types can I index?</h3>
+                <p class="doc-p">
+                    Markdown (<span class="ci">.md</span>) and plain text (<span class="ci">.txt</span>) for local
+                    files. For websites, plshelp crawls and cleans the HTML automatically.
+                </p>
+
+                <h3 class="doc-h3">How do I update a library when the docs change?</h3>
+                <p class="doc-p">
+                    Remove the old version with <span class="ci">plshelp remove &lt;name&gt;</span>, then re-run <span
+                        class="ci">plshelp add</span>. There's no in-place refresh for crawled libraries yet.
+                </p>
+
+                <h3 class="doc-h3">Is there an MCP server?</h3>
+                <p class="doc-p">
+                    Not yet. The CLI is the integration surface for now. If you need MCP, the practical path is wrapping
+                    the <span class="ci">--json</span> commands in a thin adapter.
+                </p>
+
+                <h3 class="doc-h3">Where does plshelp store everything?</h3>
+                <p class="doc-p">
+                    All runtime data (database, embeddings, model cache, config) lives in your system's app data
+                    directory. See the <a href="#storage">storage section</a> for platform-specific paths.
+                </p>
             </div>
 
-            <div class="doc-section" id="changelog">
-                <h2 class="doc-h2">Current status</h2>
-                <p class="doc-p">
-                    The current build supports local config, JSON output, BM25 plus embedding-based retrieval, local file indexing, merged libraries, exports, and a separate registry builder.
-                    The install scripts and release workflow are in place, but ecosystem packaging beyond direct installers is still evolving.
-                </p>
-                <p class="doc-p">
-                    The documentation should be treated as the current implementation guide, not a long-term compatibility promise. If you are integrating this into automation, pin a release and test the JSON output you depend on.
-                </p>
-            </div>
 
-            <div class="doc-nav">
-                <div></div>
-                <a class="doc-nav-btn next" href="#install">
-                    <span>Next</span>
-                    <span>Installation →</span>
-                </a>
-            </div>
 
         </main>
 
         <!-- TOC -->
         <aside class="toc">
             <div class="toc-label">On this page</div>
-            <a class="toc-link active" href="#intro">Introduction</a>
+            <a class="toc-link active" href="#what-is-it">What is plshelp?</a>
             <a class="toc-link" href="#install">Installation</a>
-            <a class="toc-link" href="#quickstart">Quickstart</a>
-            <a class="toc-link" href="#cmd-add">Docs sites</a>
-            <a class="toc-link" href="#cmd-index">Local files</a>
-            <a class="toc-link" href="#cmd-query">Querying</a>
-            <a class="toc-link" href="#cmd-merge">Merged libraries</a>
-            <a class="toc-link" href="#cmd-export">Exports</a>
-            <a class="toc-link" href="#commands-all">Full command reference</a>
-            <a class="toc-link" href="#data-model">Data model</a>
-            <a class="toc-link" href="#artifacts-and-output">Artifacts and output</a>
-            <a class="toc-link" href="#json-output">JSON output</a>
-            <a class="toc-link" href="#agent-init">Agent setup</a>
-            <a class="toc-link" href="#config">Config file</a>
+            <a class="toc-link" href="#quickstart">Your first library in 2 minutes</a>
+            <a class="toc-link" href="#indexing-sites">Indexing a docs website</a>
+            <a class="toc-link" href="#indexing-files">Indexing local files</a>
+            <a class="toc-link" href="#querying">Querying</a>
+            <a class="toc-link" href="#agent-setup">Using with coding agents</a>
+            <a class="toc-link" href="#managing">Managing your libraries</a>
+            <a class="toc-link" href="#debugging">When results seem wrong</a>
+            <a class="toc-link" href="#pipeline">The indexing pipeline</a>
+            <a class="toc-link" href="#exports">Exporting</a>
+            <a class="toc-link" href="#config">Configuration</a>
+            <a class="toc-link" href="#how-search-works">How search works</a>
+            <a class="toc-link" href="#storage">Where data lives</a>
+            <a class="toc-link" href="#reference">Full command reference</a>
             <a class="toc-link" href="#faq">FAQ</a>
         </aside>
 
+    </div>
+
+    <!-- MOBILE TOC -->
+    <div class="mobile-toc-drawer" id="mobileTocDrawer">
+        <div class="toc-label">On this page</div>
+        <a class="toc-link" href="#what-is-it">What is plshelp?</a>
+        <a class="toc-link" href="#install">Installation</a>
+        <a class="toc-link" href="#quickstart">Your first library in 2 minutes</a>
+        <a class="toc-link" href="#indexing-sites">Indexing a docs website</a>
+        <a class="toc-link" href="#indexing-files">Indexing local files</a>
+        <a class="toc-link" href="#querying">Querying</a>
+        <a class="toc-link" href="#agent-setup">Using with coding agents</a>
+        <a class="toc-link" href="#managing">Managing your libraries</a>
+        <a class="toc-link" href="#debugging">When results seem wrong</a>
+        <a class="toc-link" href="#pipeline">The indexing pipeline</a>
+        <a class="toc-link" href="#exports">Exporting</a>
+        <a class="toc-link" href="#config">Configuration</a>
+        <a class="toc-link" href="#how-search-works">How search works</a>
+        <a class="toc-link" href="#storage">Where data lives</a>
+        <a class="toc-link" href="#reference">Full command reference</a>
+        <a class="toc-link" href="#faq">FAQ</a>
     </div>
 
     <script>
@@ -1128,19 +1514,48 @@ busy_timeout_ms = <span class="arg">5000</span></pre>
             });
         });
 
-        // Scroll-aware TOC highlighting
+        // Mobile TOC toggle
+        const mobileTocBtn = document.getElementById('mobileTocBtn');
+        const mobileTocDrawer = document.getElementById('mobileTocDrawer');
+
+        mobileTocBtn.addEventListener('click', () => {
+            const isOpen = mobileTocDrawer.classList.toggle('open');
+            mobileTocBtn.classList.toggle('open', isOpen);
+        });
+
+        // Close drawer when a link is clicked
+        mobileTocDrawer.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileTocDrawer.classList.remove('open');
+                mobileTocBtn.classList.remove('open');
+            });
+        });
+
+        // Close drawer when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileTocDrawer.contains(e.target) && !mobileTocBtn.contains(e.target)) {
+                mobileTocDrawer.classList.remove('open');
+                mobileTocBtn.classList.remove('open');
+            }
+        });
+
+        // Scroll-aware TOC highlighting — applies to both sidebar and mobile drawer
         const sections = Array.from(document.querySelectorAll('.doc-section[id]'));
-        const tocLinks = Array.from(document.querySelectorAll('.toc-link'));
-        const tocById = new Map(
-            tocLinks
-                .map(link => [link.getAttribute('href')?.slice(1), link])
-                .filter(([id]) => id)
-        );
+        const allTocLinks = Array.from(document.querySelectorAll('.toc-link'));
+
+        // Build a map from section id -> all links pointing to it (sidebar + mobile)
+        const tocById = new Map();
+        allTocLinks.forEach(link => {
+            const id = link.getAttribute('href')?.slice(1);
+            if (!id) return;
+            if (!tocById.has(id)) tocById.set(id, []);
+            tocById.get(id).push(link);
+        });
 
         function setActiveToc(id) {
-            tocLinks.forEach(link => link.classList.remove('active'));
+            allTocLinks.forEach(link => link.classList.remove('active'));
             const active = tocById.get(id);
-            if (active) active.classList.add('active');
+            if (active) active.forEach(link => link.classList.add('active'));
         }
 
         const observer = new IntersectionObserver(
@@ -1160,7 +1575,8 @@ busy_timeout_ms = <span class="arg">5000</span></pre>
 
         sections.forEach(section => observer.observe(section));
 
-        tocLinks.forEach(link => {
+        // Manual click highlight for sidebar links
+        document.querySelectorAll('.toc aside .toc-link').forEach(link => {
             link.addEventListener('click', () => {
                 const id = link.getAttribute('href')?.slice(1);
                 if (id) setActiveToc(id);
