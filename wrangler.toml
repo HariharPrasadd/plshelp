@@ -5,9 +5,3 @@ workers_dev = true
 [assets]
 directory = "./site/public"
 
-# If you later decide to proxy registry docs through the Worker instead of
-# serving them from an R2 custom domain directly, uncomment and configure:
-#
-# [[r2_buckets]]
-# binding = "REGISTRY_BUCKET"
-# bucket_name = "plshelp-registry"
