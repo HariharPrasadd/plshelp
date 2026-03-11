@@ -436,16 +436,17 @@
         }
 
         .use-list li {
-            display: flex;
-            gap: 12px;
+            display: grid;
+            grid-template-columns: 12px minmax(0, 1fr);
+            column-gap: 12px;
             color: var(--text-2);
-            align-items: baseline;
+            align-items: start;
         }
 
         .use-list li::before {
             content: '—';
             color: var(--text-3);
-            flex-shrink: 0;
+            display: block;
         }
 
         /* Workflows */
@@ -675,9 +676,8 @@
                 padding-top: 12px;
             }
 
-            /* Fix ci inline overflow in lists */
+            /* Keep inline code from overflowing on narrow screens */
             .use-list li {
-                flex-wrap: wrap;
                 word-break: break-word;
             }
 
