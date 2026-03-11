@@ -531,6 +531,28 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
             let (output_json, _flags) = extract_json_flag(&args[1..]);
             list_libraries(&conn, output_json)?;
         }
+        "config" => {
+            let (output_json, flags) = extract_json_flag(&args[1..]);
+            if !flags.is_empty() {
+                return Err("Usage: plshelp config [--json]".into());
+            }
+            let path = config_file_path();
+            let raw = fs::read_to_string(&path)?;
+            if output_json {
+                print_json(&json!({
+                    "command": "config",
+                    "status": "success",
+                    "result": {
+                        "path": path,
+                        "content": raw,
+                    }
+                }))?;
+            } else {
+                println!("{}", path.display());
+                println!();
+                print!("{}", raw);
+            }
+        }
         "show" => {
             if args.len() < 2 {
                 return Err("Usage: plshelp show <library_name>".into());

@@ -1,6 +1,7 @@
 use crate::*;
 
 pub(crate) fn print_help() {
+    println!("\nnote: for queries, quote questions in the shell, especially if they contain ? or *\n");
     println!("plshelp <command>");
     println!("  add <library_name> <source_url> [--include-artifacts[=/path]] [--json]");
     println!("  crawl <library_name> <source_url> [--include-artifacts[=/path]] [--json]");
@@ -19,9 +20,9 @@ pub(crate) fn print_help() {
     println!(
         "  ask \"<question>\" [--libraries a,b,c] [--mode ...] [--top-k N] [--context N] [--json]"
     );
-    println!("  note: quote questions in the shell, especially if they contain ? or *");
     println!("  alias <library_name> <alias>");
     println!("  list [--json]");
+    println!("  config [--json]");
     println!("  show <library_name> [--json]");
     println!("  remove <library_name> [--json]");
     println!("  open <chunk_id> [--json]");

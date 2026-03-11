@@ -89,6 +89,10 @@ pub(crate) fn db_path() -> PathBuf {
     runtime_paths().db_path.clone()
 }
 
+pub(crate) fn config_file_path() -> PathBuf {
+    runtime_paths().config_file.clone()
+}
+
 pub(crate) fn artifacts_root() -> PathBuf {
     runtime_paths().artifacts_dir.clone()
 }
