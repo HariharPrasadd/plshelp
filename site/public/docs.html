@@ -1414,6 +1414,130 @@ plshelp remove <library> [--json]" aria-label="Copy">
                 </div>
             </div>
 
+            <!-- REGISTRY WITHOUT CLI -->
+            <div class="doc-section" id="registry-curl">
+                <h2 class="doc-h2">Using the registry without the CLI</h2>
+                <p class="doc-p">
+                    The plshelp registry is a collection of pre-crawled documentation libraries hosted at <span
+                        class="ci">registry.plshelp.run</span>. You don't need the CLI tool to use it — every library is
+                    available as a plain <span class="ci">.md</span> or <span class="ci">.txt</span> file you can
+                    download directly with curl.
+                </p>
+
+                <h3 class="doc-h3">See what's available</h3>
+                <p class="doc-p">
+                    The registry publishes an <span class="ci">index.json</span> with every available library. Pipe it
+                    through <span class="ci">jq</span> to get a clean list:
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn"
+                            data-copy="curl -s https://registry.plshelp.run/index.json | jq -r '.entries[] | select(.status==&quot;success&quot;) | .name'"
+                            aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmd">curl</span> <span class="flag">-s</span> https://registry.plshelp.run/index.json <span class="flag">|</span> jq <span class="flag">-r</span> <span class="arg">'.entries[] | select(.status=="success") | .name'</span></pre>
+                </div>
+                <p class="doc-p">
+                    If you want the slug alongside the name — useful for building download URLs:
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn"
+                            data-copy="curl -s https://registry.plshelp.run/index.json | jq -r '.entries[] | select(.status==&quot;success&quot;) | &quot;\(.name) (\(.slug))&quot;'"
+                            aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmd">curl</span> <span class="flag">-s</span> https://registry.plshelp.run/index.json <span class="flag">|</span> jq <span class="flag">-r</span> <span class="arg">'.entries[] | select(.status=="success") | "\(.name) (\(.slug))"'</span></pre>
+                </div>
+
+                <h3 class="doc-h3">Download a single library</h3>
+                <p class="doc-p">
+                    Every library is at <span class="ci">registry.plshelp.run/docs/&lt;slug&gt;/docs.md</span>. Use
+                    <span class="ci">-O</span> to save it with the default filename, or <span class="ci">-o</span> to
+                    name it yourself:
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="# Save as docs.md
+curl -O https://registry.plshelp.run/docs/accelerate/docs.md
+
+# Save with a custom name
+curl -o accelerate-docs.md https://registry.plshelp.run/docs/accelerate/docs.md
+
+# Plain text version
+curl -O https://registry.plshelp.run/docs/accelerate/docs.txt" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmt"># Save as docs.md</span>
+<span class="cmd">curl</span> <span class="flag">-O</span> https://registry.plshelp.run/docs/accelerate/docs.md
+
+<span class="cmt"># Save with a custom name</span>
+<span class="cmd">curl</span> <span class="flag">-o</span> <span class="arg">accelerate-docs.md</span> https://registry.plshelp.run/docs/accelerate/docs.md
+
+<span class="cmt"># Plain text version</span>
+<span class="cmd">curl</span> <span class="flag">-O</span> https://registry.plshelp.run/docs/accelerate/docs.txt</pre>
+                </div>
+
+                <h3 class="doc-h3">Download everything at once</h3>
+                <p class="doc-p">
+                    Combine the index with <span class="ci">xargs</span> to bulk-download all available libraries in one
+                    shot:
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="curl -s https://registry.plshelp.run/index.json \
+  | jq -r '.entries[] | select(.status==&quot;success&quot;) | .slug' \
+  | xargs -I{} curl -O https://registry.plshelp.run/docs/{}/docs.md" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmd">curl</span> <span class="flag">-s</span> https://registry.plshelp.run/index.json \
+  <span class="flag">|</span> jq <span class="flag">-r</span> <span class="arg">'.entries[] | select(.status=="success") | .slug'</span> \
+  <span class="flag">|</span> xargs <span class="flag">-I{}</span> <span class="cmd">curl</span> <span class="flag">-O</span> https://registry.plshelp.run/docs/<span class="arg">{}</span>/docs.md</pre>
+                </div>
+                <div class="callout">
+                    <div class="callout-label">Tip</div>
+                    <p>You can also browse and download libraries from the <a class="cmd" href="/registry">registry page</a>
+                        directly in your browser.</p>
+                </div>
+            </div>
+
             <!-- FAQ -->
             <div class="doc-section" id="faq">
                 <h2 class="doc-h2">FAQ</h2>
@@ -1477,6 +1601,7 @@ plshelp remove <library> [--json]" aria-label="Copy">
             <a class="toc-link" href="#how-search-works">How search works</a>
             <a class="toc-link" href="#storage">Where data lives</a>
             <a class="toc-link" href="#reference">Full command reference</a>
+            <a class="toc-link" href="#registry-curl">Using the registry</a>
             <a class="toc-link" href="#faq">FAQ</a>
         </aside>
 
@@ -1500,6 +1625,7 @@ plshelp remove <library> [--json]" aria-label="Copy">
         <a class="toc-link" href="#how-search-works">How search works</a>
         <a class="toc-link" href="#storage">Where data lives</a>
         <a class="toc-link" href="#reference">Full command reference</a>
+        <a class="toc-link" href="#registry-curl">Using the registry</a>
         <a class="toc-link" href="#faq">FAQ</a>
     </div>
 

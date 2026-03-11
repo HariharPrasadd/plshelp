@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>plshelp — registry</title>
+    <style>
+        @font-face {
+            font-family: 'CommitMono';
+            src: url('/fonts/CommitMono-400-Regular.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'CommitMono';
+            src: url('/fonts/CommitMono-700-Regular.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --base-950: #1C1B1A;
+            --base-900: #282726;
+            --base-850: #343331;
+            --base-700: #575653;
+            --base-500: #878580;
+            --base-200: #CECDC3;
+            --accent-grad: linear-gradient(90deg, #af3029, #ec8b49);
+            --cyan-400: #3AA99F;
+            --bg: #000000;
+            --bg-2: var(--base-950);
+            --bg-3: var(--base-900);
+            --border: var(--base-850);
+            --text: var(--base-200);
+            --text-2: var(--base-500);
+            --text-3: var(--base-700);
+            --mono: 'CommitMono', monospace;
+            --topbar-h: 48px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--mono);
+            font-size: 14px;
+            line-height: 1.75;
+            min-height: 100vh;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* ── DASH FIELD CANVAS ── */
+        #dash-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .grad-text {
+            background: var(--accent-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ── TOPBAR ── */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--topbar-h);
+            background: #000000ee;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 300;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .topbar-logo {
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .topbar-sep {
+            color: var(--text-3);
+            font-size: 18px;
+            font-weight: 300;
+        }
+
+        .topbar-section {
+            color: var(--text-2);
+            font-size: 13px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .topbar-right a {
+            color: var(--text-2);
+            transition: color 0.1s;
+            font-size: 13px;
+        }
+
+        .topbar-right a:hover {
+            color: var(--text);
+        }
+
+        /* ── MAIN ── */
+        .page {
+            position: relative;
+            z-index: 1;
+            padding-top: var(--topbar-h);
+            max-width: 860px;
+            margin: 0 auto;
+            padding-left: 40px;
+            padding-right: 40px;
+            padding-bottom: 80px;
+        }
+
+        .page-header {
+            padding: 48px 0 32px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+        }
+
+        .page-sub {
+            color: var(--text-2);
+            font-size: 13px;
+        }
+
+        .page-meta {
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--text-3);
+        }
+
+        /* ── SEARCH ── */
+        .search-wrap {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-3);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-icon svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            color: var(--text);
+            font-family: var(--mono);
+            font-size: 13px;
+            padding: 10px 14px 10px 38px;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-3);
+        }
+
+        .search-input:focus {
+            border-color: var(--base-500);
+        }
+
+        .search-count {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11px;
+            color: var(--text-3);
+            pointer-events: none;
+        }
+
+        /* ── GRID ── */
+        .registry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1px;
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+            background: var(--bg);
+        }
+
+        .registry-card {
+            background: var(--bg);
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: background 0.1s;
+            min-width: 0;
+        }
+
+        .registry-card:hover {
+            background: var(--bg-2);
+        }
+
+        .card-name {
+            font-weight: 700;
+            color: var(--text);
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-slug {
+            font-size: 11px;
+            color: var(--text-3);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-links {
+            display: flex;
+            gap: 8px;
+            margin-top: 2px;
+            flex-wrap: wrap;
+        }
+
+        .card-link {
+            font-size: 11px;
+            color: var(--text-3);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 2px 7px;
+            transition: color 0.1s, border-color 0.1s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .card-link:hover {
+            color: var(--text-2);
+            border-color: var(--base-500);
+        }
+
+        .card-link .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--text-3);
+            flex-shrink: 0;
+            transition: background 0.1s;
+        }
+
+        .card-link:hover .dot {
+            background: var(--text-2);
+        }
+
+        .card-size {
+            font-size: 11px;
+            color: var(--text-3);
+        }
+
+        /* highlight match */
+        mark {
+            background: none;
+            color: #ec8b49;
+            font-style: normal;
+        }
+
+        /* empty state */
+        .empty-state {
+            display: none;
+            padding: 48px 0;
+            text-align: center;
+            color: var(--text-3);
+            font-size: 13px;
+            border: 1px solid var(--border);
+            border-radius: 3px;
+        }
+
+        .empty-state.visible {
+            display: block;
+        }
+
+        /* ── COPY CLI ── */
+        .card-cli {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-3);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 4px 8px;
+            margin-top: 2px;
+            cursor: pointer;
+            transition: border-color 0.1s;
+            min-width: 0;
+        }
+
+        .card-cli:hover {
+            border-color: var(--base-500);
+        }
+
+        .card-cli code {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-2);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .card-cli code .cmd-highlight {
+            background: var(--accent-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-cli code .arg-highlight {
+            color: var(--cyan-400);
+        }
+
+        .cli-copy-btn {
+            background: none;
+            border: none;
+            color: var(--text-3);
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            flex-shrink: 0;
+            transition: color 0.1s;
+        }
+
+        .cli-copy-btn:hover {
+            color: var(--text-2);
+        }
+
+        .cli-copy-btn svg {
+            width: 12px;
+            height: 12px;
+            display: block;
+        }
+
+        .cli-copy-btn .icon-copy {
+            display: block;
+        }
+
+        .cli-copy-btn .icon-check {
+            display: none;
+        }
+
+        .cli-copy-btn.copied {
+            color: #00c632;
+        }
+
+        .cli-copy-btn.copied .icon-copy {
+            display: none;
+        }
+
+        .cli-copy-btn.copied .icon-check {
+            display: block;
+        }
+
+        /* ── LOADING ── */
+        .loading {
+            padding: 48px 0;
+            text-align: center;
+            color: var(--text-3);
+            font-size: 13px;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 600px) {
+            .page {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .registry-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="dash-canvas"></canvas>
+
+    <header class="topbar">
+        <div class="topbar-left">
+            <a href="/" class="topbar-logo grad-text">plshelp</a>
+            <span class="topbar-sep">/</span>
+            <span class="topbar-section">registry</span>
+        </div>
+        <div class="topbar-right">
+            <a href="https://github.com/HariharPrasadd/plshelp" target="_blank">GitHub</a>
+            <a href="/docs">Docs</a>
+        </div>
+    </header>
+
+    <div class="page">
+        <div class="page-header">
+            <h1 class="page-title">Registry</h1>
+            <p class="page-sub">Pre-crawled documentation libraries. Download individual files, bulk-download the entire registry,
+            or browse the index, all <a class="grad-text" href="/docs#registry-curl">from your terminal.</a></p>
+            <p class="page-meta" id="metaLine">Loading…</p>
+        </div>
+
+        <div class="search-wrap">
+            <span class="search-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+            </span>
+            <input class="search-input" id="searchInput" type="text" placeholder="Search libraries…" autocomplete="off"
+                spellcheck="false" />
+            <span class="search-count" id="searchCount"></span>
+        </div>
+
+        <div class="registry-grid" id="registryGrid">
+            <div class="loading">Loading registry…</div>
+        </div>
+
+        <div class="empty-state" id="emptyState">
+            No libraries match <strong id="emptyQuery"></strong>
+        </div>
+    </div>
+
+    <script>
+        const INDEX_URL = 'https://registry.plshelp.run/index.json';
+
+        let allEntries = [];
+
+        // ── FUZZY SEARCH ─────────────────────────────────────────────────────
+        // Simple but effective: score based on contiguous substring match,
+        // then character-sequence match as fallback.
+        function fuzzyScore(query, target) {
+            const q = query.toLowerCase();
+            const t = target.toLowerCase();
+            if (!q) return 1;
+            // exact substring — highest score
+            const idx = t.indexOf(q);
+            if (idx !== -1) return 1000 - idx;
+            // character sequence match
+            let qi = 0, score = 0, lastMatch = -1;
+            for (let ti = 0; ti < t.length && qi < q.length; ti++) {
+                if (t[ti] === q[qi]) {
+                    score += lastMatch !== -1 ? (ti - lastMatch === 1 ? 10 : 1) : 5;
+                    lastMatch = ti;
+                    qi++;
+                }
+            }
+            return qi === q.length ? score : 0;
+        }
+
+        function search(query) {
+            if (!query.trim()) return allEntries.map(e => ({ entry: e, score: 1, highlights: {} }));
+            return allEntries
+                .map(e => {
+                    const nameScore = fuzzyScore(query, e.name) * 1.2;
+                    const slugScore = fuzzyScore(query, e.slug);
+                    const score = Math.max(nameScore, slugScore);
+                    return { entry: e, score, highlights: {} };
+                })
+                .filter(r => r.score > 0)
+                .sort((a, b) => b.score - a.score);
+        }
+
+        // Wrap matched chars in <mark> for a substring match
+        function highlight(text, query) {
+            if (!query.trim()) return escapeHtml(text);
+            const idx = text.toLowerCase().indexOf(query.toLowerCase());
+            if (idx !== -1) {
+                return escapeHtml(text.slice(0, idx))
+                    + '<mark>' + escapeHtml(text.slice(idx, idx + query.length)) + '</mark>'
+                    + escapeHtml(text.slice(idx + query.length));
+            }
+            return escapeHtml(text);
+        }
+
+        function escapeHtml(s) {
+            return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function formatBytes(n) {
+            if (!n) return '';
+            if (n < 1024) return n + ' B';
+            if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+            return (n / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        // ── RENDER ───────────────────────────────────────────────────────────
+        function renderCard(entry, query) {
+            const mdUrl = entry.artifacts.markdown_path;
+            const txtUrl = entry.artifacts.text_path;
+            const size = formatBytes(entry.artifacts.markdown_bytes);
+            const cliCmd = `plshelp add ${entry.slug} ${entry.source_url}`;
+
+            return `
+            <div class="registry-card">
+                <div class="card-name">${highlight(entry.name, query)}</div>
+                <div class="card-slug">${highlight(entry.slug, query)}${size ? ' · ' + size : ''}</div>
+                <div class="card-cli" data-copy="${escapeHtml(cliCmd)}">
+                    <code><span class="cmd-highlight">plshelp</span> add <span class="arg-highlight">${escapeHtml(entry.slug)}</span></code>
+                    <button class="cli-copy-btn" aria-label="Copy install command">
+                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2"/>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </svg>
+                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="card-links">
+                    <a class="card-link" href="${mdUrl}" download="docs.md">
+                        <span class="dot"></span>.md
+                    </a>
+                    <a class="card-link" href="${txtUrl}" download="docs.txt">
+                        <span class="dot"></span>.txt
+                    </a>
+                    <a class="card-link" href="${entry.source_url}" target="_blank">
+                        <span class="dot"></span>source
+                    </a>
+                </div>
+            </div>`;
+        }
+
+        function render(query = '') {
+            const grid = document.getElementById('registryGrid');
+            const emptyState = document.getElementById('emptyState');
+            const countEl = document.getElementById('searchCount');
+
+            const results = search(query);
+
+            if (results.length === 0) {
+                grid.style.display = 'none';
+                emptyState.classList.add('visible');
+                document.getElementById('emptyQuery').textContent = '"' + query + '"';
+                countEl.textContent = '';
+                return;
+            }
+
+            grid.style.display = '';
+            emptyState.classList.remove('visible');
+            grid.innerHTML = results.map(r => renderCard(r.entry, query)).join('');
+            countEl.textContent = query.trim()
+                ? results.length + ' / ' + allEntries.length
+                : '';
+
+            // wire up copy buttons
+            grid.querySelectorAll('.card-cli').forEach(row => {
+                const btn = row.querySelector('.cli-copy-btn');
+                const copyText = row.dataset.copy;
+                const handleCopy = () => {
+                    navigator.clipboard.writeText(copyText).then(() => {
+                        btn.classList.add('copied');
+                        setTimeout(() => btn.classList.remove('copied'), 1800);
+                    });
+                };
+                btn.addEventListener('click', e => { e.stopPropagation(); handleCopy(); });
+                row.addEventListener('click', handleCopy);
+            });
+        }
+
+        // ── LOAD ─────────────────────────────────────────────────────────────
+        async function load() {
+            try {
+                const res = await fetch(INDEX_URL);
+                const data = await res.json();
+                allEntries = data.entries.filter(e => e.status === 'success');
+                allEntries.sort((a, b) => b.artifacts.markdown_bytes - a.artifacts.markdown_bytes);
+
+                document.getElementById('metaLine').textContent =
+                    allEntries.length + ' libraries · updated '
+                    + new Date(data.generated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+                render();
+            } catch (err) {
+                document.getElementById('registryGrid').innerHTML =
+                    '<div class="loading">Failed to load registry. Check console for details.</div>';
+                console.error('Registry load error:', err);
+            }
+        }
+
+        // ── SEARCH INPUT ─────────────────────────────────────────────────────
+        let debounceTimer;
+        document.getElementById('searchInput').addEventListener('input', e => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => render(e.target.value), 80);
+        });
+
+
+        // ── DASH FIELD ────────────────────────────────────────────────────────
+        const canvas = document.getElementById('dash-canvas');
+        const ctx = canvas.getContext('2d');
+
+        const SPACING = 28;
+        const DASH_LEN = 10;
+        const IDLE_SPEED = 0.004;
+        const INFLUENCE = 340;
+        const OUTER_FADE = 600;
+
+        let W, H, dashes;
+        let mouse = { x: -9999, y: -9999 };
+
+        function resize() {
+            W = canvas.width = window.innerWidth;
+            H = canvas.height = window.innerHeight;
+            buildGrid();
+        }
+
+        function buildGrid() {
+            dashes = [];
+            const offsetX = (W % SPACING) / 2;
+            const offsetY = (H % SPACING) / 2;
+            for (let x = offsetX + SPACING / 2; x < W; x += SPACING) {
+                for (let y = offsetY + SPACING / 2; y < H; y += SPACING) {
+                    dashes.push({ x, y, angle: Math.random() * Math.PI * 2, targetAngle: 0 });
+                }
+            }
+        }
+
+        function angleDiff(a, b) {
+            return ((b - a) % (Math.PI * 2) + Math.PI * 3) % (Math.PI * 2) - Math.PI;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+            for (const d of dashes) {
+                const dx = mouse.x - d.x;
+                const dy = mouse.y - d.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                const towardCursor = Math.atan2(dy, dx);
+                const weight = dist < INFLUENCE ? 1 : dist < OUTER_FADE ? 1 - (dist - INFLUENCE) / (OUTER_FADE - INFLUENCE) : 0;
+                const idleAngle = d.angle + IDLE_SPEED;
+                d.targetAngle = weight > 0 ? towardCursor + (1 - weight) * angleDiff(towardCursor, idleAngle) * 0.5 : idleAngle;
+                const easeStrength = 0.04 + weight * 0.1;
+                d.angle += angleDiff(d.angle, d.targetAngle) * easeStrength;
+                const proximity = Math.max(0, 1 - dist / OUTER_FADE);
+                const alpha = 0.44 + proximity * proximity * proximity * 1.5;
+                let r, g, b;
+                if (dist < INFLUENCE * 0.4) {
+                    const t = dist / (INFLUENCE * 0.4);
+                    r = 236; g = Math.round(139 - t * 60); b = Math.round(73 - t * 30);
+                } else if (dist < INFLUENCE) {
+                    const t = (dist - INFLUENCE * 0.4) / (INFLUENCE * 0.6);
+                    r = Math.round(175 - t * (175 - 87));
+                    g = Math.round(48 - t * (48 - 86));
+                    b = Math.round(41 - t * (41 - 83));
+                } else {
+                    r = 87; g = 86; b = 83;
+                }
+                const cos = Math.cos(d.angle);
+                const sin = Math.sin(d.angle);
+                ctx.beginPath();
+                ctx.moveTo(d.x - cos * DASH_LEN, d.y - sin * DASH_LEN);
+                ctx.lineTo(d.x + cos * DASH_LEN, d.y + sin * DASH_LEN);
+                ctx.strokeStyle = `rgba(${r},${g},${b},${alpha.toFixed(3)})`;
+                ctx.lineWidth = 1.2;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', resize);
+        window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+        window.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
+
+        resize();
+        draw();
+
+        load();
+    </script>
+</body>
+
+</html>
