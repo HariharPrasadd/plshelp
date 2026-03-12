@@ -15,13 +15,11 @@ pub(crate) use std::env;
 pub(crate) use std::error::Error;
 pub(crate) use std::fs;
 pub(crate) use std::io::{stdin, stdout, Write};
-pub(crate) use std::os::fd::AsRawFd;
 pub(crate) use std::path::{Path, PathBuf};
 pub(crate) use std::sync::atomic::{AtomicBool, Ordering};
 pub(crate) use std::sync::{Arc, LazyLock, Mutex, OnceLock};
 pub(crate) use std::thread;
 pub(crate) use std::time::{Duration, SystemTime, UNIX_EPOCH};
-pub(crate) use termios::{tcsetattr, Termios, ECHO, TCSANOW};
 pub(crate) use url::Url;
 
 pub(crate) const DEFAULT_TOP_K: usize = 1;
