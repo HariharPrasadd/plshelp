@@ -1,16 +1,53 @@
-   0.239723417s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint: stale: changed "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/src/ui.rs"
-   0.239756542s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint:           (vs) "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/target/debug/.fingerprint/plshelp-d6ff8a464b6de3bd/dep-lib-plshelp"
-   0.239759875s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 1773278156, nanos: 639116763 } < FileTime { seconds: 1773278441, nanos: 852473891 }
-   0.240263667s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint: fingerprint dirty for plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("plshelp", ["lib"], "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/src/lib.rs", Edition2024) }
-   0.240283125s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/target/debug/.fingerprint/plshelp-d6ff8a464b6de3bd/dep-lib-plshelp", reference_mtime: FileTime { seconds: 1773278156, nanos: 639116763 }, stale: "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/src/ui.rs", stale_mtime: FileTime { seconds: 1773278441, nanos: 852473891 } }))
-   0.266608875s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint: stale: changed "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/src/ui.rs"
-   0.266617208s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint:           (vs) "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/target/debug/.fingerprint/plshelp-4103e0745c98f568/dep-test-lib-plshelp"
-   0.266619125s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 1773278156, nanos: 639114263 } < FileTime { seconds: 1773278441, nanos: 852473891 }
-   0.266684667s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint: fingerprint dirty for plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("plshelp", ["lib"], "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/src/lib.rs", Edition2024) }
-   0.266693542s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/target/debug/.fingerprint/plshelp-4103e0745c98f568/dep-test-lib-plshelp", reference_mtime: FileTime { seconds: 1773278156, nanos: 639114263 }, stale: "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/src/ui.rs", stale_mtime: FileTime { seconds: 1773278441, nanos: 852473891 } }))
-   0.267946625s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint: fingerprint dirty for plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider)/Check { test: false }/TargetInner { name: "plshelp", doc: true, ..: with_path("/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/src/main.rs", Edition2024) }
-   0.267954792s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "plshelp" })
-   0.269376250s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint: fingerprint dirty for plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider)/Check { test: true }/TargetInner { name: "plshelp", doc: true, ..: with_path("/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/src/main.rs", Edition2024) }
-   0.269387583s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "plshelp" })
+    Blocking waiting for file lock on build directory
+  28.459029958s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint: fingerprint error for plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("plshelp", ["lib"], "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/src/lib.rs", Edition2024) }
+  28.459128458s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/target/debug/.fingerprint/plshelp-ee822d2149f86ac1/test-lib-plshelp`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+  28.469902250s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint: fingerprint error for plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider)/Check { test: true }/TargetInner { name: "plshelp", doc: true, ..: with_path("/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/src/main.rs", Edition2024) }
+  28.469919708s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/target/debug/.fingerprint/plshelp-6bd14c082a59e01e/test-bin-plshelp`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
     Checking plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.40s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 29.95s
