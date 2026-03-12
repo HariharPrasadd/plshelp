@@ -1746,24 +1746,6 @@ busy_timeout_ms = <span class="arg">5000</span></pre>
                     truncation.
                 </p>
 
-                <h3 class="doc-h3">What to consider if you change it</h3>
-                <p class="doc-p">
-                    Speed, quality, and context window are the main axes. How these land in practice depends heavily on
-                    your hardware. On a slow CPU or a machine with limited RAM, a quantized small model may be the only
-                    option that runs at usable speed. Quantized models (the ones ending in <span class="ci">Q</span>)
-                    are faster and lighter with a modest quality tradeoff. Larger models produce better embeddings but
-                    are slower and heavier to store. Long-context models like <span class="ci">BGEM3</span> and <span
-                        class="ci">NomicEmbedTextV15</span> support up to 8192 tokens per chunk, enabling much less
-                    aggressive child chunking - but they're significantly slower on CPU and may not be practical on
-                    lower-end hardware.
-                </p>
-                <p class="doc-p">
-                    The full list of supported models is in the <a class="ext-link"
-                        href="https://docs.rs/fastembed/latest/fastembed/enum.EmbeddingModel.html" target="_blank"
-                        rel="noopener">fastembed documentation</a>. A summary of the most useful ones is in the table
-                    below.
-                </p>
-
                 <h3 class="doc-h3">Batch size</h3>
                 <p class="doc-p">
                     The <span class="ci">batch_size</span> setting controls how many chunks are embedded in a single
@@ -1799,6 +1781,24 @@ busy_timeout_ms = <span class="arg">5000</span></pre>
                 <p class="doc-p">
                     If you see memory pressure or swapping during <span class="ci">embed</span>, lower the batch size.
                     If indexing feels slow and you have headroom, try stepping it up by 64 at a time.
+                </p>
+
+                <h3 class="doc-h3">What to consider if you change models</h3>
+                <p class="doc-p">
+                    Speed, quality, and context window are the main axes. How these land in practice depends heavily on
+                    your hardware. On a slow CPU or a machine with limited RAM, a quantized small model may be the only
+                    option that runs at usable speed. Quantized models (the ones ending in <span class="ci">Q</span>)
+                    are faster and lighter with a modest quality tradeoff. Larger models produce better embeddings but
+                    are slower and heavier to store. Long-context models like <span class="ci">BGEM3</span> and <span
+                        class="ci">NomicEmbedTextV15</span> support up to 8192 tokens per chunk, enabling much less
+                    aggressive child chunking - but they're significantly slower on CPU and may not be practical on
+                    lower-end hardware.
+                </p>
+                <p class="doc-p">
+                    The full list of supported models is in the <a class="ext-link"
+                        href="https://docs.rs/fastembed/latest/fastembed/enum.EmbeddingModel.html" target="_blank"
+                        rel="noopener">fastembed documentation</a>. A summary of the most useful ones is in the table
+                    below.
                 </p>
 
                 <details class="model-table-details">
