@@ -392,6 +392,195 @@ fn parse_init_flags(flags: &[String]) -> Result<(bool, bool, bool), Box<dyn Erro
     Ok((write_agents, write_claude, print_only))
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum UninstallScope {
+    All,
+    Data,
+    Binary,
+}
+
+fn parse_uninstall_flags(flags: &[String]) -> Result<UninstallScope, Box<dyn Error>> {
+    let mut scope: Option<UninstallScope> = None;
+    for flag in flags {
+        let next = match flag.as_str() {
+            "--all" => UninstallScope::All,
+            "--data" => UninstallScope::Data,
+            "--binary" => UninstallScope::Binary,
+            _ => return Err("Usage: plshelp uninstall --all | --data | --binary".into()),
+        };
+        if scope.replace(next).is_some() {
+            return Err("Usage: plshelp uninstall --all | --data | --binary".into());
+        }
+    }
+    scope.ok_or_else(|| "Usage: plshelp uninstall --all | --data | --binary".into())
+}
+
+fn ensure_safe_delete_path(path: &Path, label: &str) -> Result<(), Box<dyn Error>> {
+    if path.as_os_str().is_empty() {
+        return Err(format!("Refusing to delete empty {} path.", label).into());
+    }
+    if !path.is_absolute() {
+        return Err(format!("Refusing to delete non-absolute {} path: {}", label, path.display()).into());
+    }
+    if path == Path::new("/") {
+        return Err(format!("Refusing to delete root {} path.", label).into());
+    }
+    if let Some(home) = home_dir() {
+        if path == home {
+            return Err(format!("Refusing to delete home directory as {} path.", label).into());
+        }
+    }
+    if let Ok(cwd) = env::current_dir() {
+        if path == cwd {
+            return Err(format!("Refusing to delete current working directory as {} path.", label).into());
+        }
+    }
+    let component_count = path.components().count();
+    if component_count < 3 {
+        return Err(format!(
+            "Refusing to delete suspiciously broad {} path: {}",
+            label,
+            path.display()
+        )
+        .into());
+    }
+    Ok(())
+}
+
+fn prompt_exact_path_confirmation(expected: &Path) -> Result<(), Box<dyn Error>> {
+    println!();
+    println!("WARNING: THIS IS A DESTRUCTIVE OPERATION.");
+    println!("WARNING: ONCE DELETED, THIS DATA CANNOT BE RECOVERED BY PLSHELP.");
+    println!();
+    println!("Type this exact path to confirm deletion:");
+    println!("  {}", expected.display());
+    print!("> ");
+    stdout().flush()?;
+    let mut input = String::new();
+    stdin().read_line(&mut input)?;
+    let typed = input.trim();
+    let expected_str = expected.display().to_string();
+    if typed != expected_str {
+        return Err("Confirmation path did not match. Aborting.".into());
+    }
+    Ok(())
+}
+
+fn print_uninstall_plan(
+    scope: UninstallScope,
+    binary_path: &Path,
+    runtime: &RuntimePaths,
+    config_path: &Path,
+) {
+    match scope {
+        UninstallScope::Binary => {
+            println!("Deleting binary:");
+            println!("  {}", binary_path.display());
+            println!();
+            println!("Data will remain at:");
+            println!("  {}", runtime.data_dir.display());
+            println!("  {}", config_path.display());
+            println!("  {}", runtime.artifacts_dir.display());
+            println!("  {}", runtime.models_dir.display());
+            println!("  {}", runtime.db_path.display());
+            println!();
+            println!("NOTE: This only removes the executable.");
+            println!("If you want to delete the local database, artifacts, model cache, and config too, use:");
+            println!("  plshelp uninstall --all");
+        }
+        UninstallScope::Data => {
+            println!("Deleting data:");
+            println!("  {}", runtime.data_dir.display());
+            if runtime.config_dir != runtime.data_dir {
+                println!("  {}", runtime.config_dir.display());
+            }
+            println!();
+            println!("Binary will remain at:");
+            println!("  {}", binary_path.display());
+            println!();
+            println!("NOTE: This only removes local runtime data.");
+            println!("If you also want to remove the installed executable, use:");
+            println!("  plshelp uninstall --all");
+        }
+        UninstallScope::All => {
+            println!("Deleting binary:");
+            println!("  {}", binary_path.display());
+            println!();
+            println!("Deleting data:");
+            println!("  {}", runtime.data_dir.display());
+            if runtime.config_dir != runtime.data_dir {
+                println!("  {}", runtime.config_dir.display());
+            }
+            println!();
+            println!("Nothing else under plshelp runtime paths will remain.");
+        }
+    }
+}
+
+fn uninstall_scope(scope: UninstallScope) -> Result<(), Box<dyn Error>> {
+    let runtime = runtime_paths().clone();
+    let config_path = config_file_path();
+    let binary_path = env::current_exe()?;
+
+    match scope {
+        UninstallScope::Binary => {
+            ensure_safe_delete_path(&binary_path, "binary")?;
+        }
+        UninstallScope::Data => {
+            ensure_safe_delete_path(&runtime.data_dir, "data")?;
+            if runtime.config_dir != runtime.data_dir {
+                ensure_safe_delete_path(&runtime.config_dir, "config")?;
+            }
+        }
+        UninstallScope::All => {
+            ensure_safe_delete_path(&binary_path, "binary")?;
+            ensure_safe_delete_path(&runtime.data_dir, "data")?;
+            if runtime.config_dir != runtime.data_dir {
+                ensure_safe_delete_path(&runtime.config_dir, "config")?;
+            }
+        }
+    }
+
+    print_uninstall_plan(scope, &binary_path, &runtime, &config_path);
+    println!();
+
+    let confirm_path = match scope {
+        UninstallScope::Binary => binary_path.as_path(),
+        UninstallScope::Data | UninstallScope::All => runtime.data_dir.as_path(),
+    };
+    prompt_exact_path_confirmation(confirm_path)?;
+
+    match scope {
+        UninstallScope::Binary => {
+            fs::remove_file(&binary_path)?;
+            println!("Deleted {}", binary_path.display());
+        }
+        UninstallScope::Data => {
+            if runtime.config_dir != runtime.data_dir && runtime.config_dir.exists() {
+                fs::remove_dir_all(&runtime.config_dir)?;
+                println!("Deleted {}", runtime.config_dir.display());
+            }
+            if runtime.data_dir.exists() {
+                fs::remove_dir_all(&runtime.data_dir)?;
+                println!("Deleted {}", runtime.data_dir.display());
+            }
+        }
+        UninstallScope::All => {
+            if runtime.config_dir != runtime.data_dir && runtime.config_dir.exists() {
+                fs::remove_dir_all(&runtime.config_dir)?;
+                println!("Deleted {}", runtime.config_dir.display());
+            }
+            if runtime.data_dir.exists() {
+                fs::remove_dir_all(&runtime.data_dir)?;
+                println!("Deleted {}", runtime.data_dir.display());
+            }
+            fs::remove_file(&binary_path)?;
+        }
+    }
+
+    Ok(())
+}
+
 fn upsert_marked_block(existing: &str, block: &str) -> String {
     if let (Some(start), Some(end)) = (
         existing.find(PLSHELP_AGENT_BLOCK_START),
@@ -441,44 +630,74 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
         return Ok(());
     }
 
-    let conn = init_db(&db_path())?;
     let command = args[0].as_str();
 
     match command {
+        "uninstall" => {
+            let scope = parse_uninstall_flags(&args[1..])?;
+            uninstall_scope(scope)?;
+        }
         "add" => {
+            let conn = init_db(&db_path())?;
             if args.len() < 3 {
                 return Err(
-                    "Usage: plshelp add <library_name> <source_url> [--include-artifacts[=/path]]".into(),
+                    "Usage: plshelp add <library_name> <source_url> [--single] [--respect-robots] [--include-artifacts[=/path]]".into(),
                 );
             }
             let (output_json, flags) = extract_json_flag(&args[3..]);
+            let (single_page, flags) = extract_single_flag(&flags);
+            let (respect_robots, flags) = extract_respect_robots_flag(&flags);
             let include_artifacts = parse_include_artifacts_flag(&flags, &args[1]);
-            add_library(&conn, &args[1], &args[2], include_artifacts).await?;
+            add_library(
+                &conn,
+                &args[1],
+                &args[2],
+                single_page,
+                respect_robots,
+                include_artifacts,
+            )
+            .await?;
             print_command_result(
                 "add",
                 output_json,
                 json!({
                     "library_name": args[1],
                     "source_url": args[2],
+                    "single_page": single_page,
+                    "respect_robots": respect_robots,
                     "artifacts_path": flags.iter().find_map(|f| f.strip_prefix("--include-artifacts=").map(|s| s.to_string())),
                 }),
             )?;
         }
         "crawl" => {
+            let conn = init_db(&db_path())?;
             if args.len() < 3 {
                 return Err(
-                    "Usage: plshelp crawl <library_name> <source_url> [--include-artifacts[=/path]]".into(),
+                    "Usage: plshelp crawl <library_name> <source_url> [--single] [--respect-robots] [--include-artifacts[=/path]]".into(),
                 );
             }
             let (output_json, flags) = extract_json_flag(&args[3..]);
+            let (single_page, flags) = extract_single_flag(&flags);
+            let (respect_robots, flags) = extract_respect_robots_flag(&flags);
             let include_artifacts = parse_include_artifacts_flag(&flags, &args[1]);
-            crawl_library(&conn, &args[1], &args[2], "crawl", include_artifacts).await?;
+            crawl_library(
+                &conn,
+                &args[1],
+                &args[2],
+                single_page,
+                respect_robots,
+                "crawl",
+                include_artifacts,
+            )
+            .await?;
             print_command_result(
                 "crawl",
                 output_json,
                 json!({
                     "library_name": args[1],
                     "source_url": args[2],
+                    "single_page": single_page,
+                    "respect_robots": respect_robots,
                 }),
             )?;
         }
@@ -543,6 +762,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
             }
         }
         "index" => {
+            let conn = init_db(&db_path())?;
             if args.len() < 2 {
                 return Err("Usage: plshelp index <library_name> [--file /path/to/file]".into());
             }
@@ -559,6 +779,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
             )?;
         }
         "chunk" => {
+            let conn = init_db(&db_path())?;
             if args.len() < 2 {
                 return Err("Usage: plshelp chunk <library_name> [--file /path/to/file]".into());
             }
@@ -575,6 +796,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
             )?;
         }
         "embed" => {
+            let conn = init_db(&db_path())?;
             if args.len() < 2 {
                 return Err("Usage: plshelp embed <library_name>".into());
             }
@@ -592,6 +814,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
             )?;
         }
         "refresh" => {
+            let conn = init_db(&db_path())?;
             let (output_json, flags) = extract_json_flag(&args[1..]);
             refresh_stats(&conn, &flags)?;
             print_command_result(
@@ -603,6 +826,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
             )?;
         }
         "merge" => {
+            let conn = init_db(&db_path())?;
             if args.len() < 4 {
                 return Err("Usage: plshelp merge <new_library_name> <library1> <library2> [library3 ...] [--replace] [--include-artifacts[=/path]]".into());
             }
@@ -627,6 +851,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
             )?;
         }
         "export" => {
+            let conn = init_db(&db_path())?;
             if args.len() < 2 {
                 return Err("Usage: plshelp export <library_name> [path]".into());
             }
@@ -647,6 +872,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
             )?;
         }
         "query" => {
+            let conn = init_db(&db_path())?;
             if args.len() < 3 {
                 return Err(
                     "Usage: plshelp query <library_name> \"<question>\" [--mode hybrid|vector|keyword] [--top-k N] [--context N]".into(),
@@ -670,6 +896,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
             )?;
         }
         "trace" => {
+            let conn = init_db(&db_path())?;
             if args.len() < 3 {
                 return Err(
                     "Usage: plshelp trace <library_name> \"<question>\" [--mode hybrid|vector|keyword] [--top-k N] [--context N]".into(),
@@ -693,6 +920,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
             )?;
         }
         "ask" => {
+            let conn = init_db(&db_path())?;
             if args.len() < 2 {
                 return Err(
                     "Usage: plshelp ask \"<question>\" [--libraries a,b,c] [--mode ...] [--top-k N] [--context N]".into(),
@@ -706,6 +934,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
             ask_libraries(&conn, &question, &flags, output_json)?;
         }
         "alias" => {
+            let conn = init_db(&db_path())?;
             if args.len() < 3 {
                 return Err("Usage: plshelp alias <library_name> <alias>".into());
             }
@@ -724,6 +953,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
             )?;
         }
         "list" => {
+            let conn = init_db(&db_path())?;
             let (output_json, _flags) = extract_json_flag(&args[1..]);
             list_libraries(&conn, output_json)?;
         }
@@ -750,6 +980,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
             }
         }
         "show" => {
+            let conn = init_db(&db_path())?;
             if args.len() < 2 {
                 return Err("Usage: plshelp show <library_name>".into());
             }
@@ -760,6 +991,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
             show_library(&conn, &args[1], output_json)?;
         }
         "remove" => {
+            let conn = init_db(&db_path())?;
             if args.len() < 2 {
                 return Err("Usage: plshelp remove <library_name>".into());
             }
@@ -777,6 +1009,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
             )?;
         }
         "open" => {
+            let conn = init_db(&db_path())?;
             if args.len() < 2 {
                 return Err("Usage: plshelp open <chunk_id>".into());
             }
@@ -789,6 +1022,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
         }
         "help" | "--help" | "-h" => print_help(),
         _ => {
+            let conn = init_db(&db_path())?;
             if args.len() < 2 {
                 return Err("Usage: plshelp <library_name> \"<question>\"".into());
             }

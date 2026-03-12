@@ -78,6 +78,8 @@ pub(crate) async fn add_library(
     conn: &Connection,
     library_name: &str,
     source_url: &str,
+    single_page: bool,
+    respect_robots: bool,
     include_artifacts: Option<PathBuf>,
 ) -> Result<(), Box<dyn Error>> {
     let exists: i64 = conn.query_row(
@@ -90,6 +92,8 @@ pub(crate) async fn add_library(
             conn,
             library_name,
             source_url,
+            single_page,
+            respect_robots,
             "add-crawl",
             include_artifacts.clone(),
         )
@@ -105,6 +109,8 @@ pub(crate) async fn add_library(
                 conn,
                 library_name,
                 source_url,
+                single_page,
+                respect_robots,
                 "add-crawl",
                 include_artifacts.clone(),
             )

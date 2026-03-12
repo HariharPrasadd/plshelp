@@ -3,9 +3,10 @@ use crate::*;
 pub(crate) fn print_help() {
     println!("\nnote: for queries, quote questions in the shell, especially if they contain ? or *\n");
     println!("plshelp <command>");
-    println!("  add <library_name> <source_url> [--include-artifacts[=/path]] [--json]");
-    println!("  crawl <library_name> <source_url> [--include-artifacts[=/path]] [--json]");
+    println!("  add <library_name> <source_url> [--single] [--respect-robots] [--include-artifacts[=/path]] [--json]");
+    println!("  crawl <library_name> <source_url> [--single] [--respect-robots] [--include-artifacts[=/path]] [--json]");
     println!("  init [--agents] [--claude] [--print] [--json]");
+    println!("  uninstall --all | --data | --binary");
     println!("  index <library_name> [--file /path/to/file] [--json]");
     println!("  chunk <library_name> [--file /path/to/file] [--json]");
     println!("  embed <library_name> [--json]");
@@ -229,6 +230,32 @@ pub(crate) fn parse_include_artifacts_flag(flags: &[String], library_name: &str)
         i += 1;
     }
     artifacts
+}
+
+pub(crate) fn extract_single_flag(flags: &[String]) -> (bool, Vec<String>) {
+    let mut single_page = false;
+    let mut out = Vec::with_capacity(flags.len());
+    for flag in flags {
+        if flag == "--single" {
+            single_page = true;
+        } else {
+            out.push(flag.clone());
+        }
+    }
+    (single_page, out)
+}
+
+pub(crate) fn extract_respect_robots_flag(flags: &[String]) -> (bool, Vec<String>) {
+    let mut respect_robots = false;
+    let mut out = Vec::with_capacity(flags.len());
+    for flag in flags {
+        if flag == "--respect-robots" {
+            respect_robots = true;
+        } else {
+            out.push(flag.clone());
+        }
+    }
+    (respect_robots, out)
 }
 
 pub(crate) fn parse_merge_args(

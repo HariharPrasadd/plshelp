@@ -40,6 +40,45 @@ pub(crate) fn whitelist_for_url(seed_url: &str) -> Result<Vec<CompactString>, St
     Ok(vec![CompactString::new(regex_pattern)])
 }
 
+pub(crate) fn exact_url_for_single_page(target_url: &str) -> Result<String, String> {
+    let mut parsed =
+        Url::parse(target_url).map_err(|e| format!("Invalid target URL '{}': {}", target_url, e))?;
+    parsed.set_fragment(None);
+    Ok(parsed.to_string())
+}
+
+pub(crate) fn canonical_page_identity(target_url: &str) -> Result<String, String> {
+    let mut parsed =
+        Url::parse(target_url).map_err(|e| format!("Invalid target URL '{}': {}", target_url, e))?;
+    parsed.set_fragment(None);
+    let mut identity = format!("{}://", parsed.scheme());
+    if let Some(host) = parsed.host_str() {
+        identity.push_str(&host.to_ascii_lowercase());
+    }
+    if let Some(port) = parsed.port() {
+        identity.push(':');
+        identity.push_str(&port.to_string());
+    }
+    let path = parsed.path().trim_end_matches('/');
+    if path.is_empty() {
+        identity.push('/');
+    } else {
+        identity.push_str(path);
+    }
+    if let Some(query) = parsed.query() {
+        identity.push('?');
+        identity.push_str(query);
+    }
+    Ok(identity)
+}
+
+pub(crate) fn is_same_single_page_url(lhs: &str, rhs: &str) -> bool {
+    match (canonical_page_identity(lhs), canonical_page_identity(rhs)) {
+        (Ok(a), Ok(b)) => a == b,
+        _ => lhs == rhs,
+    }
+}
+
 pub(crate) fn extract_content_html(html: &str) -> String {
     let document = Html::parse_document(html);
     let mut best_html: Option<String> = None;
@@ -88,28 +127,38 @@ pub(crate) async fn crawl_library(
     conn: &Connection,
     library_name: &str,
     source_url: &str,
+    single_page: bool,
+    respect_robots: bool,
     job_type: &str,
     include_artifacts: Option<PathBuf>,
 ) -> Result<(), Box<dyn Error>> {
     let job_id = start_job(conn, library_name, job_type)?;
 
     let run_result = async {
-        let spinner = ProgressSpinner::new("Preparing crawl");
-        let normalized_seed_url =
-            normalize_seed_url(source_url).map_err(|e| format!("URL error: {e}"))?;
+        let spinner = ProgressSpinner::new(if single_page {
+            "Preparing single-page crawl"
+        } else {
+            "Preparing crawl"
+        });
+        let crawl_url = if single_page {
+            exact_url_for_single_page(source_url).map_err(|e| format!("URL error: {e}"))?
+        } else {
+            normalize_seed_url(source_url).map_err(|e| format!("URL error: {e}"))?
+        };
         let whitelist =
-            whitelist_for_url(&normalized_seed_url).map_err(|e| format!("Whitelist error: {e}"))?;
+            whitelist_for_url(&crawl_url).map_err(|e| format!("Whitelist error: {e}"))?;
 
         let mut config = Configuration::new();
         config
-            .with_limit(5_000)
-            .with_depth(25)
+            .with_limit(if single_page { 1 } else { 5_000 })
+            .with_depth(if single_page { 1 } else { 25 })
             .with_subdomains(false)
             .with_tld(false)
+            .with_respect_robots_txt(respect_robots)
             .with_user_agent(Some("DocumentationScraper/1.0"))
             .with_whitelist_url(Some(whitelist));
 
-        let mut website = Website::new(&normalized_seed_url)
+        let mut website = Website::new(&crawl_url)
             .with_config(config)
             .build()
             .map_err(|e| format!("Failed to build website: {e}"))?;
@@ -128,8 +177,17 @@ pub(crate) async fn crawl_library(
         spinner.set_stage("Writing files");
         let page_inputs: Vec<(String, String)> = pages
             .iter()
+            .filter(|p| !single_page || is_same_single_page_url(p.get_url(), &crawl_url))
             .map(|p| (p.get_url().to_string(), p.get_html()))
             .collect();
+        if page_inputs.is_empty() {
+            spinner.finish();
+            return Err(if single_page {
+                format!("Target page '{}' was not collected.", source_url).into()
+            } else {
+                "No pages collected".into()
+            });
+        }
         // Indexed parallel iterators preserve order on collect.
         let converted: Vec<(String, String)> = page_inputs
             .into_par_iter()
@@ -202,7 +260,7 @@ pub(crate) async fn crawl_library(
 
         spinner.finish();
 
-        Ok::<String, Box<dyn Error>>(format!("Crawled {} pages.", pages.len()))
+        Ok::<String, Box<dyn Error>>(format!("Crawled {} page{}.", converted.len(), if converted.len() == 1 { "" } else { "s" }))
     }
     .await;
 
