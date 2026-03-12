@@ -33,4 +33,18 @@ pub(crate) fn export_library(
     Ok(())
 }
 
+pub(crate) fn export_all_libraries(
+    conn: &Connection,
+    output_root: Option<&Path>,
+) -> Result<usize, Box<dyn Error>> {
+    let library_names = all_library_names(conn)?;
+    for library_name in &library_names {
+        let output_dir = output_root
+            .map(|root| root.join(library_name))
+            .unwrap_or_else(|| compiled_dir(library_name));
+        export_library(conn, library_name, Some(&output_dir))?;
+    }
+    Ok(library_names.len())
+}
+
 // ============================================================================

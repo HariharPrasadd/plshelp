@@ -1,5 +1,15 @@
 use crate::*;
 
+pub(crate) fn all_library_names(conn: &Connection) -> Result<Vec<String>, Box<dyn Error>> {
+    let mut stmt = conn.prepare("SELECT library_name FROM libraries ORDER BY library_name ASC")?;
+    let rows = stmt.query_map([], |row| row.get::<_, String>(0))?;
+    let mut out = Vec::new();
+    for row in rows {
+        out.push(row?);
+    }
+    Ok(out)
+}
+
 pub(crate) fn resolve_library_name(conn: &Connection, input: &str) -> Result<String, Box<dyn Error>> {
     if let Ok(name) = conn.query_row(
         "SELECT library_name FROM libraries WHERE library_name = ?1",
@@ -800,6 +810,15 @@ pub(crate) fn remove_library(conn: &Connection, input_name: &str) -> Result<(), 
         fs::remove_dir_all(dir)?;
     }
     Ok(())
+}
+
+pub(crate) fn remove_all_libraries(conn: &Connection) -> Result<usize, Box<dyn Error>> {
+    let library_names = all_library_names(conn)?;
+    for library_name in &library_names {
+        remove_library(conn, library_name)?;
+    }
+    conn.execute("DELETE FROM library_groups", [])?;
+    Ok(library_names.len())
 }
 
 pub(crate) fn open_chunk(conn: &Connection, chunk_id: i64, output_json: bool) -> Result<(), Box<dyn Error>> {

@@ -768,17 +768,35 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
         "index" => {
             let conn = init_db(&db_path())?;
             if args.len() < 2 {
-                return Err("Usage: plshelp index <library_name> [--file /path/to/file] [--force]".into());
+                return Err("Usage: plshelp index <library_name> [--file /path/to/file] [--force] | plshelp index --all [--force]".into());
             }
-            let (output_json, flags) = extract_json_flag(&args[2..]);
+            let (output_json, flags) = extract_json_flag(&args[1..]);
+            let (all, flags) = extract_all_flag(&flags);
             let (force, flags) = extract_force_flag(&flags);
             let file = parse_index_file_flag(&flags);
+            if all {
+                if file.is_some() {
+                    return Err("Cannot use --file with --all.".into());
+                }
+                let count = index_all_libraries(&conn, force)?;
+                print_command_result(
+                    "index",
+                    output_json,
+                    json!({
+                        "all": true,
+                        "force": force,
+                        "library_count": count,
+                    }),
+                )?;
+                return Ok(());
+            }
             index_library(&conn, &args[1], file.as_deref(), force)?;
             print_command_result(
                 "index",
                 output_json,
                 json!({
                     "input_name": args[1],
+                    "all": false,
                     "file": file,
                     "force": force,
                 }),
@@ -787,17 +805,35 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
         "chunk" => {
             let conn = init_db(&db_path())?;
             if args.len() < 2 {
-                return Err("Usage: plshelp chunk <library_name> [--file /path/to/file] [--force]".into());
+                return Err("Usage: plshelp chunk <library_name> [--file /path/to/file] [--force] | plshelp chunk --all [--force]".into());
             }
-            let (output_json, flags) = extract_json_flag(&args[2..]);
+            let (output_json, flags) = extract_json_flag(&args[1..]);
+            let (all, flags) = extract_all_flag(&flags);
             let (force, flags) = extract_force_flag(&flags);
             let file = parse_index_file_flag(&flags);
+            if all {
+                if file.is_some() {
+                    return Err("Cannot use --file with --all.".into());
+                }
+                let count = chunk_all_libraries(&conn, force, "chunk")?;
+                print_command_result(
+                    "chunk",
+                    output_json,
+                    json!({
+                        "all": true,
+                        "force": force,
+                        "library_count": count,
+                    }),
+                )?;
+                return Ok(());
+            }
             chunk_targets(&conn, &args[1], file.as_deref(), force, "chunk")?;
             print_command_result(
                 "chunk",
                 output_json,
                 json!({
                     "input_name": args[1],
+                    "all": false,
                     "file": file,
                     "force": force,
                 }),
@@ -806,12 +842,26 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
         "embed" => {
             let conn = init_db(&db_path())?;
             if args.len() < 2 {
-                return Err("Usage: plshelp embed <library_name> [--force]".into());
+                return Err("Usage: plshelp embed <library_name> [--force] | plshelp embed --all [--force]".into());
             }
-            let (output_json, flags) = extract_json_flag(&args[2..]);
+            let (output_json, flags) = extract_json_flag(&args[1..]);
+            let (all, flags) = extract_all_flag(&flags);
             let (force, flags) = extract_force_flag(&flags);
             if !flags.is_empty() {
-                return Err("Usage: plshelp embed <library_name> [--force] [--json]".into());
+                return Err("Usage: plshelp embed <library_name> [--force] [--json] | plshelp embed --all [--force] [--json]".into());
+            }
+            if all {
+                let count = embed_all_libraries(&conn, force, "embed")?;
+                print_command_result(
+                    "embed",
+                    output_json,
+                    json!({
+                        "all": true,
+                        "force": force,
+                        "library_count": count,
+                    }),
+                )?;
+                return Ok(());
             }
             embed_library(&conn, &args[1], force, "embed")?;
             print_command_result(
@@ -819,6 +869,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
                 output_json,
                 json!({
                     "input_name": args[1],
+                    "all": false,
                     "force": force,
                 }),
             )?;
@@ -826,12 +877,18 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
         "refresh" => {
             let conn = init_db(&db_path())?;
             let (output_json, flags) = extract_json_flag(&args[1..]);
-            refresh_stats(&conn, &flags)?;
+            let (all, flags) = extract_all_flag(&flags);
+            if all && !flags.is_empty() {
+                return Err("Cannot combine --all with explicit library names.".into());
+            }
+            let targets = if all { Vec::new() } else { flags.clone() };
+            refresh_stats(&conn, &targets)?;
             print_command_result(
                 "refresh",
                 output_json,
                 json!({
-                    "targets": flags,
+                    "all": all,
+                    "targets": targets,
                 }),
             )?;
         }
@@ -863,20 +920,31 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
         "export" => {
             let conn = init_db(&db_path())?;
             if args.len() < 2 {
-                return Err("Usage: plshelp export <library_name> [path]".into());
+                return Err("Usage: plshelp export <library_name> [path] | plshelp export --all [path]".into());
             }
-            let (output_json, flags) = extract_json_flag(&args[2..]);
-            let output_dir = if !flags.is_empty() {
-                Some(PathBuf::from(flags[0].clone()))
-            } else {
-                None
-            };
+            let (output_json, flags) = extract_json_flag(&args[1..]);
+            let (all, flags) = extract_all_flag(&flags);
+            let output_dir = flags.first().map(|path| PathBuf::from(path.clone()));
+            if all {
+                let count = export_all_libraries(&conn, output_dir.as_deref())?;
+                print_command_result(
+                    "export",
+                    output_json,
+                    json!({
+                        "all": true,
+                        "library_count": count,
+                        "output_root": output_dir,
+                    }),
+                )?;
+                return Ok(());
+            }
             export_library(&conn, &args[1], output_dir.as_deref())?;
             print_command_result(
                 "export",
                 output_json,
                 json!({
                     "input_name": args[1],
+                    "all": false,
                     "output_dir": output_dir,
                 }),
             )?;
@@ -1003,18 +1071,48 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
         "remove" => {
             let conn = init_db(&db_path())?;
             if args.len() < 2 {
-                return Err("Usage: plshelp remove <library_name>".into());
+                return Err("Usage: plshelp remove <library_name> | plshelp remove --all".into());
             }
-            let (output_json, flags) = extract_json_flag(&args[2..]);
-            if !flags.is_empty() {
+            let (output_json, flags) = extract_json_flag(&args[1..]);
+            let (all, flags) = extract_all_flag(&flags);
+            if all {
+                if !flags.is_empty() {
+                    return Err("Usage: plshelp remove --all [--json]".into());
+                }
+                println!("Deleting all indexed libraries and merged groups.");
+                println!();
+                println!("WARNING: THIS IS A DESTRUCTIVE OPERATION.");
+                println!("WARNING: THIS WILL REMOVE EVERY LIBRARY, GROUP, PAGE, CHUNK, AND EMBEDDING IN THE LOCAL DATABASE.");
+                println!();
+                println!("Type REMOVE ALL to confirm deletion:");
+                print!("> ");
+                stdout().flush()?;
+                let mut confirmation = String::new();
+                stdin().read_line(&mut confirmation)?;
+                if confirmation.trim() != "REMOVE ALL" {
+                    return Err("Confirmation did not match. Aborting.".into());
+                }
+                let removed_count = remove_all_libraries(&conn)?;
+                print_command_result(
+                    "remove",
+                    output_json,
+                    json!({
+                        "all": true,
+                        "removed_library_count": removed_count,
+                    }),
+                )?;
+                return Ok(());
+            }
+            if flags.len() != 1 {
                 return Err("Usage: plshelp remove <library_name> [--json]".into());
             }
-            remove_library(&conn, &args[1])?;
+            remove_library(&conn, &flags[0])?;
             print_command_result(
                 "remove",
                 output_json,
                 json!({
-                    "input_name": args[1],
+                    "all": false,
+                    "input_name": flags[0],
                 }),
             )?;
         }

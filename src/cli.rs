@@ -8,13 +8,17 @@ pub(crate) fn print_help() {
     println!("  init [--agents] [--claude] [--print] [--json]");
     println!("  uninstall --all | --data | --binary");
     println!("  index <library_name> [--file /path/to/file] [--force] [--json]");
+    println!("  index --all [--force] [--json]");
     println!("  chunk <library_name> [--file /path/to/file] [--force] [--json]");
+    println!("  chunk --all [--force] [--json]");
     println!("  embed <library_name> [--force] [--json]");
-    println!("  refresh [library_name ...] [--json]   # recompute/backfill stats; no crawl");
+    println!("  embed --all [--force] [--json]");
+    println!("  refresh [library_name ...] [--all] [--json]   # recompute/backfill stats; no crawl");
     println!(
         "  merge <new_library_name> <library1> <library2> [library3 ...] [--replace] [--include-artifacts[=/path]] [--json]"
     );
     println!("  export <library_name> [path] [--json]");
+    println!("  export --all [path] [--json]");
     println!(
         "  query <library_name> \"<question>\" [--mode hybrid|vector|keyword] [--top-k N] [--context N] [--json]"
     );
@@ -27,6 +31,7 @@ pub(crate) fn print_help() {
     println!("  config [--json]");
     println!("  show <library_name> [--json]");
     println!("  remove <library_name> [--json]");
+    println!("  remove --all [--json]");
     println!("  open <chunk_id> [--json]");
     println!(
         "  trace <library_name> \"<question>\" [--mode ...] [--top-k N] [--context N] [--json]"
@@ -269,6 +274,19 @@ pub(crate) fn extract_force_flag(flags: &[String]) -> (bool, Vec<String>) {
         }
     }
     (force, out)
+}
+
+pub(crate) fn extract_all_flag(flags: &[String]) -> (bool, Vec<String>) {
+    let mut all = false;
+    let mut out = Vec::with_capacity(flags.len());
+    for flag in flags {
+        if flag == "--all" {
+            all = true;
+        } else {
+            out.push(flag.clone());
+        }
+    }
+    (all, out)
 }
 
 pub(crate) fn parse_merge_args(

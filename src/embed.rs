@@ -360,6 +360,18 @@ pub(crate) fn chunk_targets(
     Ok(())
 }
 
+pub(crate) fn chunk_all_libraries(
+    conn: &Connection,
+    force: bool,
+    job_type: &str,
+) -> Result<usize, Box<dyn Error>> {
+    let library_names = all_library_names(conn)?;
+    for library_name in &library_names {
+        chunk_targets(conn, library_name, None, force, job_type)?;
+    }
+    Ok(library_names.len())
+}
+
 pub(crate) fn embed_library(
     conn: &Connection,
     input_name: &str,
@@ -452,6 +464,18 @@ pub(crate) fn embed_library(
     }
 }
 
+pub(crate) fn embed_all_libraries(
+    conn: &Connection,
+    force: bool,
+    job_type: &str,
+) -> Result<usize, Box<dyn Error>> {
+    let library_names = all_library_names(conn)?;
+    for library_name in &library_names {
+        embed_library(conn, library_name, force, job_type)?;
+    }
+    Ok(library_names.len())
+}
+
 pub(crate) fn index_library(
     conn: &Connection,
     input_name: &str,
@@ -479,6 +503,17 @@ pub(crate) fn index_library(
         }
     }
     Ok(())
+}
+
+pub(crate) fn index_all_libraries(
+    conn: &Connection,
+    force: bool,
+) -> Result<usize, Box<dyn Error>> {
+    let library_names = all_library_names(conn)?;
+    for library_name in &library_names {
+        index_library(conn, library_name, None, force)?;
+    }
+    Ok(library_names.len())
 }
 
 pub(crate) fn load_chunks_for_library(
