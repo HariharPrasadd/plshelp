@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>plshelp — docs</title>
-        <style>
-@font-face {
+    <title>plshelp - docs</title>
+    <style>
+        @font-face {
             font-family: 'CommitMono';
             src: url('/fonts/CommitMono-400-Regular.woff2') format('woff2');
             font-weight: 400;
@@ -94,6 +94,22 @@
             background-clip: text;
         }
 
+        .ext-link {
+            background: var(--accent-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 18px rgba(175, 48, 41, 0.45);
+            text-decoration: underline;
+            text-decoration-color: #af302966;
+            text-underline-offset: 3px;
+        }
+
+        .ext-link:hover {
+            text-shadow: 0 0 24px rgba(236, 139, 73, 0.6);
+            text-decoration-color: #ec8b4999;
+        }
+
         /* ── TOPBAR ── */
         .topbar {
             position: fixed;
@@ -119,18 +135,18 @@
 
         .topbar-logo {
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
         }
 
         .topbar-sep {
             color: var(--text-3);
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 300;
         }
 
         .topbar-section {
             color: var(--text-2);
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .topbar-right {
@@ -142,7 +158,7 @@
         .topbar-right a {
             color: var(--text-2);
             transition: color 0.1s;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .topbar-right a:hover {
@@ -383,6 +399,177 @@
             color: var(--text-2);
         }
 
+        /* Collapsible model table */
+        .model-table-details {
+            margin: 16px 0 24px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .model-table-summary {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-1);
+            cursor: pointer;
+            user-select: none;
+            list-style: none;
+            background: var(--surface);
+        }
+
+        .model-table-summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .model-table-summary::before {
+            content: '▶';
+            font-size: 10px;
+            color: var(--text-3);
+            transition: transform 0.15s;
+            flex-shrink: 0;
+        }
+
+        .model-table-details[open] .model-table-summary::before {
+            transform: rotate(90deg);
+        }
+
+        .model-table-hint {
+            font-size: 11px;
+            color: var(--text-3);
+            font-weight: 400;
+        }
+
+        .model-table-wrap {
+            overflow-x: auto;
+        }
+
+        .model-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12.5px;
+        }
+
+        .model-table th {
+            text-align: left;
+            padding: 8px 14px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-3);
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+            white-space: nowrap;
+        }
+
+        .model-table th.col-num {
+            text-align: center;
+        }
+
+        .model-table td {
+            padding: 7px 14px;
+            vertical-align: top;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-2);
+        }
+
+        .model-table td:first-child {
+            white-space: nowrap;
+            color: var(--text-1);
+        }
+
+        .model-table td.col-num {
+            white-space: nowrap;
+            text-align: center;
+            color: var(--text-3);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .model-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .model-group-row td {
+            padding: 10px 14px 4px;
+            font-size: 10.5px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: var(--bg);
+            border-bottom: none !important;
+        }
+
+        /* ── Medium: squeeze — hide numeric cols, inline them as subdued meta in notes cell ── */
+        @media (max-width: 680px) {
+
+            .model-table th.col-num,
+            .model-table td.col-num {
+                display: none;
+            }
+
+            .model-table td.col-notes::before {
+                content: attr(data-meta);
+                display: block;
+                font-size: 10.5px;
+                color: var(--text-3);
+                margin-bottom: 2px;
+                font-variant-numeric: tabular-nums;
+            }
+        }
+
+        /* ── Small: full card layout ── */
+        @media (max-width: 440px) {
+            .model-table thead {
+                display: none;
+            }
+
+            .model-table tbody,
+            .model-table tr,
+            .model-table td {
+                display: block;
+                width: 100%;
+            }
+
+            .model-group-row {
+                display: block;
+            }
+
+            .model-group-row td {
+                display: block;
+            }
+
+            .model-table tr:not(.model-group-row) {
+                padding: 10px 14px;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .model-table tr:not(.model-group-row) td {
+                padding: 0;
+                border: none;
+            }
+
+            .model-table td:first-child {
+                margin-bottom: 3px;
+            }
+
+            .model-table td.col-num {
+                display: none;
+            }
+
+            .model-table td.col-notes::before {
+                content: attr(data-meta);
+                display: block;
+                font-size: 10.5px;
+                color: var(--text-3);
+                margin-bottom: 3px;
+            }
+        }
+
         /* Nav breadcrumb at bottom */
         .doc-nav {
             display: flex;
@@ -569,7 +756,6 @@
             }
         }
     </style>
-
 </head>
 
 <body>
@@ -600,14 +786,14 @@
             <div class="doc-section" id="what-is-it">
                 <h2 class="doc-h2">What is plshelp?</h2>
                 <p class="doc-p">
-                    plshelp is a local documentation search tool. Point it at any docs website — or your own notes and
-                    Markdown files — and it indexes everything locally so you can search it instantly from your
+                    plshelp is a local documentation search tool. Point it at any docs website - or your own notes and
+                    Markdown files - and it indexes everything locally so you can search it instantly from your
                     terminal.
                 </p>
                 <p class="doc-p">
                     You can use it yourself, just like you'd use a search box on a docs site, except it works offline
                     and across everything you've indexed at once. And because it speaks JSON, coding agents like Claude
-                    Code and Codex can call it too — automatically pulling in the right docs context without ever
+                    Code and Codex can call it too - automatically pulling in the right docs context without ever
                     touching the web.
                 </p>
                 <p class="doc-p">
@@ -671,8 +857,9 @@
                 </div>
 
                 <p class="doc-p">
-                    Confirm it worked by running <span class="ci">plshelp help</span>. If the shell says it can't find
-                    the command, you may need to add the install directory to your PATH and open a new terminal.
+                    Confirm it worked by running <span class="ci">plshelp help</span> or <span class="ci">plshelp
+                        --help</span> - both print the same usage output. If the shell says it can't find the command,
+                    you may need to add the install directory to your PATH and open a new terminal.
                 </p>
             </div>
 
@@ -709,7 +896,7 @@ plshelp query nextjs &quot;how does the app router work&quot;" aria-label="Copy"
                 </div>
                 <p class="doc-p">
                     That's it. <span class="ci">add</span> crawls the site, chunks the content, and builds a search
-                    index. After that, <span class="ci">query</span> is instant — it searches locally, no network
+                    index. After that, <span class="ci">query</span> is instant - it searches locally, no network
                     needed.
                 </p>
                 <div class="callout">
@@ -721,10 +908,10 @@ plshelp query nextjs &quot;how does the app router work&quot;" aria-label="Copy"
 
             <!-- INDEXING DOCS SITES -->
             <div class="doc-section" id="indexing-sites">
-                <h2 class="doc-h2">Indexing a docs website</h2>
+                <h2 class="doc-h2">Indexing websites and web pages</h2>
                 <p class="doc-p">
                     Use <span class="ci">plshelp add &lt;name&gt; &lt;url&gt;</span> for any documentation website. Give
-                    the library a short name you'll remember — you'll use it in every query.
+                    the library a short name you'll remember - you'll use it in every query.
                 </p>
                 <div class="code-block">
                     <div class="code-block-header"><span class="code-block-label">shell</span>
@@ -746,10 +933,122 @@ plshelp add tailwind https://tailwindcss.com/docs" aria-label="Copy">
 <span class="cmd">plshelp</span> add <span class="arg">react</span> https://react.dev/reference/react
 <span class="cmd">plshelp</span> add <span class="arg">tailwind</span> https://tailwindcss.com/docs</pre>
                 </div>
+
+                <h3 class="doc-h3">Indexing a single page</h3>
+                <p class="doc-p">
+                    By default, <span class="ci">add</span> follows links and crawls an entire site. Use <span
+                        class="ci">--single</span> when you want to capture exactly one page - an article, a paper, a
+                    changelog, any URL you want to make locally searchable.
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="# Save a single article
+plshelp add article https://example.com/some-post --single
+
+# Save a research paper page
+plshelp add paper https://some-site.com/research --single
+
+# Save a changelog
+plshelp add changelog https://lib.rs/releases --single" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmt"># Save a single article</span>
+<span class="cmd">plshelp</span> add <span class="arg">article</span> https://example.com/some-post <span class="flag">--single</span>
+
+<span class="cmt"># Save a research paper page</span>
+<span class="cmd">plshelp</span> add <span class="arg">paper</span> https://some-site.com/research <span class="flag">--single</span>
+
+<span class="cmt"># Save a changelog</span>
+<span class="cmd">plshelp</span> add <span class="arg">changelog</span> https://lib.rs/releases <span class="flag">--single</span></pre>
+                </div>
+                <p class="doc-p">
+                    This is what turns plshelp into a general-purpose internet reader. You can build a local library of
+                    anything you find useful - articles you want to reference later, pages you want your agent to know
+                    about, research you want to search across. Index each page as its own library, then <span
+                        class="ci">merge</span> them into one so you can query across everything at once.
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="# Index each page as its own library
+plshelp add reading-post-1 https://blog.example.com/post-1 --single
+plshelp add reading-post-2 https://blog.example.com/post-2 --single
+plshelp add reading-hn-12345 &quot;https://news.ycombinator.com/item?id=12345&quot; --single
+
+# Merge them into one library
+plshelp merge reading reading-post-1 reading-post-2 reading-hn-12345
+
+# Query across everything you've saved
+plshelp ask &quot;what did I read about distributed systems&quot; --libraries reading
+
+# Wire it up to your agent
+plshelp init" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmt"># Index each page as its own library</span>
+<span class="cmd">plshelp</span> add <span class="arg">reading-post-1</span> https://blog.example.com/post-1 <span class="flag">--single</span>
+<span class="cmd">plshelp</span> add <span class="arg">reading-post-2</span> https://blog.example.com/post-2 <span class="flag">--single</span>
+<span class="cmd">plshelp</span> add <span class="arg">reading-hn-12345</span> <span class="flag">"https://news.ycombinator.com/item?id=12345"</span> <span class="flag">--single</span>
+
+<span class="cmt"># Merge them into one library</span>
+<span class="cmd">plshelp</span> merge <span class="arg">reading</span> reading-post-1 reading-post-2 reading-hn-12345
+
+<span class="cmt"># Query across everything you've saved</span>
+<span class="cmd">plshelp</span> ask <span class="flag">"what did I read about distributed systems"</span> <span class="flag">--libraries</span> reading
+
+<span class="cmt"># Wire it up to your agent</span>
+<span class="cmd">plshelp</span> init</pre>
+                </div>
+
+                <h3 class="doc-h3">Respecting robots.txt</h3>
+                <p class="doc-p">
+                    By default, plshelp crawls without checking <span class="ci">robots.txt</span>. Pass <span
+                        class="ci">--respect-robots</span> to opt in to the target site's crawl policy - useful when you
+                    want more conservative behavior or are crawling sites where it matters.
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn"
+                            data-copy="plshelp add mylib https://example.com/docs --respect-robots" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmd">plshelp</span> add <span class="arg">mylib</span> https://example.com/docs <span class="flag">--respect-robots</span></pre>
+                </div>
+                <p class="doc-p">
+                    Both flags work with <span class="ci">crawl</span> as well, and can be combined: <span
+                        class="ci">plshelp add &lt;library&gt; &lt;url&gt; --single --respect-robots</span>.
+                </p>
+
                 <p class="doc-p">
                     Behind the scenes, <span class="ci">add</span> runs three stages: it crawls the site, splits the
                     content into chunks, and generates embeddings for semantic search. You can run these stages
-                    separately if you want more control — see the <a href="#pipeline">pipeline section</a> below.
+                    separately if you want more control - see the <a href="#pipeline">pipeline section</a> below.
                 </p>
                 <p class="doc-p">
                     Once a library is indexed, check on it with <span class="ci">plshelp show &lt;name&gt;</span> to see
@@ -761,7 +1060,7 @@ plshelp add tailwind https://tailwindcss.com/docs" aria-label="Copy">
             <div class="doc-section" id="indexing-files">
                 <h2 class="doc-h2">Indexing local files</h2>
                 <p class="doc-p">
-                    plshelp isn't just for docs sites — you can index anything you have locally. Markdown notes, a team
+                    plshelp isn't just for docs sites - you can index anything you have locally. Markdown notes, a team
                     wiki, architecture decision records, exported API specs, internal playbooks. If it's text, you can
                     search it the same way you'd search any other library.
                 </p>
@@ -789,7 +1088,7 @@ plshelp query mynotes &quot;how is the auth service structured&quot;" aria-label
                 </div>
                 <p class="doc-p">
                     Works with <span class="ci">.md</span> and <span class="ci">.txt</span> files. The library name is
-                    yours to choose — pick something short that you'll remember when querying. This is also a good way
+                    yours to choose - pick something short that you'll remember when querying. This is also a good way
                     to give a coding agent access to private context it wouldn't otherwise have, like internal docs that
                     aren't on the web.
                 </p>
@@ -923,7 +1222,7 @@ plshelp ask &quot;how do I handle errors&quot;" aria-label="Copy">
             <div class="doc-section" id="agent-setup">
                 <h2 class="doc-h2">Using with coding agents</h2>
                 <p class="doc-p">
-                    Claude Code, Codex, and other terminal-based agents can use plshelp automatically — but first they
+                    Claude Code, Codex, and other terminal-based agents can use plshelp automatically - but first they
                     need to know it exists. That's what <span class="ci">plshelp init</span> is for.
                 </p>
                 <p class="doc-p">
@@ -965,7 +1264,7 @@ plshelp init --print" aria-label="Copy">
 <span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">--print</span></pre>
                 </div>
                 <p class="doc-p">
-                    If you already have a <span class="ci">CLAUDE.md</span>, don't worry — <span class="ci">init</span>
+                    If you already have a <span class="ci">CLAUDE.md</span>, don't worry - <span class="ci">init</span>
                     won't overwrite it. It appends a clearly marked plshelp section so your existing content stays
                     intact.
                 </p>
@@ -975,7 +1274,7 @@ plshelp init --print" aria-label="Copy">
                         files to the repo so every teammate (and the agent) gets the same setup automatically.</p>
                 </div>
                 <p class="doc-p">
-                    The <span class="ci">--json</span> flag is specifically for agent use — it makes plshelp output a
+                    The <span class="ci">--json</span> flag is specifically for agent use - it makes plshelp output a
                     structured JSON response that's easy to parse programmatically. When you're querying for yourself,
                     you don't need it; the default output is formatted for human reading. The generated init files
                     instruct the agent to always use <span class="ci">--json</span> automatically.
@@ -1017,7 +1316,7 @@ plshelp show rust" aria-label="Copy">
 
                 <h3 class="doc-h3">Combine libraries into one</h3>
                 <p class="doc-p">
-                    If you want one query to cover multiple docs sets — say, numpy's user guide and its API reference —
+                    If you want one query to cover multiple docs sets - say, numpy's user guide and its API reference -
                     merge them into a single named library.
                 </p>
                 <div class="code-block">
@@ -1039,9 +1338,48 @@ plshelp query numpy &quot;what is broadcasting&quot;" aria-label="Copy">
 <span class="cmd">plshelp</span> query <span class="arg">numpy</span> <span class="flag">"what is broadcasting"</span></pre>
                 </div>
 
+                <h3 class="doc-h3">Bulk operations</h3>
+                <p class="doc-p">
+                    Most pipeline commands accept <span class="ci">--all</span> to operate across every indexed library
+                    at once.
+                </p>
+                <table class="opt-table">
+                    <tr>
+                        <td><span class="ci">embed --all --force</span></td>
+                        <td>Clears and regenerates embeddings for every library. Use after changing the embedding model
+                            in config.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="ci">index --all --force</span></td>
+                        <td>Rechunks and re-embeds everything from scratch. Use after changing chunk size config.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="ci">chunk --all --force</span></td>
+                        <td>Rebuilds the chunk and BM25 index for every library. Note: chunking always rebuilds its own
+                            stage regardless - <span class="ci">--force</span> here clears derived state before
+                            rechunking but does not touch embeddings.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="ci">refresh --all</span></td>
+                        <td>Re-runs the default refresh logic across all libraries.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="ci">export --all &lt;path&gt;</span></td>
+                        <td>Exports every library to <span class="ci">&lt;path&gt;/&lt;slug&gt;/docs.md</span> and <span
+                                class="ci">docs.txt</span>. The path argument is required when using <span
+                                class="ci">--all</span>.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="ci">remove --all</span></td>
+                        <td>Deletes every indexed library from the database. Requires typing <span class="ci">REMOVE
+                                ALL</span> exactly to confirm - this is destructive and cannot be undone. It does not
+                            touch the binary or runtime data; see <span class="ci">uninstall</span> for that.</td>
+                    </tr>
+                </table>
+
                 <h3 class="doc-h3">Delete a library</h3>
                 <p class="doc-p">
-                    Use <span class="ci">remove</span> to delete a library from the index — useful when docs are stale
+                    Use <span class="ci">remove</span> to delete a library from the index - useful when docs are stale
                     or the source URL changed and you want to re-index from scratch.
                 </p>
                 <div class="code-block">
@@ -1062,8 +1400,46 @@ plshelp query numpy &quot;what is broadcasting&quot;" aria-label="Copy">
                 </div>
                 <p class="doc-p">
                     This only removes the library from the database. Any exported files on disk (like <span
-                        class="ci">docs.md</span>) are left alone — delete those yourself if you want them gone.
+                        class="ci">docs.md</span>) are left alone - delete those yourself if you want them gone.
                 </p>
+                <h3 class="doc-h3">Uninstalling plshelp</h3>
+                <p class="doc-p">
+                    Use <span class="ci">plshelp uninstall</span> to remove the binary, the local runtime data, or both.
+                    This is different from <span class="ci">remove --all</span>, which only wipes indexed libraries from
+                    the database - <span class="ci">uninstall</span> removes plshelp itself from your system. The
+                    command is interactive - it shows you the exact resolved paths it will delete, tells you what will
+                    remain, and requires you to type the target path back exactly before anything is removed.
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="# Remove everything (binary + all local data)
+plshelp uninstall --all
+
+# Remove only the installed binary
+plshelp uninstall --binary
+
+# Remove only the local runtime data (database, embeddings, cache, config)
+plshelp uninstall --data" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmt"># Remove everything (binary + all local data)</span>
+<span class="cmd">plshelp</span> uninstall <span class="flag">--all</span>
+
+<span class="cmt"># Remove only the installed binary</span>
+<span class="cmd">plshelp</span> uninstall <span class="flag">--binary</span>
+
+<span class="cmt"># Remove only the local runtime data (database, embeddings, cache, config)</span>
+<span class="cmd">plshelp</span> uninstall <span class="flag">--data</span></pre>
+                </div>
             </div>
 
             <!-- DEBUGGING -->
@@ -1076,14 +1452,14 @@ plshelp query numpy &quot;what is broadcasting&quot;" aria-label="Copy">
                 <h3 class="doc-h3">Check if the library is fully indexed</h3>
                 <p class="doc-p">
                     Run <span class="ci">plshelp show &lt;name&gt;</span>. If embeddings aren't done yet, vector search
-                    won't be working — try <span class="ci">--mode keyword</span> as a workaround, or wait for
+                    won't be working - try <span class="ci">--mode keyword</span> as a workaround, or wait for
                     embeddings to finish.
                 </p>
 
                 <h3 class="doc-h3">See how results are being ranked</h3>
                 <p class="doc-p">
                     <span class="ci">trace</span> runs the same search as <span class="ci">query</span> but shows you
-                    the scoring details — which chunks matched, what their scores were, and why they ranked where they
+                    the scoring details - which chunks matched, what their scores were, and why they ranked where they
                     did.
                 </p>
                 <div class="code-block">
@@ -1112,7 +1488,7 @@ plshelp query numpy &quot;what is broadcasting&quot;" aria-label="Copy">
                 </p>
                 <div class="code-block">
                     <div class="code-block-header"><span class="code-block-label">shell</span>
-                        <button class="code-copy-btn" data-copy="plshelp open chunk_abc123" aria-label="Copy">
+                        <button class="code-copy-btn" data-copy="plshelp open 127" aria-label="Copy">
                             <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="9" y="9" width="13" height="13" rx="2" />
@@ -1124,7 +1500,7 @@ plshelp query numpy &quot;what is broadcasting&quot;" aria-label="Copy">
                             </svg>
                         </button>
                     </div>
-                    <pre><span class="cmd">plshelp</span> open <span class="arg">chunk_abc123</span></pre>
+                    <pre><span class="cmd">plshelp</span> open <span class="arg">127</span></pre>
                 </div>
             </div>
 
@@ -1138,7 +1514,7 @@ plshelp query numpy &quot;what is broadcasting&quot;" aria-label="Copy">
                 <table class="opt-table">
                     <tr>
                         <td><span class="ci">crawl</span></td>
-                        <td>Download pages from a URL. Stops before chunking — useful if you want to inspect the raw
+                        <td>Download pages from a URL. Stops before chunking - useful if you want to inspect the raw
                             content first.</td>
                     </tr>
                     <tr>
@@ -1171,7 +1547,7 @@ plshelp query numpy &quot;what is broadcasting&quot;" aria-label="Copy">
             <div class="doc-section" id="exports">
                 <h2 class="doc-h2">Exporting</h2>
                 <p class="doc-p">
-                    <span class="ci">export</span> writes a library out as plain files — a <span
+                    <span class="ci">export</span> writes a library out as plain files - a <span
                         class="ci">docs.md</span> and a <span class="ci">docs.txt</span>. Useful if you want a snapshot
                     you can share, paste into a prompt, or pipe into another tool.
                 </p>
@@ -1200,9 +1576,39 @@ plshelp export rust ./exports/rust-docs" aria-label="Copy">
 <span class="cmd">plshelp</span> export <span class="arg">rust</span> ./exports/rust-docs</pre>
                 </div>
                 <p class="doc-p">
-                    If you want exports generated automatically during indexing, pass <span
-                        class="ci">--include-artifacts</span> to <span class="ci">add</span> or <span
-                        class="ci">crawl</span>.
+                    If you want exports generated automatically during indexing rather than as a separate step, pass
+                    <span class="ci">--include-artifacts</span> to <span class="ci">add</span> or <span
+                        class="ci">crawl</span>. Without a path it writes to the default <span
+                        class="ci">artifacts/&lt;library&gt;/</span> location; with a path it writes there instead:
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="# Write to artifacts/rust/ automatically after crawling
+plshelp add rust https://doc.rust-lang.org/book/ --include-artifacts
+
+# Write to a custom path
+plshelp add rust https://doc.rust-lang.org/book/ --include-artifacts=./my-exports/rust" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmt"># Write to artifacts/rust/ automatically after crawling</span>
+<span class="cmd">plshelp</span> add <span class="arg">rust</span> https://doc.rust-lang.org/book/ <span class="flag">--include-artifacts</span>
+
+<span class="cmt"># Write to a custom path</span>
+<span class="cmd">plshelp</span> add <span class="arg">rust</span> https://doc.rust-lang.org/book/ <span class="flag">--include-artifacts</span>=./my-exports/rust</pre>
+                </div>
+                <p class="doc-p">
+                    Use <span class="ci">--include-artifacts</span> when you want the export to happen in one step as
+                    part of indexing. Use <span class="ci">plshelp export</span> when the library is already indexed and
+                    you just want to produce or refresh the files on demand.
                 </p>
             </div>
 
@@ -1211,7 +1617,7 @@ plshelp export rust ./exports/rust-docs" aria-label="Copy">
                 <h2 class="doc-h2">Configuration</h2>
                 <p class="doc-p">
                     plshelp writes a <span class="ci">config.toml</span> on first run. Most people never need to touch
-                    it — the defaults are sensible. But if you want to tune retrieval behavior or chunk sizes, this is
+                    it - the defaults are sensible. But if you want to tune retrieval behavior or chunk sizes, this is
                     where to do it.
                 </p>
                 <p class="doc-p">
@@ -1297,6 +1703,371 @@ busy_timeout_ms = <span class="arg">5000</span></pre>
                 </p>
             </div>
 
+            <!-- EMBEDDING MODEL CONFIG -->
+            <div class="doc-section" id="model-config">
+                <h2 class="doc-h2">Embedding model configuration</h2>
+                <p class="doc-p">
+                    You probably don't need to touch this. The default model - <span class="ci">AllMiniLML6V2Q</span> -
+                    is a good fit for most machines and most corpora. This section is for users who have a specific
+                    reason to change it.
+                </p>
+
+                <h3 class="doc-h3">Why this is a serious change</h3>
+                <p class="doc-p">
+                    The embedding model is used twice: when indexing, to generate chunk embeddings, and when querying,
+                    to embed your question before retrieval. Both sides must use the same model. If you change the model
+                    after indexing a library, every existing embedding in that library is incompatible with your queries
+                    - results will be meaningless.
+                </p>
+                <p class="doc-p">
+                    Changing the model also means downloading new weights, which can be several hundred megabytes to
+                    over a gigabyte depending on the model. If you experiment with several models, the cache grows
+                    accordingly. This is not a setting to rotate casually.
+                </p>
+                <p class="doc-p">
+                    The right time to choose a model is before you start indexing. Pick one, index everything with it,
+                    and leave it alone.
+                </p>
+
+                <h3 class="doc-h3">How chunking relates to model choice</h3>
+                <p class="doc-p">
+                    plshelp uses a parent/child chunking model. When a document is indexed, it's split into large parent
+                    chunks and smaller child chunks nested inside them. The child chunks are what get embedded and
+                    BM25-indexed - small enough for the model to handle well and for BM25 to match precisely. When
+                    retrieval finds a child chunk, plshelp returns its parent, so the text you actually read has enough
+                    surrounding context to be coherent.
+                </p>
+                <p class="doc-p">
+                    This means the model's token input limit should drive your child chunk sizing. The default child
+                    range of <span class="ci">400–800 chars</span> is calibrated for the default model's 256-token input
+                    window, using a rough conversion of 3–4 chars per token for prose and 2–3 chars per token for
+                    code-heavy content. If you switch to a model with a larger input window, you can raise <span
+                        class="ci">child_max_chars</span> accordingly and get better semantic coherence without
+                    truncation.
+                </p>
+
+                <h3 class="doc-h3">What to consider if you change it</h3>
+                <p class="doc-p">
+                    Speed, quality, and context window are the main axes. How these land in practice depends heavily on
+                    your hardware. On a slow CPU or a machine with limited RAM, a quantized small model may be the only
+                    option that runs at usable speed. Quantized models (the ones ending in <span class="ci">Q</span>)
+                    are faster and lighter with a modest quality tradeoff. Larger models produce better embeddings but
+                    are slower and heavier to store. Long-context models like <span class="ci">BGEM3</span> and <span
+                        class="ci">NomicEmbedTextV15</span> support up to 8192 tokens per chunk, enabling much less
+                    aggressive child chunking - but they're significantly slower on CPU and may not be practical on
+                    lower-end hardware.
+                </p>
+                <p class="doc-p">
+                    The full list of supported models is in the <a class="ext-link"
+                        href="https://docs.rs/fastembed/latest/fastembed/enum.EmbeddingModel.html" target="_blank"
+                        rel="noopener">fastembed documentation</a>. A summary of the most useful ones is in the table
+                    below.
+                </p>
+
+                <h3 class="doc-h3">Batch size</h3>
+                <p class="doc-p">
+                    The <span class="ci">batch_size</span> setting controls how many chunks are embedded in a single
+                    pass. It defaults to <span class="ci">128</span> and should always be set to a multiple of 64.
+                </p>
+                <p class="doc-p">
+                    A larger batch size means more chunks are processed in parallel, which improves throughput - but
+                    only up to the limit your hardware can support. If the batch doesn't fit in available RAM, the OS
+                    will start swapping and performance will collapse. The right value depends on which model you're
+                    using and how much memory your machine has.
+                </p>
+                <table class="opt-table">
+                    <tr>
+                        <td><strong>64</strong></td>
+                        <td>Safe floor for constrained machines (4–8 GB RAM). Use with larger models or when memory is
+                            tight.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>128</strong></td>
+                        <td>Default. Works well with small/quantized models on 8–16 GB RAM.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>192–256</strong></td>
+                        <td>Reasonable on 16–32 GB RAM with small or medium models. Diminishing returns beyond this
+                            point on CPU.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>256+</strong></td>
+                        <td>Only beneficial with large models on well-provisioned machines. If you're on CPU only, more
+                            RAM won't help much past 256 - the bottleneck shifts to compute.</td>
+                    </tr>
+                </table>
+                <p class="doc-p">
+                    If you see memory pressure or swapping during <span class="ci">embed</span>, lower the batch size.
+                    If indexing feels slow and you have headroom, try stepping it up by 64 at a time.
+                </p>
+
+                <details class="model-table-details">
+                    <summary class="model-table-summary">Supported models <span class="model-table-hint">click to
+                            expand</span></summary>
+                    <div class="model-table-wrap">
+                        <table class="model-table">
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th class="col-num">Input tokens</th>
+                                    <th class="col-num">child_max_chars</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="model-group-row">
+                                    <td colspan="4">Fast / quantized</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">AllMiniLML6V2Q</span></td>
+                                    <td class="col-num">256</td>
+                                    <td class="col-num">400–800</td>
+                                    <td class="col-notes" data-meta="256 tokens · 400–800 chars">Default. Best choice
+                                        for large corpora on average hardware.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">BGESmallENV15Q</span></td>
+                                    <td class="col-num">512</td>
+                                    <td class="col-num">700–1400</td>
+                                    <td class="col-notes" data-meta="512 tokens · 700–1400 chars">Quantized, slightly
+                                        better quality than MiniLM.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">SnowflakeArcticEmbedSQ</span></td>
+                                    <td class="col-num">512</td>
+                                    <td class="col-num">700–1400</td>
+                                    <td class="col-notes" data-meta="512 tokens · 700–1400 chars">Fast quantized option
+                                        with competitive retrieval quality.</td>
+                                </tr>
+                                <tr class="model-group-row">
+                                    <td colspan="4">Balanced</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">AllMiniLML6V2</span></td>
+                                    <td class="col-num">256</td>
+                                    <td class="col-num">400–800</td>
+                                    <td class="col-notes" data-meta="256 tokens · 400–800 chars">Unquantized MiniLM.
+                                        Slightly better quality than Q variant, somewhat slower.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">BGESmallENV15</span></td>
+                                    <td class="col-num">512</td>
+                                    <td class="col-num">700–1400</td>
+                                    <td class="col-notes" data-meta="512 tokens · 700–1400 chars">Good quality/speed
+                                        balance for English docs. Reasonable on most hardware.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">SnowflakeArcticEmbedM</span></td>
+                                    <td class="col-num">512</td>
+                                    <td class="col-num">700–1400</td>
+                                    <td class="col-notes" data-meta="512 tokens · 700–1400 chars">Solid mid-tier model
+                                        with good English retrieval.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">MultilingualE5Small</span></td>
+                                    <td class="col-num">512</td>
+                                    <td class="col-num">700–1400</td>
+                                    <td class="col-notes" data-meta="512 tokens · 700–1400 chars">Smallest multilingual
+                                        option.</td>
+                                </tr>
+                                <tr class="model-group-row">
+                                    <td colspan="4">Higher quality, slower</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">BGEBaseENV15</span></td>
+                                    <td class="col-num">512</td>
+                                    <td class="col-num">700–1400</td>
+                                    <td class="col-notes" data-meta="512 tokens · 700–1400 chars">Better retrieval than
+                                        Small. Needs more RAM and CPU time.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">GTEBaseENV15</span></td>
+                                    <td class="col-num">512</td>
+                                    <td class="col-num">700–1400</td>
+                                    <td class="col-notes" data-meta="512 tokens · 700–1400 chars">Comparable to BGE
+                                        Base. Good general-purpose English model.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">MxbaiEmbedLargeV1</span></td>
+                                    <td class="col-num">512</td>
+                                    <td class="col-num">700–1400</td>
+                                    <td class="col-notes" data-meta="512 tokens · 700–1400 chars">High quality English
+                                        model. Best reserved for small, high-value corpora.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">BGELargeENV15</span></td>
+                                    <td class="col-num">512</td>
+                                    <td class="col-num">700–1400</td>
+                                    <td class="col-notes" data-meta="512 tokens · 700–1400 chars">Large BGE. Strong
+                                        retrieval, expensive to run.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">ModernBertEmbedLarge</span></td>
+                                    <td class="col-num">8192</td>
+                                    <td class="col-num">1400–2000</td>
+                                    <td class="col-notes" data-meta="8192 tokens · 1400–2000 chars">Modern architecture,
+                                        large context. Slow on CPU.</td>
+                                </tr>
+                                <tr class="model-group-row">
+                                    <td colspan="4">Long context</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">BGEM3</span></td>
+                                    <td class="col-num">8192</td>
+                                    <td class="col-num">1400–2000</td>
+                                    <td class="col-notes" data-meta="8192 tokens · 1400–2000 chars">Long-context,
+                                        multilingual. Slow on CPU.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">NomicEmbedTextV15</span></td>
+                                    <td class="col-num">8192</td>
+                                    <td class="col-num">1400–2000</td>
+                                    <td class="col-notes" data-meta="8192 tokens · 1400–2000 chars">Long-context English
+                                        model. Good for papers and longform content.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">SnowflakeArcticEmbedMLong</span></td>
+                                    <td class="col-num">2048</td>
+                                    <td class="col-num">1000–1800</td>
+                                    <td class="col-notes" data-meta="2048 tokens · 1000–1800 chars">Mid-range
+                                        long-context option. Faster than BGEM3.</td>
+                                </tr>
+                                <tr class="model-group-row">
+                                    <td colspan="4">Domain-specific</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">JinaEmbeddingsV2BaseCode</span></td>
+                                    <td class="col-num">8192</td>
+                                    <td class="col-num">600–1200</td>
+                                    <td class="col-notes" data-meta="8192 tokens · 600–1200 chars">Trained on code. Best
+                                        for code-heavy or source-annotated corpora. Smaller child sizes recommended due
+                                        to denser token counts in code.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">MultilingualE5Base</span></td>
+                                    <td class="col-num">512</td>
+                                    <td class="col-num">700–1400</td>
+                                    <td class="col-notes" data-meta="512 tokens · 700–1400 chars">Cross-language
+                                        retrieval. Use when your corpus spans multiple languages.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">MultilingualE5Large</span></td>
+                                    <td class="col-num">512</td>
+                                    <td class="col-num">700–1400</td>
+                                    <td class="col-notes" data-meta="512 tokens · 700–1400 chars">Best multilingual
+                                        quality. Heavy.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">BGESmallZHV15</span></td>
+                                    <td class="col-num">512</td>
+                                    <td class="col-num">700–1400</td>
+                                    <td class="col-notes" data-meta="512 tokens · 700–1400 chars">Chinese-language
+                                        corpora.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="ci">BGELargeZHV15</span></td>
+                                    <td class="col-num">512</td>
+                                    <td class="col-num">700–1400</td>
+                                    <td class="col-notes" data-meta="512 tokens · 700–1400 chars">Higher quality Chinese
+                                        retrieval.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </details>
+
+                <h3 class="doc-h3">How to change models</h3>
+                <p class="doc-p">
+                    Edit the <span class="ci">model</span> field in your <span class="ci">config.toml</span>:
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">config.toml</span>
+                        <button class="code-copy-btn" data-copy="[embedding]
+model = &quot;BGESmallENV15&quot;" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre>[embedding]
+model = <span class="flag">"BGESmallENV15"</span></pre>
+                </div>
+                <p class="doc-p">
+                    After changing the model, you must regenerate embeddings for any library you want to keep using with
+                    vector or hybrid search. Use <span class="ci">--force</span> to clear and regenerate - without it,
+                    <span class="ci">embed</span> only fills missing embeddings and won't replace existing ones.
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="# Re-embed a single library
+plshelp embed <library> --force
+
+# Re-embed every indexed library at once
+plshelp embed --all --force" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmt"># Re-embed a single library</span>
+<span class="cmd">plshelp</span> embed <span class="arg">&lt;library&gt;</span> <span class="flag">--force</span>
+
+<span class="cmt"># Re-embed every indexed library at once</span>
+<span class="cmd">plshelp</span> embed <span class="flag">--all --force</span></pre>
+                </div>
+                <p class="doc-p">
+                    <span class="ci">embed --force</span> preserves your existing crawl and chunk data - it only
+                    regenerates the embeddings. If you also want to rebuild chunking from scratch (for example, after
+                    changing <span class="ci">child_max_chars</span> to match a new model's input window):
+                </p>
+                <div class="code-block">
+                    <div class="code-block-header"><span class="code-block-label">shell</span>
+                        <button class="code-copy-btn" data-copy="# Rechunk and re-embed a single library
+plshelp index <library> --force
+
+# Rechunk and re-embed everything
+plshelp index --all --force" aria-label="Copy">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><span class="cmt"># Rechunk and re-embed a single library</span>
+<span class="cmd">plshelp</span> index <span class="arg">&lt;library&gt;</span> <span class="flag">--force</span>
+
+<span class="cmt"># Rechunk and re-embed everything</span>
+<span class="cmd">plshelp</span> index <span class="flag">--all --force</span></pre>
+                </div>
+                <p class="doc-p">
+                    If you only want to rebuild chunks without re-embedding (unusual, but possible), use <span class="ci">chunk
+                        --force</span>. This rebuilds the chunks, rebuilds BM25, and deletes the old embeddings along
+                    with the old child chunks. If you want vector or hybrid search again afterward, run <span class="ci">embed</span>
+                    to generate embeddings for the new chunks.
+                </p>
+                <p class="doc-p">
+                    Keyword search continues to work without re-embedding, since BM25 is built from the chunk text
+                    itself, not the embedding model.
+                </p> 
+            </div>
+
             <!-- HOW SEARCH WORKS -->
             <div class="doc-section" id="how-search-works">
                 <h2 class="doc-h2">How search works</h2>
@@ -1317,7 +2088,7 @@ busy_timeout_ms = <span class="arg">5000</span></pre>
                     </tr>
                     <tr>
                         <td><span class="ci">keyword</span></td>
-                        <td>Exact text matching using BM25. Fast, and works as soon as a library is chunked — no
+                        <td>Exact text matching using BM25. Fast, and works as soon as a library is chunked - no
                             embeddings needed. Best for looking up specific flags, error strings, or function names.
                         </td>
                     </tr>
@@ -1333,7 +2104,7 @@ busy_timeout_ms = <span class="arg">5000</span></pre>
             <div class="doc-section" id="storage">
                 <h2 class="doc-h2">Where data lives</h2>
                 <p class="doc-p">
-                    Everything — the database, embeddings, model cache, and config — lives in your system's app data
+                    Everything - the database, embeddings, model cache, and config - lives in your system's app data
                     directory. The binary itself is installed separately in a bin directory.
                 </p>
                 <table class="opt-table">
@@ -1351,7 +2122,7 @@ busy_timeout_ms = <span class="arg">5000</span></pre>
                     </tr>
                 </table>
                 <p class="doc-p">
-                    The database is a single SQLite file. It's yours — back it up, move it, inspect it directly if you
+                    The database is a single SQLite file. It's yours - back it up, move it, inspect it directly if you
                     want.
                 </p>
             </div>
@@ -1363,14 +2134,19 @@ busy_timeout_ms = <span class="arg">5000</span></pre>
                     <div class="code-block-header"><span class="code-block-label">all commands</span>
                         <button class="code-copy-btn" data-copy="plshelp help
 plshelp init [--agents] [--claude] [--print] [--json]
-plshelp add <library> <url> [--include-artifacts[=/path]] [--json]
-plshelp crawl <library> <url> [--include-artifacts[=/path]] [--json]
-plshelp index <library> [--file /path/to/file] [--json]
-plshelp chunk <library> [--file /path/to/file] [--json]
-plshelp embed <library> [--json]
-plshelp refresh [library ...] [--json]
+plshelp add <library> <url> [--single] [--respect-robots] [--force] [--include-artifacts[=/path]] [--json]
+plshelp crawl <library> <url> [--single] [--respect-robots] [--force] [--include-artifacts[=/path]] [--json]
+plshelp index <library> [--file /path/to/file] [--force] [--json]
+plshelp index --all [--force] [--json]
+plshelp chunk <library> [--file /path/to/file] [--force] [--json]
+plshelp chunk --all [--force] [--json]
+plshelp embed <library> [--force] [--json]
+plshelp embed --all [--force] [--json]
+plshelp refresh [library ...]  [--json]
+plshelp refresh --all [--json]
 plshelp merge <new> <lib1> <lib2> [...] [--replace] [--json]
 plshelp export <library> [path] [--json]
+plshelp export --all <path> [--json]
 plshelp query <library> &quot;<question>&quot; [--mode hybrid|vector|keyword] [--top-k N] [--context N] [--json]
 plshelp <library> &quot;<question>&quot;
 plshelp ask &quot;<question>&quot; [--libraries a,b,c] [--mode ...] [--top-k N] [--context N] [--json]
@@ -1380,7 +2156,9 @@ plshelp list [--json]
 plshelp show <library> [--json]
 plshelp open <chunk_id> [--json]
 plshelp config [--json]
-plshelp remove <library> [--json]" aria-label="Copy">
+plshelp remove <library> [--json]
+plshelp remove --all [--json]
+plshelp uninstall [--all] [--binary] [--data]" aria-label="Copy">
                             <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="9" y="9" width="13" height="13" rx="2" />
@@ -1394,14 +2172,19 @@ plshelp remove <library> [--json]" aria-label="Copy">
                     </div>
                     <pre><span class="cmd">plshelp</span> <span class="arg">help</span>
 <span class="cmd">plshelp</span> <span class="arg">init</span> <span class="flag">[--agents] [--claude] [--print] [--json]</span>
-<span class="cmd">plshelp</span> <span class="arg">add</span> <span class="arg">&lt;library&gt;</span> <span class="arg">&lt;url&gt;</span> <span class="flag">[--include-artifacts[=/path]] [--json]</span>
-<span class="cmd">plshelp</span> <span class="arg">crawl</span> <span class="arg">&lt;library&gt;</span> <span class="arg">&lt;url&gt;</span> <span class="flag">[--include-artifacts[=/path]] [--json]</span>
-<span class="cmd">plshelp</span> <span class="arg">index</span> <span class="arg">&lt;library&gt;</span> <span class="flag">[--file /path/to/file] [--json]</span>
-<span class="cmd">plshelp</span> <span class="arg">chunk</span> <span class="arg">&lt;library&gt;</span> <span class="flag">[--file /path/to/file] [--json]</span>
-<span class="cmd">plshelp</span> <span class="arg">embed</span> <span class="arg">&lt;library&gt;</span> <span class="flag">[--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">add</span> <span class="arg">&lt;library&gt;</span> <span class="arg">&lt;url&gt;</span> <span class="flag">[--single] [--respect-robots] [--force] [--include-artifacts[=/path]] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">crawl</span> <span class="arg">&lt;library&gt;</span> <span class="arg">&lt;url&gt;</span> <span class="flag">[--single] [--respect-robots] [--force] [--include-artifacts[=/path]] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">index</span> <span class="arg">&lt;library&gt;</span> <span class="flag">[--file /path/to/file] [--force] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">index</span> <span class="flag">--all [--force] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">chunk</span> <span class="arg">&lt;library&gt;</span> <span class="flag">[--file /path/to/file] [--force] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">chunk</span> <span class="flag">--all [--force] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">embed</span> <span class="arg">&lt;library&gt;</span> <span class="flag">[--force] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">embed</span> <span class="flag">--all [--force] [--json]</span>
 <span class="cmd">plshelp</span> <span class="arg">refresh</span> <span class="flag">[library ...] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">refresh</span> <span class="flag">--all [--json]</span>
 <span class="cmd">plshelp</span> <span class="arg">merge</span> <span class="arg">&lt;new&gt;</span> <span class="arg">&lt;lib1&gt;</span> <span class="arg">&lt;lib2&gt;</span> <span class="flag">[...] [--replace] [--json]</span>
 <span class="cmd">plshelp</span> <span class="arg">export</span> <span class="arg">&lt;library&gt;</span> <span class="flag">[path] [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">export</span> <span class="flag">--all &lt;path&gt; [--json]</span>
 <span class="cmd">plshelp</span> <span class="arg">query</span> <span class="arg">&lt;library&gt;</span> <span class="flag">"&lt;question&gt;" [--mode hybrid|vector|keyword] [--top-k N] [--context N] [--json]</span>
 <span class="cmd">plshelp</span> <span class="arg">&lt;library&gt;</span> <span class="flag">"&lt;question&gt;"</span>
 <span class="cmd">plshelp</span> <span class="arg">ask</span> <span class="flag">"&lt;question&gt;" [--libraries a,b,c] [--mode ...] [--top-k N] [--context N] [--json]</span>
@@ -1411,7 +2194,9 @@ plshelp remove <library> [--json]" aria-label="Copy">
 <span class="cmd">plshelp</span> <span class="arg">show</span> <span class="arg">&lt;library&gt;</span> <span class="flag">[--json]</span>
 <span class="cmd">plshelp</span> <span class="arg">open</span> <span class="arg">&lt;chunk_id&gt;</span> <span class="flag">[--json]</span>
 <span class="cmd">plshelp</span> <span class="arg">config</span> <span class="flag">[--json]</span>
-<span class="cmd">plshelp</span> <span class="arg">remove</span> <span class="arg">&lt;library&gt;</span> <span class="flag">[--json]</span></pre>
+<span class="cmd">plshelp</span> <span class="arg">remove</span> <span class="arg">&lt;library&gt;</span> <span class="flag">[--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">remove</span> <span class="flag">--all [--json]</span>
+<span class="cmd">plshelp</span> <span class="arg">uninstall</span> <span class="flag">[--all] [--binary] [--data]</span></pre>
                 </div>
             </div>
 
@@ -1420,7 +2205,7 @@ plshelp remove <library> [--json]" aria-label="Copy">
                 <h2 class="doc-h2">Using the registry without the CLI</h2>
                 <p class="doc-p">
                     The plshelp registry is a collection of pre-crawled documentation libraries hosted at <span
-                        class="ci">registry.plshelp.run</span>. You don't need the CLI tool to use it — every library is
+                        class="ci">registry.plshelp.run</span>. You don't need the CLI to use it - every library is
                     available as a plain <span class="ci">.md</span> or <span class="ci">.txt</span> file you can
                     download directly with curl.
                 </p>
@@ -1449,7 +2234,7 @@ plshelp remove <library> [--json]" aria-label="Copy">
                     <pre><span class="cmd">curl</span> <span class="flag">-s</span> https://registry.plshelp.run/index.json <span class="flag">|</span> jq <span class="flag">-r</span> <span class="arg">'.entries[] | select(.status=="success") | .name'</span></pre>
                 </div>
                 <p class="doc-p">
-                    If you want the slug alongside the name — useful for building download URLs:
+                    If you want the slug alongside the name - useful for building download URLs:
                 </p>
                 <div class="code-block">
                     <div class="code-block-header"><span class="code-block-label">shell</span>
@@ -1534,8 +2319,8 @@ curl -O https://registry.plshelp.run/docs/accelerate/docs.txt" aria-label="Copy"
                 </div>
                 <div class="callout">
                     <div class="callout-label">Tip</div>
-                    <p>You can also browse and download libraries from the <a class="cmd" href="/registry">registry page</a>
-                        directly in your browser.</p>
+                    <p>You can also browse and download libraries from the <a href="/registry">registry page</a>
+                        directly in your browser - no terminal needed.</p>
                 </div>
             </div>
 
@@ -1564,7 +2349,9 @@ curl -O https://registry.plshelp.run/docs/accelerate/docs.txt" aria-label="Copy"
                 <h3 class="doc-h3">How do I update a library when the docs change?</h3>
                 <p class="doc-p">
                     Remove the old version with <span class="ci">plshelp remove &lt;name&gt;</span>, then re-run <span
-                        class="ci">plshelp add</span>. There's no in-place refresh for crawled libraries yet.
+                        class="ci">plshelp add</span>. Or use <span class="ci">plshelp add &lt;name&gt; &lt;url&gt;
+                        --force</span> to recrawl, rechunk, and re-embed from scratch without removing the library
+                    first.
                 </p>
 
                 <h3 class="doc-h3">Is there an MCP server?</h3>
@@ -1590,7 +2377,7 @@ curl -O https://registry.plshelp.run/docs/accelerate/docs.txt" aria-label="Copy"
             <a class="toc-link active" href="#what-is-it">What is plshelp?</a>
             <a class="toc-link" href="#install">Installation</a>
             <a class="toc-link" href="#quickstart">Your first library in 2 minutes</a>
-            <a class="toc-link" href="#indexing-sites">Indexing a docs website</a>
+            <a class="toc-link" href="#indexing-sites">Indexing websites and web pages</a>
             <a class="toc-link" href="#indexing-files">Indexing local files</a>
             <a class="toc-link" href="#querying">Querying</a>
             <a class="toc-link" href="#agent-setup">Using with coding agents</a>
@@ -1599,6 +2386,7 @@ curl -O https://registry.plshelp.run/docs/accelerate/docs.txt" aria-label="Copy"
             <a class="toc-link" href="#pipeline">The indexing pipeline</a>
             <a class="toc-link" href="#exports">Exporting</a>
             <a class="toc-link" href="#config">Configuration</a>
+            <a class="toc-link" href="#model-config">Embedding model config</a>
             <a class="toc-link" href="#how-search-works">How search works</a>
             <a class="toc-link" href="#storage">Where data lives</a>
             <a class="toc-link" href="#reference">Full command reference</a>
@@ -1614,7 +2402,7 @@ curl -O https://registry.plshelp.run/docs/accelerate/docs.txt" aria-label="Copy"
         <a class="toc-link" href="#what-is-it">What is plshelp?</a>
         <a class="toc-link" href="#install">Installation</a>
         <a class="toc-link" href="#quickstart">Your first library in 2 minutes</a>
-        <a class="toc-link" href="#indexing-sites">Indexing a docs website</a>
+        <a class="toc-link" href="#indexing-sites">Indexing websites and web pages</a>
         <a class="toc-link" href="#indexing-files">Indexing local files</a>
         <a class="toc-link" href="#querying">Querying</a>
         <a class="toc-link" href="#agent-setup">Using with coding agents</a>
@@ -1623,6 +2411,7 @@ curl -O https://registry.plshelp.run/docs/accelerate/docs.txt" aria-label="Copy"
         <a class="toc-link" href="#pipeline">The indexing pipeline</a>
         <a class="toc-link" href="#exports">Exporting</a>
         <a class="toc-link" href="#config">Configuration</a>
+        <a class="toc-link" href="#model-config">Embedding model config</a>
         <a class="toc-link" href="#how-search-works">How search works</a>
         <a class="toc-link" href="#storage">Where data lives</a>
         <a class="toc-link" href="#reference">Full command reference</a>
@@ -1630,8 +2419,8 @@ curl -O https://registry.plshelp.run/docs/accelerate/docs.txt" aria-label="Copy"
         <a class="toc-link" href="#faq">FAQ</a>
     </div>
 
-        <script>
-// Copy buttons
+    <script>
+        // Copy buttons
         document.querySelectorAll('.code-copy-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 navigator.clipboard.writeText(btn.dataset.copy).then(() => {
@@ -1666,7 +2455,7 @@ curl -O https://registry.plshelp.run/docs/accelerate/docs.txt" aria-label="Copy"
             }
         });
 
-        // Scroll-aware TOC highlighting — applies to both sidebar and mobile drawer
+        // Scroll-aware TOC highlighting - applies to both sidebar and mobile drawer
         const sections = Array.from(document.querySelectorAll('.doc-section[id]'));
         const allTocLinks = Array.from(document.querySelectorAll('.toc-link'));
 
@@ -1710,7 +2499,6 @@ curl -O https://registry.plshelp.run/docs/accelerate/docs.txt" aria-label="Copy"
             });
         });
     </script>
-
 </body>
 
 </html>
