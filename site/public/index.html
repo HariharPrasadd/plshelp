@@ -791,8 +791,8 @@
                     <button class="tab-btn" data-tab="brew">brew</button>
                 </div>
                 <div class="install-cmd active" id="tab-curl">
-                    <code><span class="d">curl -fsSL</span> https://plshelp.run/install.sh <span class="d">|</span> sh</code>
-                    <button class="copy-btn" data-copy="curl -fsSL https://plshelp.run/install.sh | sh"
+                    <code id="curl-install-command"><span class="d">curl -fsSL</span> https://plshelp.run/install.sh <span class="d">|</span> sh</code>
+                    <button class="copy-btn" id="curl-install-copy" data-copy="curl -fsSL https://plshelp.run/install.sh | sh"
                         aria-label="Copy">
                         <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1130,6 +1130,49 @@
             const isOpen = navMobile.classList.toggle('open');
             hamburger.classList.toggle('open', isOpen);
         });
+
+        // ── OS-AWARE INSTALL COMMAND ─────────────────────────────────────────
+        const curlInstallCommand = document.getElementById('curl-install-command');
+        const curlInstallCopy = document.getElementById('curl-install-copy');
+
+        function detectBrowserOs() {
+            const userAgent = navigator.userAgent || '';
+            const platform = navigator.platform || '';
+            const touchPoints = navigator.maxTouchPoints || 0;
+            const macLike = /Mac/i.test(platform) || /Mac OS X/i.test(userAgent);
+            const isIpad = touchPoints > 1 && /Mac/i.test(platform);
+
+            if (/Windows/i.test(platform) || /Windows/i.test(userAgent)) {
+                return 'windows';
+            }
+            if (/Linux|X11/i.test(platform) || /Linux|X11/i.test(userAgent)) {
+                return 'linux';
+            }
+            if (macLike || /iPhone|iPad|iPod/i.test(userAgent) || isIpad) {
+                return 'macos';
+            }
+            return 'unix';
+        }
+
+        function setInstallCommandForOs() {
+            if (!curlInstallCommand || !curlInstallCopy) {
+                return;
+            }
+
+            const os = detectBrowserOs();
+            if (os === 'windows') {
+                curlInstallCommand.innerHTML =
+                    '<span class="d">irm</span> https://plshelp.run/install.ps1 <span class="d">|</span> iex';
+                curlInstallCopy.dataset.copy = 'irm https://plshelp.run/install.ps1 | iex';
+                return;
+            }
+
+            curlInstallCommand.innerHTML =
+                '<span class="d">curl -fsSL</span> https://plshelp.run/install.sh <span class="d">|</span> sh';
+            curlInstallCopy.dataset.copy = 'curl -fsSL https://plshelp.run/install.sh | sh';
+        }
+
+        setInstallCommandForOs();
 
         // ── INSTALL TABS ──────────────────────────────────────────────────────
         document.querySelectorAll('.tab-btn').forEach(btn => {

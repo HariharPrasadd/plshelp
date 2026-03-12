@@ -75,7 +75,7 @@ try {
     if ($InstallDir -notin $pathDirs) {
         Write-Host "Add $InstallDir to your PATH if it is not already there."
     }
-    Write-Host 'Run: plshelp --help'
+    Write-Host 'Run: plshelp help'
 }
 finally {
     Remove-Item -Recurse -Force $TempDir -ErrorAction SilentlyContinue

@@ -122,4 +122,4 @@ case ":$PATH:" in
     log "Add $INSTALL_DIR to your PATH if it is not already there."
     ;;
 esac
-log "Run: plshelp --help"
+log "Run: plshelp help"
