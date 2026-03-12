@@ -1,0 +1,11 @@
+{
+  "name": "plshelp-darwin-arm64",
+  "version": "0.1.0",
+  "os": ["darwin"],
+  "cpu": ["arm64"],
+  "description": "macOS arm64 binary for plshelp",
+  "bin": {
+    "plshelp": "./bin/plshelp"
+  },
+  "files": ["bin/"]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "plshelp-linux-x64",
+  "version": "0.1.0",
+  "os": ["linux"],
+  "cpu": ["x64"],
+  "description": "Linux x64 binary for plshelp",
+  "bin": {
+    "plshelp": "./bin/plshelp"
+  },
+  "files": ["bin/"]
+}
