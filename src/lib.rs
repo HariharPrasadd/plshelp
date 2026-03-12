@@ -639,12 +639,13 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
             let conn = init_db(&db_path())?;
             if args.len() < 3 {
                 return Err(
-                    "Usage: plshelp add <library_name> <source_url> [--single] [--respect-robots] [--include-artifacts[=/path]]".into(),
+                    "Usage: plshelp add <library_name> <source_url> [--single] [--respect-robots] [--force] [--include-artifacts[=/path]]".into(),
                 );
             }
             let (output_json, flags) = extract_json_flag(&args[3..]);
             let (single_page, flags) = extract_single_flag(&flags);
             let (respect_robots, flags) = extract_respect_robots_flag(&flags);
+            let (force, flags) = extract_force_flag(&flags);
             let include_artifacts = parse_include_artifacts_flag(&flags, &args[1]);
             add_library(
                 &conn,
@@ -652,6 +653,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
                 &args[2],
                 single_page,
                 respect_robots,
+                force,
                 include_artifacts,
             )
             .await?;
@@ -663,6 +665,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
                     "source_url": args[2],
                     "single_page": single_page,
                     "respect_robots": respect_robots,
+                    "force": force,
                     "artifacts_path": flags.iter().find_map(|f| f.strip_prefix("--include-artifacts=").map(|s| s.to_string())),
                 }),
             )?;
@@ -671,12 +674,13 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
             let conn = init_db(&db_path())?;
             if args.len() < 3 {
                 return Err(
-                    "Usage: plshelp crawl <library_name> <source_url> [--single] [--respect-robots] [--include-artifacts[=/path]]".into(),
+                    "Usage: plshelp crawl <library_name> <source_url> [--single] [--respect-robots] [--force] [--include-artifacts[=/path]]".into(),
                 );
             }
             let (output_json, flags) = extract_json_flag(&args[3..]);
             let (single_page, flags) = extract_single_flag(&flags);
             let (respect_robots, flags) = extract_respect_robots_flag(&flags);
+            let (force, flags) = extract_force_flag(&flags);
             let include_artifacts = parse_include_artifacts_flag(&flags, &args[1]);
             crawl_library(
                 &conn,
@@ -684,6 +688,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
                 &args[2],
                 single_page,
                 respect_robots,
+                force,
                 "crawl",
                 include_artifacts,
             )
@@ -696,6 +701,7 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
                     "source_url": args[2],
                     "single_page": single_page,
                     "respect_robots": respect_robots,
+                    "force": force,
                 }),
             )?;
         }
@@ -762,52 +768,58 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
         "index" => {
             let conn = init_db(&db_path())?;
             if args.len() < 2 {
-                return Err("Usage: plshelp index <library_name> [--file /path/to/file]".into());
+                return Err("Usage: plshelp index <library_name> [--file /path/to/file] [--force]".into());
             }
             let (output_json, flags) = extract_json_flag(&args[2..]);
+            let (force, flags) = extract_force_flag(&flags);
             let file = parse_index_file_flag(&flags);
-            index_library(&conn, &args[1], file.as_deref())?;
+            index_library(&conn, &args[1], file.as_deref(), force)?;
             print_command_result(
                 "index",
                 output_json,
                 json!({
                     "input_name": args[1],
                     "file": file,
+                    "force": force,
                 }),
             )?;
         }
         "chunk" => {
             let conn = init_db(&db_path())?;
             if args.len() < 2 {
-                return Err("Usage: plshelp chunk <library_name> [--file /path/to/file]".into());
+                return Err("Usage: plshelp chunk <library_name> [--file /path/to/file] [--force]".into());
             }
             let (output_json, flags) = extract_json_flag(&args[2..]);
+            let (force, flags) = extract_force_flag(&flags);
             let file = parse_index_file_flag(&flags);
-            chunk_targets(&conn, &args[1], file.as_deref(), "chunk")?;
+            chunk_targets(&conn, &args[1], file.as_deref(), force, "chunk")?;
             print_command_result(
                 "chunk",
                 output_json,
                 json!({
                     "input_name": args[1],
                     "file": file,
+                    "force": force,
                 }),
             )?;
         }
         "embed" => {
             let conn = init_db(&db_path())?;
             if args.len() < 2 {
-                return Err("Usage: plshelp embed <library_name>".into());
+                return Err("Usage: plshelp embed <library_name> [--force]".into());
             }
             let (output_json, flags) = extract_json_flag(&args[2..]);
+            let (force, flags) = extract_force_flag(&flags);
             if !flags.is_empty() {
-                return Err("Usage: plshelp embed <library_name> [--json]".into());
+                return Err("Usage: plshelp embed <library_name> [--force] [--json]".into());
             }
-            embed_library(&conn, &args[1], "embed")?;
+            embed_library(&conn, &args[1], force, "embed")?;
             print_command_result(
                 "embed",
                 output_json,
                 json!({
                     "input_name": args[1],
+                    "force": force,
                 }),
             )?;
         }

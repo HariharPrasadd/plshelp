@@ -3,13 +3,13 @@ use crate::*;
 pub(crate) fn print_help() {
     println!("\nnote: for queries, quote questions in the shell, especially if they contain ? or *\n");
     println!("plshelp <command>");
-    println!("  add <library_name> <source_url> [--single] [--respect-robots] [--include-artifacts[=/path]] [--json]");
-    println!("  crawl <library_name> <source_url> [--single] [--respect-robots] [--include-artifacts[=/path]] [--json]");
+    println!("  add <library_name> <source_url> [--single] [--respect-robots] [--force] [--include-artifacts[=/path]] [--json]");
+    println!("  crawl <library_name> <source_url> [--single] [--respect-robots] [--force] [--include-artifacts[=/path]] [--json]");
     println!("  init [--agents] [--claude] [--print] [--json]");
     println!("  uninstall --all | --data | --binary");
-    println!("  index <library_name> [--file /path/to/file] [--json]");
-    println!("  chunk <library_name> [--file /path/to/file] [--json]");
-    println!("  embed <library_name> [--json]");
+    println!("  index <library_name> [--file /path/to/file] [--force] [--json]");
+    println!("  chunk <library_name> [--file /path/to/file] [--force] [--json]");
+    println!("  embed <library_name> [--force] [--json]");
     println!("  refresh [library_name ...] [--json]   # recompute/backfill stats; no crawl");
     println!(
         "  merge <new_library_name> <library1> <library2> [library3 ...] [--replace] [--include-artifacts[=/path]] [--json]"
@@ -256,6 +256,19 @@ pub(crate) fn extract_respect_robots_flag(flags: &[String]) -> (bool, Vec<String
         }
     }
     (respect_robots, out)
+}
+
+pub(crate) fn extract_force_flag(flags: &[String]) -> (bool, Vec<String>) {
+    let mut force = false;
+    let mut out = Vec::with_capacity(flags.len());
+    for flag in flags {
+        if flag == "--force" {
+            force = true;
+        } else {
+            out.push(flag.clone());
+        }
+    }
+    (force, out)
 }
 
 pub(crate) fn parse_merge_args(

@@ -129,6 +129,7 @@ pub(crate) async fn crawl_library(
     source_url: &str,
     single_page: bool,
     respect_robots: bool,
+    force: bool,
     job_type: &str,
     include_artifacts: Option<PathBuf>,
 ) -> Result<(), Box<dyn Error>> {
@@ -219,6 +220,24 @@ pub(crate) async fn crawl_library(
         }
 
         let tx = conn.unchecked_transaction()?;
+        if force {
+            tx.execute(
+                "DELETE FROM chunks_fts WHERE library_name = ?1",
+                params![library_name],
+            )?;
+            tx.execute(
+                "DELETE FROM chunks WHERE library_name = ?1",
+                params![library_name],
+            )?;
+            tx.execute(
+                "DELETE FROM parents WHERE library_name = ?1",
+                params![library_name],
+            )?;
+            tx.execute(
+                "DELETE FROM library_texts WHERE library_name = ?1",
+                params![library_name],
+            )?;
+        }
         tx.execute("DELETE FROM pages WHERE library_name = ?1", params![library_name])?;
         for (page_order, (url, markdown)) in converted.iter().enumerate() {
             tx.execute(
@@ -247,8 +266,8 @@ pub(crate) async fn crawl_library(
              )
              VALUES (
                ?1, ?2,
-               COALESCE((SELECT created_at FROM libraries WHERE library_name = ?1), ?3),
-               ?3, ?3, ?4, ?5,
+                COALESCE((SELECT created_at FROM libraries WHERE library_name = ?1), ?3),
+                ?3, ?3, ?4, ?5,
                COALESCE((SELECT chunk_count FROM libraries WHERE library_name = ?1), 0),
                COALESCE((SELECT embedded_chunk_count FROM libraries WHERE library_name = ?1), 0),
                COALESCE((SELECT empty_page_count FROM libraries WHERE library_name = ?1), 0),
@@ -257,6 +276,18 @@ pub(crate) async fn crawl_library(
              )",
             params![library_name, source_url, now, total_chars, converted.len() as i64],
         )?;
+        if force {
+            conn.execute(
+                "UPDATE libraries
+                 SET chunk_count = 0,
+                     embedded_chunk_count = 0,
+                     empty_page_count = 0,
+                     min_chunks_per_page = 0,
+                     max_chunks_per_page = 0
+                 WHERE library_name = ?1",
+                params![library_name],
+            )?;
+        }
 
         spinner.finish();
 

@@ -21,7 +21,7 @@ jobs:
             binary_name: plshelp
             archive_ext: tar.gz
             asset_suffix: darwin-arm64
-          - os: macos-13
+          - os: macos-latest
             target: x86_64-apple-darwin
             binary_name: plshelp
             archive_ext: tar.gz

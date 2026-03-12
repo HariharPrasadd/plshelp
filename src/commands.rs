@@ -80,6 +80,7 @@ pub(crate) async fn add_library(
     source_url: &str,
     single_page: bool,
     respect_robots: bool,
+    force: bool,
     include_artifacts: Option<PathBuf>,
 ) -> Result<(), Box<dyn Error>> {
     let exists: i64 = conn.query_row(
@@ -87,13 +88,14 @@ pub(crate) async fn add_library(
         params![library_name],
         |row| row.get(0),
     )?;
-    if exists == 0 {
+    if force || exists == 0 {
         crawl_library(
             conn,
             library_name,
             source_url,
             single_page,
             respect_robots,
+            force,
             "add-crawl",
             include_artifacts.clone(),
         )
@@ -111,13 +113,14 @@ pub(crate) async fn add_library(
                 source_url,
                 single_page,
                 respect_robots,
+                force,
                 "add-crawl",
                 include_artifacts.clone(),
             )
             .await?;
         }
     }
-    index_library(conn, library_name, None)?;
+    index_library(conn, library_name, None, force)?;
     Ok(())
 }
 

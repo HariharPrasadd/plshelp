@@ -343,6 +343,7 @@ pub(crate) fn chunk_targets(
     conn: &Connection,
     input_name: &str,
     custom_file: Option<&str>,
+    _force: bool,
     job_type: &str,
 ) -> Result<(), Box<dyn Error>> {
     let targets = match resolve_target_libraries(conn, input_name) {
@@ -362,6 +363,7 @@ pub(crate) fn chunk_targets(
 pub(crate) fn embed_library(
     conn: &Connection,
     input_name: &str,
+    force: bool,
     job_type: &str,
 ) -> Result<(), Box<dyn Error>> {
     let library_name = resolve_library_name(conn, input_name)?;
@@ -377,6 +379,14 @@ pub(crate) fn embed_library(
     let job_id = start_job(conn, &library_name, job_type)?;
     let spinner = ProgressSpinner::new(format!("Preparing embeddings for {}", library_name));
     let result = (|| -> Result<String, Box<dyn Error>> {
+        if force {
+            spinner.set_stage(format!("Clearing embeddings for {}", library_name));
+            conn.execute(
+                "UPDATE chunks SET embedding = ?1 WHERE library_name = ?2",
+                params![Vec::<u8>::new(), library_name],
+            )?;
+            update_library_rollups(conn, &library_name)?;
+        }
         spinner.set_stage(format!("Loading chunks for {}", library_name));
         let mut stmt = conn.prepare(
             "SELECT id, content FROM chunks WHERE library_name = ?1 AND LENGTH(embedding) = 0 ORDER BY id ASC",
@@ -446,6 +456,7 @@ pub(crate) fn index_library(
     conn: &Connection,
     input_name: &str,
     custom_file: Option<&str>,
+    force: bool,
 ) -> Result<(), Box<dyn Error>> {
     let targets = match resolve_target_libraries(conn, input_name) {
         Ok(t) => t,
@@ -458,13 +469,13 @@ pub(crate) fn index_library(
 
     for target_name in targets {
         let (total, _embedded) = embedding_readiness(conn, &target_name).unwrap_or((0, 0));
-        if custom_file.is_some() || total == 0 {
+        if force || custom_file.is_some() || total == 0 {
             chunk_library(conn, &target_name, custom_file, "index-chunk")?;
         }
         let (total_after_chunk, embedded_after_chunk) =
             embedding_readiness(conn, &target_name).unwrap_or((0, 0));
-        if total_after_chunk > 0 && embedded_after_chunk < total_after_chunk {
-            embed_library(conn, &target_name, "index-embed")?;
+        if total_after_chunk > 0 && (force || embedded_after_chunk < total_after_chunk) {
+            embed_library(conn, &target_name, force, "index-embed")?;
         }
     }
     Ok(())
