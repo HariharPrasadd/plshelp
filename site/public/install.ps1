@@ -10,15 +10,46 @@ function Fail($Message) {
 }
 
 function Get-LatestVersion {
-    $release = Invoke-RestMethod -Uri "https://api.github.com/repos/$Repo/releases/latest"
-    if (-not $release.tag_name) {
+    try {
+        $response = Invoke-WebRequest -Uri "https://github.com/$Repo/releases/latest" -MaximumRedirection 0
+    } catch {
+        $response = $_.Exception.Response
+    }
+
+    if (-not $response) {
         Fail 'Failed to resolve latest release version.'
     }
-    return $release.tag_name
+
+    $location = $response.Headers['Location']
+    if (-not $location) {
+        Fail 'Failed to resolve latest release version.'
+    }
+
+    if ($location -match '/tag/([^/?]+)') {
+        return $matches[1]
+    }
+
+    Fail 'Failed to resolve latest release version.'
 }
 
 function Get-Sha256($Path) {
     return (Get-FileHash -Algorithm SHA256 -Path $Path).Hash.ToLowerInvariant()
+}
+
+function Test-ZipSignature($Path) {
+    $stream = [System.IO.File]::OpenRead($Path)
+    try {
+        if ($stream.Length -lt 4) {
+            return $false
+        }
+
+        $buffer = New-Object byte[] 4
+        $bytesRead = $stream.Read($buffer, 0, 4)
+        return $bytesRead -eq 4 -and $buffer[0] -eq 0x50 -and $buffer[1] -eq 0x4B
+    }
+    finally {
+        $stream.Dispose()
+    }
 }
 
 if ($Version -eq 'latest') {
@@ -51,8 +82,12 @@ try {
     Write-Host 'Downloading checksums'
     Invoke-WebRequest -Uri $ChecksumsUrl -OutFile $ChecksumsPath
 
+    if (-not (Test-ZipSignature $ArchivePath)) {
+        Fail "Downloaded asset is not a valid zip archive: $AssetUrl"
+    }
+
     $expected = Select-String -Path $ChecksumsPath -Pattern ([regex]::Escape($Asset)) | ForEach-Object {
-        ($_ -split '\s+')[0]
+        ($_ -split '\s+')[0].Trim()
     } | Select-Object -First 1
     if (-not $expected) {
         Fail "Checksum entry not found for $Asset"
@@ -60,7 +95,7 @@ try {
 
     $actual = Get-Sha256 $ArchivePath
     if ($expected.ToLowerInvariant() -ne $actual) {
-        Fail 'Checksum verification failed.'
+        Fail "Checksum verification failed for $Asset. Expected $expected but got $actual."
     }
 
     Expand-Archive -Path $ArchivePath -DestinationPath $TempDir -Force

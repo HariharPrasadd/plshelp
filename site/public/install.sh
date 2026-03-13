@@ -29,13 +29,8 @@ need_cmd() {
 
 latest_version() {
   need_cmd curl
-  if command -v jq >/dev/null 2>&1; then
-    curl -fsSL "https://api.github.com/repos/${REPO}/releases/latest" \
-      | jq -r '.tag_name // empty'
-    return
-  fi
-  curl -fsSL "https://api.github.com/repos/${REPO}/releases/latest" \
-    | sed -n 's/.*"tag_name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' \
+  curl -fsSLI -o /dev/null -w '%{url_effective}' "https://github.com/${REPO}/releases/latest" \
+    | sed -n 's#.*/tag/\([^/?]*\).*#\1#p' \
     | head -n 1
 }
 
