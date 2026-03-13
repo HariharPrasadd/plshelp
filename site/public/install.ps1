@@ -3,13 +3,6 @@ $ErrorActionPreference = 'Stop'
 $Repo = if ($env:PLSHELP_GITHUB_REPO) { $env:PLSHELP_GITHUB_REPO } else { 'HariharPrasadd/plshelp' }
 $Version = if ($env:PLSHELP_VERSION) { $env:PLSHELP_VERSION } else { 'latest' }
 $InstallDir = if ($env:PLSHELP_INSTALL_DIR) { $env:PLSHELP_INSTALL_DIR } else { Join-Path $HOME '.local\bin' }
-$DebugInstall = $env:PLSHELP_DEBUG -eq '1'
-
-function Log-Debug($Message) {
-    if ($DebugInstall) {
-        Write-Host "[plshelp-debug] $Message"
-    }
-}
 
 function Fail($Message) {
     Write-Error $Message
@@ -20,7 +13,6 @@ function Get-LatestVersion {
     $finalUri = $null
     $latestUrl = "https://github.com/$Repo/releases/latest"
     try {
-        Log-Debug "Resolving latest release from $latestUrl"
         $handler = [System.Net.Http.HttpClientHandler]::new()
         $handler.AllowAutoRedirect = $false
         $client = [System.Net.Http.HttpClient]::new($handler)
@@ -35,12 +27,9 @@ function Get-LatestVersion {
                 } else {
                     $finalUri = $location.AbsoluteUri
                 }
-                Log-Debug "Resolved latest release via Location header to $finalUri"
             } else {
-                Log-Debug "HTTP status: $([int]$response.StatusCode) $($response.StatusCode)"
                 if ($response.RequestMessage -and $response.RequestMessage.RequestUri) {
                     $finalUri = $response.RequestMessage.RequestUri.AbsoluteUri
-                    Log-Debug "Resolved latest release via request URI to $finalUri"
                 }
             }
         }
@@ -48,10 +37,7 @@ function Get-LatestVersion {
             $client.Dispose()
             $handler.Dispose()
         }
-    } catch {
-        Log-Debug "Latest release lookup threw: $($_.Exception.GetType().FullName): $($_.Exception.Message)"
-        Log-Debug "No response object was available on the exception"
-    }
+    } catch {}
 
     if (-not $finalUri) {
         Fail 'Failed to resolve latest release version.'
