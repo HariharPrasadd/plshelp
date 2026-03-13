@@ -18,11 +18,28 @@ function Fail($Message) {
 
 function Get-LatestVersion {
     $finalUri = $null
+    $latestUrl = "https://github.com/$Repo/releases/latest"
     try {
-        Log-Debug "Resolving latest release from https://github.com/$Repo/releases/latest"
-        $response = Invoke-WebRequest -Uri "https://github.com/$Repo/releases/latest"
-        $finalUri = $response.BaseResponse.ResponseUri.AbsoluteUri
-        Log-Debug "Resolved latest release to $finalUri"
+        Log-Debug "Resolving latest release from $latestUrl"
+        $response = Invoke-WebRequest -Uri $latestUrl -Method Head -MaximumRedirection 0 -SkipHttpErrorCheck
+        $location = $response.Headers.Location
+        if ($location) {
+            if ($location -is [System.Array]) {
+                $finalUri = $location[0]
+            } else {
+                $finalUri = [string]$location
+            }
+            Log-Debug "Resolved latest release via Location header to $finalUri"
+        } else {
+            Log-Debug "HEAD response did not include a Location header, falling back to GET"
+            $response = Invoke-WebRequest -Uri $latestUrl
+            if ($response.BaseResponse.RequestMessage.RequestUri) {
+                $finalUri = $response.BaseResponse.RequestMessage.RequestUri.AbsoluteUri
+            } elseif ($response.BaseResponse.ResponseUri) {
+                $finalUri = $response.BaseResponse.ResponseUri.AbsoluteUri
+            }
+            Log-Debug "Resolved latest release via GET to $finalUri"
+        }
     } catch {
         Log-Debug "Invoke-WebRequest threw: $($_.Exception.GetType().FullName): $($_.Exception.Message)"
         $response = $_.Exception.Response
