@@ -87,7 +87,7 @@ try {
     }
 
     $expected = Select-String -Path $ChecksumsPath -Pattern ([regex]::Escape($Asset)) | ForEach-Object {
-        ($_ -split '\s+')[0].Trim()
+        ($_.Line -split '\s+')[0].Trim()
     } | Select-Object -First 1
     if (-not $expected) {
         Fail "Checksum entry not found for $Asset"
