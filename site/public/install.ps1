@@ -11,21 +11,20 @@ function Fail($Message) {
 
 function Get-LatestVersion {
     try {
-        $response = Invoke-WebRequest -Uri "https://github.com/$Repo/releases/latest" -MaximumRedirection 0
+        $response = Invoke-WebRequest -Uri "https://github.com/$Repo/releases/latest"
+        $finalUri = $response.BaseResponse.ResponseUri.AbsoluteUri
     } catch {
         $response = $_.Exception.Response
+        if ($response -and $response.Headers['Location']) {
+            $finalUri = $response.Headers['Location']
+        }
     }
 
-    if (-not $response) {
+    if (-not $finalUri) {
         Fail 'Failed to resolve latest release version.'
     }
 
-    $location = $response.Headers['Location']
-    if (-not $location) {
-        Fail 'Failed to resolve latest release version.'
-    }
-
-    if ($location -match '/tag/([^/?]+)') {
+    if ($finalUri -match '/tag/([^/?]+)') {
         return $matches[1]
     }
 
