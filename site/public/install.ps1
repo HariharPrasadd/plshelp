@@ -21,47 +21,36 @@ function Get-LatestVersion {
     $latestUrl = "https://github.com/$Repo/releases/latest"
     try {
         Log-Debug "Resolving latest release from $latestUrl"
-        $response = Invoke-WebRequest -Uri $latestUrl -Method Head -MaximumRedirection 0 -SkipHttpErrorCheck
-        $location = $response.Headers.Location
-        if ($location) {
-            if ($location -is [System.Array]) {
-                $finalUri = $location[0]
-            } else {
-                $finalUri = [string]$location
-            }
-            Log-Debug "Resolved latest release via Location header to $finalUri"
-        } else {
-            Log-Debug "HEAD response did not include a Location header, falling back to GET"
-            $response = Invoke-WebRequest -Uri $latestUrl
-            if ($response.BaseResponse.RequestMessage.RequestUri) {
-                $finalUri = $response.BaseResponse.RequestMessage.RequestUri.AbsoluteUri
-            } elseif ($response.BaseResponse.ResponseUri) {
-                $finalUri = $response.BaseResponse.ResponseUri.AbsoluteUri
-            }
-            Log-Debug "Resolved latest release via GET to $finalUri"
-        }
-    } catch {
-        Log-Debug "Invoke-WebRequest threw: $($_.Exception.GetType().FullName): $($_.Exception.Message)"
-        $response = $_.Exception.Response
-        if ($response -and $response.Headers['Location']) {
-            $finalUri = $response.Headers['Location']
-            Log-Debug "Using redirect location header $finalUri"
-        } elseif ($response) {
-            Log-Debug "Response type: $($response.GetType().FullName)"
-            if ($response.ResponseUri) {
-                Log-Debug "Response URI: $($response.ResponseUri.AbsoluteUri)"
-            }
-            if ($response.Headers) {
-                $locationHeader = $response.Headers['Location']
-                if ($locationHeader) {
-                    Log-Debug "Response Location header: $locationHeader"
+        $handler = [System.Net.Http.HttpClientHandler]::new()
+        $handler.AllowAutoRedirect = $false
+        $client = [System.Net.Http.HttpClient]::new($handler)
+        try {
+            $request = [System.Net.Http.HttpRequestMessage]::new([System.Net.Http.HttpMethod]::Get, $latestUrl)
+            $response = $client.Send($request)
+            $location = $response.Headers.Location
+            if ($location) {
+                if (-not $location.IsAbsoluteUri) {
+                    $uri = [System.Uri]::new([System.Uri]$latestUrl, $location)
+                    $finalUri = $uri.AbsoluteUri
                 } else {
-                    Log-Debug "Response did not include a Location header"
+                    $finalUri = $location.AbsoluteUri
+                }
+                Log-Debug "Resolved latest release via Location header to $finalUri"
+            } else {
+                Log-Debug "HTTP status: $([int]$response.StatusCode) $($response.StatusCode)"
+                if ($response.RequestMessage -and $response.RequestMessage.RequestUri) {
+                    $finalUri = $response.RequestMessage.RequestUri.AbsoluteUri
+                    Log-Debug "Resolved latest release via request URI to $finalUri"
                 }
             }
-        } else {
-            Log-Debug "No response object was available on the exception"
         }
+        finally {
+            $client.Dispose()
+            $handler.Dispose()
+        }
+    } catch {
+        Log-Debug "Latest release lookup threw: $($_.Exception.GetType().FullName): $($_.Exception.Message)"
+        Log-Debug "No response object was available on the exception"
     }
 
     if (-not $finalUri) {
