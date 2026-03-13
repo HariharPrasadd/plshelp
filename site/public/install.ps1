@@ -3,6 +3,13 @@ $ErrorActionPreference = 'Stop'
 $Repo = if ($env:PLSHELP_GITHUB_REPO) { $env:PLSHELP_GITHUB_REPO } else { 'HariharPrasadd/plshelp' }
 $Version = if ($env:PLSHELP_VERSION) { $env:PLSHELP_VERSION } else { 'latest' }
 $InstallDir = if ($env:PLSHELP_INSTALL_DIR) { $env:PLSHELP_INSTALL_DIR } else { Join-Path $HOME '.local\bin' }
+$DebugInstall = $env:PLSHELP_DEBUG -eq '1'
+
+function Log-Debug($Message) {
+    if ($DebugInstall) {
+        Write-Host "[plshelp-debug] $Message"
+    }
+}
 
 function Fail($Message) {
     Write-Error $Message
@@ -12,12 +19,31 @@ function Fail($Message) {
 function Get-LatestVersion {
     $finalUri = $null
     try {
+        Log-Debug "Resolving latest release from https://github.com/$Repo/releases/latest"
         $response = Invoke-WebRequest -Uri "https://github.com/$Repo/releases/latest"
         $finalUri = $response.BaseResponse.ResponseUri.AbsoluteUri
+        Log-Debug "Resolved latest release to $finalUri"
     } catch {
+        Log-Debug "Invoke-WebRequest threw: $($_.Exception.GetType().FullName): $($_.Exception.Message)"
         $response = $_.Exception.Response
         if ($response -and $response.Headers['Location']) {
             $finalUri = $response.Headers['Location']
+            Log-Debug "Using redirect location header $finalUri"
+        } elseif ($response) {
+            Log-Debug "Response type: $($response.GetType().FullName)"
+            if ($response.ResponseUri) {
+                Log-Debug "Response URI: $($response.ResponseUri.AbsoluteUri)"
+            }
+            if ($response.Headers) {
+                $locationHeader = $response.Headers['Location']
+                if ($locationHeader) {
+                    Log-Debug "Response Location header: $locationHeader"
+                } else {
+                    Log-Debug "Response did not include a Location header"
+                }
+            }
+        } else {
+            Log-Debug "No response object was available on the exception"
         }
     }
 

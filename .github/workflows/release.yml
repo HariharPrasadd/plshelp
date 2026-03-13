@@ -139,6 +139,8 @@ jobs:
       - name: Install via PowerShell script
         if: matrix.os == 'windows-latest'
         shell: pwsh
+        env:
+          PLSHELP_DEBUG: "1"
         run: |
           $ErrorActionPreference = "Stop"
           for ($attempt = 1; $attempt -le 5; $attempt++) {
@@ -146,6 +148,7 @@ jobs:
               irm https://plshelp.run/install.ps1 | iex
               exit 0
             } catch {
+              Write-Host "Attempt $attempt failed: $($_.Exception.Message)"
               if ($attempt -eq 5) {
                 throw "install.ps1 failed after $attempt attempts. $($_.Exception.Message)"
               }
