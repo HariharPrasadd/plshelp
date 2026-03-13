@@ -1,11 +1,24 @@
 {
-  "name": "plshelp-win32-x64",
-  "version": "0.1.0",
-  "os": ["win32"],
-  "cpu": ["x64"],
+  "name": "@generalinteraction/plshelp-win32-x64",
+  "version": "0.1.12",
+  "os": [
+    "win32"
+  ],
+  "cpu": [
+    "x64"
+  ],
   "description": "Windows x64 binary for plshelp",
-  "bin": {
-    "plshelp": "./bin/plshelp.exe"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HariharPrasadd/plshelp.git"
   },
-  "files": ["bin/"]
+  "homepage": "https://plshelp.run",
+  "files": [
+    "bin/"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
 }

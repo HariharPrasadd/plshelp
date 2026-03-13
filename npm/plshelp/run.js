@@ -7,9 +7,9 @@ const { spawnSync } = require("child_process");
 function getPlatformInfo() {
   const key = `${os.platform()}-${os.arch()}`;
   const map = {
-    "linux-x64": { pkg: "plshelp-linux-x64", bin: "plshelp" },
-    "darwin-arm64": { pkg: "plshelp-darwin-arm64", bin: "plshelp" },
-    "win32-x64": { pkg: "plshelp-win32-x64", bin: "plshelp.exe" },
+    "linux-x64": { pkg: "@generalinteraction/plshelp-linux-x64", bin: "plshelp" },
+    "darwin-arm64": { pkg: "@generalinteraction/plshelp-darwin-arm64", bin: "plshelp" },
+    "win32-x64": { pkg: "@generalinteraction/plshelp-win32-x64", bin: "plshelp.exe" },
   };
 
   const info = map[key];

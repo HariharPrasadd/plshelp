@@ -5,3 +5,6 @@ artifacts/
 .fastembed_cache
 scratch/
 site/public/registry/docs
+/npm/plshelp-linux-x64/bin/*
+/npm/plshelp-darwin-arm64/bin/*
+/npm/plshelp-win32-x64/bin/*

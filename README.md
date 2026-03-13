@@ -2,21 +2,21 @@
 
 # plshelp
 
-Local documentation search for your terminal. Point it at any docs site — or your own Markdown files — and search it instantly without touching the web.
+Turn documentation websites, web pages, Markdown, and plain text files into a local searchable corpus for coding assistants and RAG workflows. Crawl, clean, chunk, and index — so your agent has accurate context without hitting the internet at query time. 
 
 ## What it does
 
-`plshelp add` crawls and indexes a documentation site. After that, `plshelp query` searches it locally using hybrid BM25 + semantic search, with no network required. Everything lives in a SQLite database on your machine.
+`plshelp add` crawls and indexes a documentation site. After that, `plshelp query` searches it locally using hybrid BM25 + semantic search, completely locally. Everything lives in a SQLite database on your machine.
 ```sh
 plshelp add nextjs https://nextjs.org/docs
 plshelp query nextjs "how does the app router work"
 ```
 
-You can index multiple libraries and search across all of them at once, merge related libraries together, or point it at local Markdown files instead of a URL.
+You can index multiple libraries and search across all of them at once, merge related libraries together, or index local Markdown files instead of a website.
 
 ## Why it exists
 
-Docs sites are slow to search, require a browser, and disappear offline. Coding agents like Claude Code and Codex can call `plshelp` directly — run `plshelp init` at your project root and it writes the instruction files that tell the agent how to use it. The `--json` flag makes output machine-readable.
+All current context augmentation tools require calling an API, moving your data off your machine and to a remote server. plshelp is completely local, both human and agent-friendly, and open-source, giving you control over which embedding models to use and the ability to tune it to your own machine's capabilities.
 
 ## Install
 

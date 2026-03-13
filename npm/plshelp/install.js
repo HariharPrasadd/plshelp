@@ -8,19 +8,19 @@ const REPO = "HariharPrasadd/plshelp";
 
 const platformMap = {
   "linux-x64": {
-    pkg: "plshelp-linux-x64",
+    pkg: "@generalinteraction/plshelp-linux-x64",
     assetSuffix: "linux-x86_64",
     archiveExt: "tar.gz",
     binName: "plshelp",
   },
   "darwin-arm64": {
-    pkg: "plshelp-darwin-arm64",
+    pkg: "@generalinteraction/plshelp-darwin-arm64",
     assetSuffix: "darwin-arm64",
     archiveExt: "tar.gz",
     binName: "plshelp",
   },
   "win32-x64": {
-    pkg: "plshelp-win32-x64",
+    pkg: "@generalinteraction/plshelp-win32-x64",
     assetSuffix: "windows-x86_64",
     archiveExt: "zip",
     binName: "plshelp.exe",

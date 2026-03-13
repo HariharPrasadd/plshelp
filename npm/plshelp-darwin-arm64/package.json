@@ -1,11 +1,24 @@
 {
-  "name": "plshelp-darwin-arm64",
-  "version": "0.1.0",
-  "os": ["darwin"],
-  "cpu": ["arm64"],
+  "name": "@generalinteraction/plshelp-darwin-arm64",
+  "version": "0.1.12",
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "arm64"
+  ],
   "description": "macOS arm64 binary for plshelp",
-  "bin": {
-    "plshelp": "./bin/plshelp"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HariharPrasadd/plshelp.git"
   },
-  "files": ["bin/"]
+  "homepage": "https://plshelp.run",
+  "files": [
+    "bin/"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
 }
