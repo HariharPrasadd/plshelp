@@ -10,6 +10,7 @@ function Fail($Message) {
 }
 
 function Get-LatestVersion {
+    $finalUri = $null
     try {
         $response = Invoke-WebRequest -Uri "https://github.com/$Repo/releases/latest"
         $finalUri = $response.BaseResponse.ResponseUri.AbsoluteUri
