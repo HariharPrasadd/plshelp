@@ -1,41 +1,173 @@
 use crate::*;
+use unicode_width::UnicodeWidthStr;
+
+const RESET: &str = "\x1b[0m";
+const BOLD: &str = "\x1b[1m";
+const DIM: &str = "\x1b[2m";
+const ORANGE: &str = "\x1b[33m";
+const PURPLE: &str = "\x1b[35m";
+const BLUE: &str = "\x1b[34m";
+const AMBER: &str = "\x1b[93m";
+const GREEN: &str = "\x1b[32m";
+
+fn style(text: &str, codes: &[&str]) -> String {
+    format!("{}{}{}", codes.join(""), text, RESET)
+}
+
+fn pad_visible(text: &str, width: usize) -> String {
+    let visible = UnicodeWidthStr::width(text);
+    if visible >= width {
+        text.to_string()
+    } else {
+        format!("{}{}", text, " ".repeat(width - visible))
+    }
+}
+
+fn print_command(command: &str, args: &str, description: &str, color: &str) {
+    let command_col = pad_visible(command, 12);
+    let args_col = pad_visible(args, 30);
+    println!(
+        "  {} {} {}",
+        style(&command_col, &[BOLD, color]),
+        style(&args_col, &[DIM]),
+        description
+    );
+}
+
+fn print_help_command_row() {
+    let command_col = pad_visible("<command>", 12);
+    let args_col = pad_visible("--help", 30);
+    println!(
+        "  {} {} {}",
+        style(&command_col, &[GREEN]),
+        style(&args_col, &[BOLD, GREEN]),
+        "Print help text for command"
+    );
+}
 
 pub(crate) fn print_help() {
-    println!("\nnote: for queries, quote questions in the shell, especially if they contain ? or *\n");
-    println!("plshelp <command>");
-    println!("  add <library_name> <source_url> [--single] [--respect-robots] [--force] [--include-artifacts[=/path]] [--json]");
-    println!("  crawl <library_name> <source_url> [--single] [--respect-robots] [--force] [--include-artifacts[=/path]] [--json]");
-    println!("  init [--agents] [--claude] [--print] [--json]");
-    println!("  uninstall --all | --data | --binary");
-    println!("  index <library_name> [--file /path/to/file] [--force] [--json]");
-    println!("  index --all [--force] [--json]");
-    println!("  chunk <library_name> [--file /path/to/file] [--force] [--json]");
-    println!("  chunk --all [--force] [--json]");
-    println!("  embed <library_name> [--force] [--json]");
-    println!("  embed --all [--force] [--json]");
-    println!("  refresh [library_name ...] [--all] [--json]   # recompute/backfill stats; no crawl");
     println!(
-        "  merge <new_library_name> <library1> <library2> [library3 ...] [--replace] [--include-artifacts[=/path]] [--json]"
+        "\n{}\n",
+        format!(
+            "{} is a local-first documentation search tool for agents and humans.",
+            style("plshelp", &[BOLD, ORANGE])
+        )
     );
-    println!("  export <library_name> [path] [--json]");
-    println!("  export --all [path] [--json]");
     println!(
-        "  query <library_name> \"<question>\" [--mode hybrid|vector|keyword] [--top-k N] [--context N] [--json]"
+        "{} {}\n",
+        style("Usage:", &[BOLD]),
+        style("plshelp <command>", &[BOLD])
     );
-    println!("  <library_name> \"<question>\"   # query alias");
-    println!(
-        "  ask \"<question>\" [--libraries a,b,c] [--mode ...] [--top-k N] [--context N] [--json]"
-    );
-    println!("  alias <library_name> <alias>");
-    println!("  list [--json]");
-    println!("  config [--json]");
-    println!("  show <library_name> [--json]");
-    println!("  remove <library_name> [--json]");
-    println!("  remove --all [--json]");
-    println!("  open <chunk_id> [--json]");
-    println!(
-        "  trace <library_name> \"<question>\" [--mode ...] [--top-k N] [--context N] [--json]"
-    );
+
+    println!("{}", style("Commands:", &[BOLD]));
+    print_command("add", "<library> <source>", "Crawl and index a source", PURPLE);
+    print_command("crawl", "<library> <source>", "Crawl a source without indexing", PURPLE);
+    print_command("query", "<library> \"<question>\"", "Search one library", PURPLE);
+    print_command("trace", "<library> \"<question>\"", "Search with scoring details", PURPLE);
+    print_command("ask", "\"<question>\"", "Search across libraries", PURPLE);
+    print_command("<library>", "\"<question>\"", "Query alias", PURPLE);
+    println!();
+
+    print_command("index", "<library> | --all", "Build pages from raw inputs", BLUE);
+    print_command("chunk", "<library> | --all", "Split indexed pages into chunks", BLUE);
+    print_command("embed", "<library> | --all", "Generate embeddings for chunks", BLUE);
+    print_command("refresh", "[libraries...] | --all", "Recompute stats without crawling", BLUE);
+    print_command("merge", "<group> <library...>", "Combine libraries into one view", BLUE);
+    print_command("export", "<library> [path] | --all", "Write stored content to disk", BLUE);
+    print_command("list", "", "Show indexed libraries", BLUE);
+    print_command("show", "<library>", "Inspect one library", BLUE);
+    print_command("open", "<chunk_id>", "Open one stored chunk", BLUE);
+    println!();
+
+    print_command("alias", "<library> <alias>", "Add a shortcut name", AMBER);
+    print_command("remove", "<library> | --all", "Delete libraries", AMBER);
+    print_command("config", "", "Print the active config", AMBER);
+    print_command("init", "", "Write AGENTS.md or CLAUDE.md", AMBER);
+    print_command("uninstall", "--all | --data | --binary", "Remove plshelp from this machine", AMBER);
+    println!();
+
+    print_help_command_row();
+    println!();
+}
+
+pub(crate) fn print_command_help(command: &str) -> bool {
+    let help = match command {
+        "add" => Some(
+            "Usage:\n  plshelp add <library_name> <source_url> [--single] [--respect-robots] [--force] [--include-artifacts[=/path]] [--json]\n\nCrawl a source and run the full ingest pipeline\n",
+        ),
+        "crawl" => Some(
+            "Usage:\n  plshelp crawl <library_name> <source_url> [--single] [--respect-robots] [--force] [--include-artifacts[=/path]] [--json]\n\nFetch content and store crawl artifacts without indexing\n",
+        ),
+        "init" => Some(
+            "Usage:\n  plshelp init [--agents] [--claude] [--print] [--json]\n\nWrite AGENTS.md and/or CLAUDE.md templates in the current directory\n",
+        ),
+        "uninstall" => Some(
+            "Usage:\n  plshelp uninstall --all | --data | --binary\n\nRemove plshelp files from this machine\n",
+        ),
+        "index" => Some(
+            "Usage:\n  plshelp index <library_name> [--file /path/to/file] [--force] [--json]\n  plshelp index --all [--force] [--json]\n\nBuild indexed pages from raw inputs\n",
+        ),
+        "chunk" => Some(
+            "Usage:\n  plshelp chunk <library_name> [--file /path/to/file] [--force] [--json]\n  plshelp chunk --all [--force] [--json]\n\nSplit indexed pages into chunks\n",
+        ),
+        "embed" => Some(
+            "Usage:\n  plshelp embed <library_name> [--force] [--json]\n  plshelp embed --all [--force] [--json]\n\nGenerate embeddings for stored chunks\n",
+        ),
+        "refresh" => Some(
+            "Usage:\n  plshelp refresh [library_name ...] [--all] [--json]\n\nRecompute and backfill stats without crawling\n",
+        ),
+        "merge" => Some(
+            "Usage:\n  plshelp merge <new_library_name> <library1> <library2> [library3 ...] [--replace] [--include-artifacts[=/path]] [--json]\n\nCombine libraries into one merged group\n",
+        ),
+        "export" => Some(
+            "Usage:\n  plshelp export <library_name> [path] [--json]\n  plshelp export --all [path] [--json]\n\nExport stored content to disk\n",
+        ),
+        "query" => Some(
+            "Usage:\n  plshelp query <library_name> \"<question>\" [--mode hybrid|vector|keyword] [--top-k N] [--context N] [--json]\n\nSearch one library\n",
+        ),
+        "trace" => Some(
+            "Usage:\n  plshelp trace <library_name> \"<question>\" [--mode hybrid|vector|keyword] [--top-k N] [--context N] [--json]\n\nSearch one library with scoring details\n",
+        ),
+        "ask" => Some(
+            "Usage:\n  plshelp ask \"<question>\" [--libraries a,b,c] [--mode hybrid|vector|keyword] [--top-k N] [--context N] [--json]\n\nSearch across libraries\n",
+        ),
+        "alias" => Some(
+            "Usage:\n  plshelp alias <library_name> <alias> [--json]\n\nAdd a shortcut name for a library\n",
+        ),
+        "list" => Some(
+            "Usage:\n  plshelp list [--json]\n\nShow indexed libraries and merged groups\n",
+        ),
+        "config" => Some(
+            "Usage:\n  plshelp config [--json]\n\nPrint the active config file path and contents\n",
+        ),
+        "show" => Some(
+            "Usage:\n  plshelp show <library_name> [--json]\n\nInspect one library or merged group\n",
+        ),
+        "remove" => Some(
+            "Usage:\n  plshelp remove <library_name> [--json]\n  plshelp remove --all [--json]\n\nDelete one library or all libraries\n",
+        ),
+        "open" => Some(
+            "Usage:\n  plshelp open <chunk_id> [--json]\n\nOpen one stored chunk by id\n",
+        ),
+        _ => None,
+    };
+
+    if let Some(help) = help {
+        if let Some((usage, about)) = help.split_once("\n\n") {
+            println!(
+                "\n{}\n{}\n\n{}\n{}\n",
+                style("Usage:", &[BOLD]),
+                usage.trim_start_matches("Usage:\n"),
+                style("About:", &[BOLD]),
+                about.trim()
+            );
+        } else {
+            println!("\n{}\n", help);
+        }
+        true
+    } else {
+        false
+    }
 }
 
 // ============================================================================

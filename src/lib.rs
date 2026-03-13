@@ -629,6 +629,9 @@ pub async fn run(args: Vec<String>) -> Result<(), Box<dyn Error>> {
     }
 
     let command = args[0].as_str();
+    if args.len() >= 2 && matches!(args[1].as_str(), "--help" | "-h") && print_command_help(command) {
+        return Ok(());
+    }
 
     match command {
         "uninstall" => {

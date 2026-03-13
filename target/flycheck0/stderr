@@ -1,6 +1,5 @@
-    Blocking waiting for file lock on build directory
-  28.459029958s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint: fingerprint error for plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("plshelp", ["lib"], "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/src/lib.rs", Edition2024) }
-  28.459128458s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/target/debug/.fingerprint/plshelp-ee822d2149f86ac1/test-lib-plshelp`
+   0.340610791s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint: fingerprint error for plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("plshelp", ["lib"], "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/src/lib.rs", Edition2024) }
+   0.341072666s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/target/debug/.fingerprint/plshelp-4a6b3554ac7bb93b/lib-plshelp`
 
 Caused by:
     No such file or directory (os error 2)
@@ -24,8 +23,58 @@ Stack backtrace:
   15: std::rt::lang_start::<()>::{closure#0}
   16: std::rt::lang_start_internal
   17: _main
-  28.469902250s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint: fingerprint error for plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider)/Check { test: true }/TargetInner { name: "plshelp", doc: true, ..: with_path("/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/src/main.rs", Edition2024) }
-  28.469919708s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/target/debug/.fingerprint/plshelp-6bd14c082a59e01e/test-bin-plshelp`
+   0.463212333s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint: fingerprint error for plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("plshelp", ["lib"], "/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/src/lib.rs", Edition2024) }
+   0.463223375s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/target/debug/.fingerprint/plshelp-295c57c16ae3b806/test-lib-plshelp`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.464738875s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint: fingerprint error for plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider)/Check { test: false }/TargetInner { name: "plshelp", doc: true, ..: with_path("/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/src/main.rs", Edition2024) }
+   0.464744833s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/target/debug/.fingerprint/plshelp-32d0605bd9807696/bin-plshelp`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.466263750s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint: fingerprint error for plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider)/Check { test: true }/TargetInner { name: "plshelp", doc: true, ..: with_path("/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/src/main.rs", Edition2024) }
+   0.466268541s  INFO prepare_target{force=false package_id=plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider) target="plshelp"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider/target/debug/.fingerprint/plshelp-a06d794b2913b7e1/test-bin-plshelp`
 
 Caused by:
     No such file or directory (os error 2)
@@ -50,4 +99,4 @@ Stack backtrace:
   16: std::rt::lang_start_internal
   17: _main
     Checking plshelp v0.1.0 (/Users/hariharprasad/MyDocuments/Code/Rust/deep-spider)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 29.95s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.17s
