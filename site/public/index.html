@@ -785,10 +785,12 @@
             </p>
             <div class="install-block">
                 <div class="install-tabs">
-                    <button class="tab-btn active" data-tab="bash">bash / zsh</button>
-                    <button class="tab-btn" data-tab="powershell">PowerShell</button>
+                    <button class="tab-btn active" data-tab="curl">curl</button>
+                    <button class="tab-btn" data-tab="irm">irm</button>
+                    <button class="tab-btn" data-tab="npm">npm</button>
+                    <button class="tab-btn" data-tab="bun">bun</button>
                 </div>
-                <div class="install-cmd active" id="tab-bash">
+                <div class="install-cmd active" id="tab-curl">
                     <code><span class="d">curl -fsSL</span> https://plshelp.run/install.sh <span class="d">|</span> sh</code>
                     <button class="copy-btn" data-copy="curl -fsSL https://plshelp.run/install.sh | sh"
                         aria-label="Copy">
@@ -803,7 +805,7 @@
                         </svg>
                     </button>
                 </div>
-                <div class="install-cmd" id="tab-powershell">
+                <div class="install-cmd" id="tab-irm">
                     <code><span class="d">irm</span> https://plshelp.run/install.ps1 <span class="d">|</span> iex</code>
                     <button class="copy-btn" data-copy="irm https://plshelp.run/install.ps1 | iex"
                         aria-label="Copy">
@@ -811,6 +813,36 @@
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="9" y="9" width="13" height="13" rx="2" />
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                        </svg>
+                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="install-cmd" id="tab-npm">
+                    <code><span class="d">npm install -g</span> @generalinteraction/plshelp</code>
+                    <button class="copy-btn" data-copy="npm install -g @generalinteraction/plshelp"
+                        aria-label="Copy">
+                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" />
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                        </svg>
+                        <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="install-cmd" id="tab-bun">
+                    <code><span class="d">bun add -g</span> @generalinteraction/plshelp</code>
+                    <button class="copy-btn" data-copy="bun add -g @generalinteraction/plshelp"
+                        aria-label="Copy">
+                        <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" />
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2 2v1" />
                         </svg>
                         <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
