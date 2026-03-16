@@ -1,7 +1,11 @@
 name = "plshelp"
 compatibility_date = "2026-03-10"
 workers_dev = true
+main = "./worker.js"
 
 [assets]
 directory = "./site/public"
 
+[[analytics_engine_datasets]]
+binding = "DOWNLOADS"
+dataset = "plshelp_downloads"
