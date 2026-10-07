@@ -14,8 +14,26 @@
     right: 3px;
     height: 72vh;
     z-index: 40;
-    cursor: pointer;
+    /* the rail box itself (including the empty flex gaps between ticks) is
+       NOT clickable - without this, that whole ~220px-wide region was
+       swallowing normal scroll/touch gestures and misfiring the open/close
+       toggle. only .hitStrip (a narrow strip right at the ticks) and the
+       individual .row links opt back in below */
+    pointer-events: none;
   }
+}
+
+.hitStrip {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 22px;
+  pointer-events: auto;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
 .row {
@@ -28,6 +46,7 @@
   color: var(--text-muted);
   transition: color 0.15s ease, transform 0.12s ease-out;
   will-change: transform;
+  pointer-events: auto;
 }
 
 .row:hover {

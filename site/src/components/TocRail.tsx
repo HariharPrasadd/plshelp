@@ -125,13 +125,22 @@ export function TocRail({ entries }: { entries: TocEntry[] }) {
       ref={railRef}
       className={`${styles.rail} ${open ? styles.railOpen : ''}`}
       aria-label="Table of contents"
-      onClick={() => setOpen((o) => !o)}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       {/* one shared blur panel behind the whole label column, instead of a
           separate blur per row - avoids visible seams between labels */}
       <div className={styles.labelsBackdrop} aria-hidden="true" />
+
+      {/* the only part of the rail that's actually tappable to open/close
+          the label list - a narrow strip right at the ticks, not the whole
+          box, so normal scrolling never misfires it */}
+      <button
+        className={styles.hitStrip}
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        aria-label="Toggle section list"
+      />
 
       {entries.map((entry, i) => {
         const active = entry.id === activeId

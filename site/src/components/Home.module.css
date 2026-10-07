@@ -54,6 +54,14 @@
 
 @media (max-width: 599px) {
   .col {
-    padding: 20px var(--side-pad);
+    /* the no-scroll/centered treatment only works when everything actually
+       fits in one viewport, which isn't reliable on narrow phones - it was
+       clipping copy (overflow: hidden) and running the title into the fixed
+       nav. let it scroll normally and start from the top instead */
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+    justify-content: flex-start;
+    padding: 72px var(--side-pad) 48px;
   }
 }
