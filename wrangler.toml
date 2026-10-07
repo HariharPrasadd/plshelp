@@ -7,6 +7,11 @@ main = "./worker.js"
 directory = "./site/public"
 not_found_handling = "single-page-application"
 
-[[analytics_engine_datasets]]
-binding = "DOWNLOADS"
-dataset = "plshelp_downloads"
+# Analytics Engine isn't enabled on the Cloudflare account, which blocks
+# deploy entirely (code 10089) if this binding is declared. worker.js's
+# trackDownload() already no-ops gracefully when env.DOWNLOADS is missing,
+# so removing it here just means install-script download tracking is off
+# until Analytics Engine gets enabled and this is added back.
+# [[analytics_engine_datasets]]
+# binding = "DOWNLOADS"
+# dataset = "plshelp_downloads"
