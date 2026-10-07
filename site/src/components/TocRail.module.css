@@ -126,7 +126,20 @@
   transition: opacity 0.18s ease, transform 0.18s ease;
 }
 
-.rail:hover .labelText,
+/* :hover-driven reveal is for real mouse/trackpad only - scoped deliberately,
+   since mobile browsers simulate :hover the instant a finger touches down
+   (before they know if it's a tap or the start of a scroll-drag), and that
+   simulated hover would reveal the panel from ordinary scrolling with no
+   click/tap ever involved. touch gets the exact same reveal, but only via
+   .railOpen, which JS sets from a confirmed tap (see TocRail.tsx) - never
+   from raw :hover. */
+@media (hover: hover) and (pointer: fine) {
+  .rail:hover .labelText {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
 .railOpen .labelText {
   opacity: 1;
   transform: translateY(-50%) translateX(0);
@@ -158,7 +171,12 @@
   transition: opacity 0.18s ease;
 }
 
-.rail:hover .labelsBackdrop,
+@media (hover: hover) and (pointer: fine) {
+  .rail:hover .labelsBackdrop {
+    opacity: 1;
+  }
+}
+
 .railOpen .labelsBackdrop {
   opacity: 1;
 }
