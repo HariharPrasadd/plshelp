@@ -9,7 +9,7 @@ const ACTIVE_LINE_PX = 150
 // same hover-swell tuning as the desktop Toc, so the two feel like one family
 const INFLUENCE_MAX = 46 // px, swell radius at high cursor speed
 const INFLUENCE_MIN = 9 // px, swell radius at rest or crawling slowly
-const MAX_SHIFT = 14 // px, how far a row pushes out at peak influence
+const MAX_SHIFT = 10 // px, how far a row pushes out at peak influence
 const VELOCITY_SCALE = 0.55 // px/ms of cursor speed that maps to the full radius
 const VELOCITY_CAP = 1.6 // px/ms, speed is clamped here before anything else sees it
 const VELOCITY_SMOOTH = 0.25 // how much each new sample blends into the smoothed speed
@@ -132,19 +132,13 @@ export function TocRail({ entries }: { entries: TocEntry[] }) {
           separate blur per row - avoids visible seams between labels */}
       <div className={styles.labelsBackdrop} aria-hidden="true" />
 
-      {/* the only part of the rail that's actually tappable to open/close
-          the label list - a narrow strip right at the ticks, not the whole
-          box, so normal scrolling never misfires it */}
-      <button
-        className={styles.hitStrip}
-        onClick={() => setOpen((o) => !o)}
-        aria-expanded={open}
-        aria-label="Toggle section list"
-      />
-
       {entries.map((entry, i) => {
         const active = entry.id === activeId
-        let style: React.CSSProperties | undefined
+        // evenly spaced down the rail, same spread the old flex layout gave -
+        // now explicit since each row is individually positioned (required
+        // so its hitbox doesn't depend on flex content sizing, see CSS)
+        const top = entries.length > 1 ? (i / (entries.length - 1)) * 100 : 50
+        let shiftX = 0
 
         if (mouseY !== null && railRef.current) {
           const el = rowRefs.current[i]
@@ -154,7 +148,7 @@ export function TocRail({ entries }: { entries: TocEntry[] }) {
             const center = elRect.top + elRect.height / 2 - railRect.top
             const dist = mouseY - center
             const influence = Math.exp(-(dist * dist) / (2 * sigma * sigma))
-            style = { transform: `translateX(${-MAX_SHIFT * influence}px)` }
+            shiftX = -MAX_SHIFT * influence
           }
         }
 
@@ -166,19 +160,31 @@ export function TocRail({ entries }: { entries: TocEntry[] }) {
             }}
             href={`#${entry.id}`}
             className={`${styles.row} ${active ? styles.rowActive : ''}`}
-            style={style}
+            style={{ top: `${top}%`, transform: `translateY(-50%) translateX(${shiftX}px)` }}
             onClick={(e) => {
-              e.stopPropagation()
               e.preventDefault()
               document.getElementById(entry.id)?.scrollIntoView({ behavior: 'smooth' })
               setOpen(false)
             }}
           >
+            {/* positioned entirely outside the row's own box (see CSS) so it
+                never affects the row's clickable footprint, open or closed */}
             <span className={styles.labelText}>{entry.title}</span>
             <span className={`${styles.tick} ${active ? styles.tickActive : ''}`} />
           </a>
         )
       })}
+
+      {/* the only control that opens/closes the label list - small and
+          fixed-size, not a tall strip spanning the scroll area */}
+      <button
+        className={styles.toggle}
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        aria-label="Toggle section list"
+      >
+        <span className={styles.toggleDot} />
+      </button>
     </nav>
   )
 }

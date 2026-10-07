@@ -5,57 +5,37 @@
 
 @media (max-width: 1099.98px) {
   .rail {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: space-between;
+    display: block;
     position: fixed;
     top: 14vh;
     right: 3px;
     height: 72vh;
     z-index: 40;
-    /* the rail box itself (including the empty flex gaps between ticks) is
-       NOT clickable - without this, that whole ~220px-wide region was
-       swallowing normal scroll/touch gestures and misfiring the open/close
-       toggle. only .hitStrip (a narrow strip right at the ticks) and the
-       individual .row links opt back in below */
+    /* the rail box itself is never a hit target - only the tiny tick rows
+       and the small toggle button (both pointer-events: auto below) are.
+       without this, the whole column was eating scroll/touch gestures. */
     pointer-events: none;
   }
 }
 
-.hitStrip {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 22px;
-  pointer-events: auto;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
-
+/* each row is positioned individually (not flex-distributed) so its own
+   clickable box is exactly the tick's size, nothing more - "stingy" on
+   purpose, since a wider box here was getting hit by ordinary scrolling */
 .row {
-  position: relative;
+  position: absolute;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 8px;
   text-decoration: none;
   color: var(--text-muted);
   transition: color 0.15s ease, transform 0.12s ease-out;
   will-change: transform;
   pointer-events: auto;
-}
-
-.row:hover {
-  color: var(--text-body);
-}
-
-.rowActive,
-.rowActive:hover {
-  color: var(--text);
+  /* a little invisible padding around the tick for a real tap target,
+     without growing the element's layout footprint */
+  padding: 7px 7px 7px 16px;
+  margin: -7px -7px -7px -16px;
 }
 
 .tick {
@@ -70,6 +50,34 @@
 
 .tickActive {
   width: 11px;
+}
+
+/* taken completely out of the row's layout box (positioned off to the left
+   of it) so it never affects the row's own clickable size, visible or not -
+   purely decorative, never itself interactive */
+.labelText {
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(6px);
+  margin-right: 8px;
+  font-size: var(--fs-micro);
+  color: inherit;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.rail:hover .labelText,
+.railOpen .labelText {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.rowActive,
+.rowActive:hover {
+  color: var(--text);
 }
 
 /* one shared blur panel behind the whole label column (not one per row, so
@@ -98,21 +106,32 @@
   opacity: 1;
 }
 
-/* hidden until the rail is hovered or tapped open, then the whole list
-   comes out together */
-.labelText {
-  position: relative;
-  font-size: var(--fs-micro);
-  color: inherit;
-  white-space: nowrap;
-  opacity: 0;
-  transform: translateX(6px);
-  pointer-events: none;
-  transition: opacity 0.18s ease, transform 0.18s ease;
+/* small, fixed-size toggle - not a tall strip - sitting just under the rail */
+.toggle {
+  position: absolute;
+  right: 0;
+  bottom: -30px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
-.rail:hover .labelText,
-.railOpen .labelText {
-  opacity: 1;
-  transform: translateX(0);
+.toggleDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: background 0.15s ease;
+}
+
+.toggle:hover .toggleDot,
+.railOpen .toggleDot {
+  background: var(--text);
 }

@@ -1,14 +1,13 @@
+/* mobile-first: plain, stingy, scrolls normally. nothing fancy here on
+   purpose - the no-scroll/vertically-centered treatment is a desktop-only
+   addition layered on below, never something mobile has to fight its way
+   out of. */
 .col {
   position: relative;
   z-index: 2;
   max-width: 620px;
   margin: 0 auto;
-  padding: 32px var(--side-pad);
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  padding: 72px var(--side-pad) 48px;
 }
 
 .col h1 {
@@ -52,16 +51,15 @@
   color: var(--text-muted);
 }
 
-@media (max-width: 599px) {
+/* desktop only: lock to one viewport and center the block vertically */
+@media (min-width: 600px) {
   .col {
-    /* the no-scroll/centered treatment only works when everything actually
-       fits in one viewport, which isn't reliable on narrow phones - it was
-       clipping copy (overflow: hidden) and running the title into the fixed
-       nav. let it scroll normally and start from the top instead */
-    height: auto;
-    min-height: 100vh;
-    overflow: visible;
-    justify-content: flex-start;
-    padding: 72px var(--side-pad) 48px;
+    max-width: 620px;
+    padding: 32px var(--side-pad);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 }
