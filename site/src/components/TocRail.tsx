@@ -23,6 +23,7 @@ function smoothstep(t: number) {
 
 export function TocRail({ entries }: { entries: TocEntry[] }) {
   const [activeId, setActiveId] = useState(entries[0]?.id)
+  const [open, setOpen] = useState(false)
   const [mouseY, setMouseY] = useState<number | null>(null)
   const [sigma, setSigma] = useState(INFLUENCE_MIN)
   const scrollRafRef = useRef<number | null>(null)
@@ -122,11 +123,26 @@ export function TocRail({ entries }: { entries: TocEntry[] }) {
   return (
     <nav
       ref={railRef}
-      className={styles.rail}
+      className={`${styles.rail} ${open ? styles.railOpen : ''}`}
       aria-label="Table of contents"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
+      {/* touch-only: a small, separate target (not the whole rail) is the
+          only thing that opens the label list on a device with no real
+          hover. closing is its own separate full-screen target below, not
+          this one - tapping this never closes anything. */}
+      {!open && (
+        <div
+          className={styles.activateZone}
+          aria-hidden="true"
+          onClick={(e) => {
+            e.stopPropagation()
+            setOpen(true)
+          }}
+        />
+      )}
+
       {/* one shared blur panel behind the whole label column, instead of a
           separate blur per row - avoids visible seams between labels */}
       <div className={styles.labelsBackdrop} aria-hidden="true" />
@@ -172,6 +188,21 @@ export function TocRail({ entries }: { entries: TocEntry[] }) {
           </a>
         )
       })}
+
+      {/* closing is its own separate full-screen target, distinct from the
+          small activation zone above - any tap outside an actual row while
+          open lands here and closes, instead of the whole rail being a
+          tap-sensitive surface again */}
+      {open && (
+        <div
+          className={styles.closeZone}
+          aria-hidden="true"
+          onClick={(e) => {
+            e.stopPropagation()
+            setOpen(false)
+          }}
+        />
+      )}
     </nav>
   )
 }

@@ -18,6 +18,56 @@
     width: 170px;
     height: 72vh;
     z-index: 40;
+    /* touch default: the rail's own blank space is NOT a hit target - a tap
+       on body text that happens to fall under this box must reach the text,
+       not get eaten here. only the small .activateZone, the rows' own tiny
+       hitboxes, and (once open) the wide area are ever tappable. */
+    pointer-events: none;
+  }
+}
+
+/* mouse/trackpad devices keep the simple hover-driven behavior unconditionally -
+   this bug (and its fix) is a touch-only problem, since real hover never
+   fires from an ordinary tap on page content */
+@media (max-width: 1099.98px) and (hover: hover) and (pointer: fine) {
+  .rail {
+    pointer-events: auto;
+  }
+}
+
+/* touch only: once activated, the rail's full width becomes tappable again -
+   this is "everything as it is now", just gated behind an explicit open
+   state instead of the whole rail always being a hit target */
+.railOpen {
+  pointer-events: auto;
+}
+
+/* small and separate from the rail's own box on purpose - this is the only
+   thing that can turn the panel on from a resting state. sized like the old
+   pre-widened hit area, not the current 170px reveal surface. */
+.activateZone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 28px;
+  pointer-events: auto;
+}
+
+/* also separate from the activation zone - any tap outside an actual row
+   while open lands here instead of the rail's blank space, so the rail
+   doesn't need to be a tap-sensitive surface to close itself */
+.closeZone {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  pointer-events: auto;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .activateZone,
+  .closeZone {
+    pointer-events: none;
   }
 }
 
@@ -76,7 +126,8 @@
   transition: opacity 0.18s ease, transform 0.18s ease;
 }
 
-.rail:hover .labelText {
+.rail:hover .labelText,
+.railOpen .labelText {
   opacity: 1;
   transform: translateY(-50%) translateX(0);
 }
@@ -107,6 +158,7 @@
   transition: opacity 0.18s ease;
 }
 
-.rail:hover .labelsBackdrop {
+.rail:hover .labelsBackdrop,
+.railOpen .labelsBackdrop {
   opacity: 1;
 }
