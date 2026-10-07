@@ -108,7 +108,11 @@ export function TocRail({ entries }: { entries: TocEntry[] }) {
     startHoverLoop()
   }
 
-  const handleMouseLeave = () => {
+  // shared by real mouseleave AND every tap-driven action below - a tap
+  // (open, close, or navigate) fires a one-off synthetic "mousemove" on
+  // mobile with no matching "mouseleave" ever following it, so without this
+  // the row nearest that touch point stays swollen out indefinitely
+  const resetHoverSwell = () => {
     setMouseY(null)
     prevSampleRef.current = null
     velocityRef.current = 0
@@ -126,7 +130,7 @@ export function TocRail({ entries }: { entries: TocEntry[] }) {
       className={`${styles.rail} ${open ? styles.railOpen : ''}`}
       aria-label="Table of contents"
       onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      onMouseLeave={resetHoverSwell}
     >
       {/* touch-only: a small, separate target (not the whole rail) is the
           only thing that opens the label list on a device with no real
@@ -139,6 +143,7 @@ export function TocRail({ entries }: { entries: TocEntry[] }) {
           onClick={(e) => {
             e.stopPropagation()
             setOpen(true)
+            resetHoverSwell()
           }}
         />
       )}
@@ -179,6 +184,7 @@ export function TocRail({ entries }: { entries: TocEntry[] }) {
             onClick={(e) => {
               e.preventDefault()
               document.getElementById(entry.id)?.scrollIntoView({ behavior: 'smooth' })
+              resetHoverSwell()
             }}
           >
             {/* positioned entirely outside the row's own box (see CSS) so it
@@ -200,6 +206,7 @@ export function TocRail({ entries }: { entries: TocEntry[] }) {
           onClick={(e) => {
             e.stopPropagation()
             setOpen(false)
+            resetHoverSwell()
           }}
         />
       )}
