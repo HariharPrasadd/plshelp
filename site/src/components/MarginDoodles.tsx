@@ -29,8 +29,12 @@ export const MarginDoodles = forwardRef<MarginDoodlesHandle>(function MarginDood
     rcRef.current = rough.canvas(canvas)
 
     const resize = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
+      const dpr = window.devicePixelRatio || 1
+      canvas.width = window.innerWidth * dpr
+      canvas.height = window.innerHeight * dpr
+      canvas.style.width = `${window.innerWidth}px`
+      canvas.style.height = `${window.innerHeight}px`
+      canvas.getContext('2d')?.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -53,7 +57,7 @@ export const MarginDoodles = forwardRef<MarginDoodlesHandle>(function MarginDood
       if (rc && canvas && ctx) {
         // clear in plain viewport space, then shift into document space for
         // the actual drawing so doodles track their original page position
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
         ctx.save()
         ctx.translate(-window.scrollX, -window.scrollY)
         const now = performance.now()

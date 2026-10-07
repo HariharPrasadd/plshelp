@@ -8,13 +8,16 @@
     display: block;
     position: fixed;
     top: 14vh;
-    right: 3px;
+    /* spans the whole tick + label column, on purpose - this is the hover
+       surface that decides whether labels are shown, and it is deliberately
+       kept separate from each row's own (much smaller) click hitbox below.
+       without a real width here, the rail has no in-flow content to size
+       itself by, collapses to ~0px, and hover is lost the instant the
+       cursor leaves a tick on its way toward the label text next to it. */
+    right: 0;
+    width: 170px;
     height: 72vh;
     z-index: 40;
-    /* the rail box itself is never a hit target - only the tiny tick rows
-       and the small toggle button (both pointer-events: auto below) are.
-       without this, the whole column was eating scroll/touch gestures. */
-    pointer-events: none;
   }
 }
 
@@ -53,8 +56,8 @@
 }
 
 /* taken completely out of the row's layout box (positioned off to the left
-   of it) so it never affects the row's own clickable size, visible or not -
-   purely decorative, never itself interactive */
+   of it) so it never affects the row's own clickable size - it can be
+   wide and interactive without making the tick's hitbox any bigger */
 .labelText {
   position: absolute;
   right: 100%;
@@ -65,12 +68,15 @@
   color: inherit;
   white-space: nowrap;
   opacity: 0;
-  pointer-events: none;
+  /* clickable once revealed - it sits inside the row's own <a>, so clicking
+     the text navigates just like clicking the tick does. this is the click
+     hitbox; the rail's hover surface above is what decides if it's visible,
+     and the two are intentionally never the same box. */
+  pointer-events: auto;
   transition: opacity 0.18s ease, transform 0.18s ease;
 }
 
-.rail:hover .labelText,
-.railOpen .labelText {
+.rail:hover .labelText {
   opacity: 1;
   transform: translateY(-50%) translateX(0);
 }
@@ -101,37 +107,6 @@
   transition: opacity 0.18s ease;
 }
 
-.rail:hover .labelsBackdrop,
-.railOpen .labelsBackdrop {
+.rail:hover .labelsBackdrop {
   opacity: 1;
-}
-
-/* small, fixed-size toggle - not a tall strip - sitting just under the rail */
-.toggle {
-  position: absolute;
-  right: 0;
-  bottom: -30px;
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: auto;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
-
-.toggleDot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--text-muted);
-  transition: background 0.15s ease;
-}
-
-.toggle:hover .toggleDot,
-.railOpen .toggleDot {
-  background: var(--text);
 }

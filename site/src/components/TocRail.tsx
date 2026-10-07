@@ -23,7 +23,6 @@ function smoothstep(t: number) {
 
 export function TocRail({ entries }: { entries: TocEntry[] }) {
   const [activeId, setActiveId] = useState(entries[0]?.id)
-  const [open, setOpen] = useState(false)
   const [mouseY, setMouseY] = useState<number | null>(null)
   const [sigma, setSigma] = useState(INFLUENCE_MIN)
   const scrollRafRef = useRef<number | null>(null)
@@ -123,7 +122,7 @@ export function TocRail({ entries }: { entries: TocEntry[] }) {
   return (
     <nav
       ref={railRef}
-      className={`${styles.rail} ${open ? styles.railOpen : ''}`}
+      className={styles.rail}
       aria-label="Table of contents"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -164,27 +163,15 @@ export function TocRail({ entries }: { entries: TocEntry[] }) {
             onClick={(e) => {
               e.preventDefault()
               document.getElementById(entry.id)?.scrollIntoView({ behavior: 'smooth' })
-              setOpen(false)
             }}
           >
             {/* positioned entirely outside the row's own box (see CSS) so it
-                never affects the row's clickable footprint, open or closed */}
+                never affects the row's clickable footprint */}
             <span className={styles.labelText}>{entry.title}</span>
             <span className={`${styles.tick} ${active ? styles.tickActive : ''}`} />
           </a>
         )
       })}
-
-      {/* the only control that opens/closes the label list - small and
-          fixed-size, not a tall strip spanning the scroll area */}
-      <button
-        className={styles.toggle}
-        onClick={() => setOpen((o) => !o)}
-        aria-expanded={open}
-        aria-label="Toggle section list"
-      >
-        <span className={styles.toggleDot} />
-      </button>
     </nav>
   )
 }
