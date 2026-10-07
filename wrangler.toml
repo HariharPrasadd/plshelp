@@ -5,6 +5,7 @@ main = "./worker.js"
 
 [assets]
 directory = "./site/public"
+not_found_handling = "single-page-application"
 
 [[analytics_engine_datasets]]
 binding = "DOWNLOADS"

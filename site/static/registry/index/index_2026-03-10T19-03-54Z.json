@@ -1,0 +1,226 @@
+{
+  "version": 1,
+  "generated_at": "2026-03-10T18:42:13.394904Z",
+  "entries": [
+    {
+      "name": "ArgoCD",
+      "slug": "argocd",
+      "source_url": "https://argo-cd.readthedocs.io/en/stable/",
+      "pages": 463,
+      "content_size_chars": 5861158,
+      "artifacts": {
+        "markdown_path": "/registry/docs/argocd/docs.md",
+        "text_path": "/registry/docs/argocd/docs.txt",
+        "markdown_bytes": 5877816,
+        "text_bytes": 5877816,
+        "markdown_sha256": "7af8343022be1e6f580c6c64036acaf7c3341f5840831c9b429a86d095bf664e",
+        "text_sha256": "7af8343022be1e6f580c6c64036acaf7c3341f5840831c9b429a86d095bf664e"
+      },
+      "last_crawled_at": "2026-03-10T18:31:47.678422Z",
+      "last_successful_crawled_at": "2026-03-10T18:32:02.392007Z",
+      "crawl_duration_ms": 14713,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Flux",
+      "slug": "flux",
+      "source_url": "https://fluxcd.io/flux/get-started/",
+      "pages": 1,
+      "content_size_chars": 9152,
+      "artifacts": {
+        "markdown_path": "/registry/docs/flux/docs.md",
+        "text_path": "/registry/docs/flux/docs.txt",
+        "markdown_bytes": 9246,
+        "text_bytes": 9246,
+        "markdown_sha256": "6356f8fe524f44dfb338734a5b959b35d0fd81441fca876b75782dc8ee44406e",
+        "text_sha256": "6356f8fe524f44dfb338734a5b959b35d0fd81441fca876b75782dc8ee44406e"
+      },
+      "last_crawled_at": "2026-03-10T18:32:02.393062Z",
+      "last_successful_crawled_at": "2026-03-10T18:32:03.147075Z",
+      "crawl_duration_ms": 754,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "NGINX",
+      "slug": "nginx",
+      "source_url": "https://nginx.org/en/docs/",
+      "pages": 150,
+      "content_size_chars": 1035043,
+      "artifacts": {
+        "markdown_path": "/registry/docs/nginx/docs.md",
+        "text_path": "/registry/docs/nginx/docs.txt",
+        "markdown_bytes": 1039356,
+        "text_bytes": 1039356,
+        "markdown_sha256": "5b83983e989ea3fe737297bbe3cc6b4586d7ba03a4fb7bcde36c0f1eb2ab6950",
+        "text_sha256": "5b83983e989ea3fe737297bbe3cc6b4586d7ba03a4fb7bcde36c0f1eb2ab6950"
+      },
+      "last_crawled_at": "2026-03-10T18:32:03.147723Z",
+      "last_successful_crawled_at": "2026-03-10T18:32:06.124769Z",
+      "crawl_duration_ms": 2977,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Caddy",
+      "slug": "caddy",
+      "source_url": "https://caddyserver.com/docs/",
+      "pages": 122,
+      "content_size_chars": 647637,
+      "artifacts": {
+        "markdown_path": "/registry/docs/caddy/docs.md",
+        "text_path": "/registry/docs/caddy/docs.txt",
+        "markdown_bytes": 648179,
+        "text_bytes": 648179,
+        "markdown_sha256": "d34eed177c06234065055e7a0ed721164cbfed3f1b63285281564b0f721144f3",
+        "text_sha256": "d34eed177c06234065055e7a0ed721164cbfed3f1b63285281564b0f721144f3"
+      },
+      "last_crawled_at": "2026-03-10T18:32:06.125307Z",
+      "last_successful_crawled_at": "2026-03-10T18:32:10.060155Z",
+      "crawl_duration_ms": 3934,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Traefik",
+      "slug": "traefik",
+      "source_url": "https://doc.traefik.io/traefik/",
+      "pages": 768,
+      "content_size_chars": 9129684,
+      "artifacts": {
+        "markdown_path": "/registry/docs/traefik/docs.md",
+        "text_path": "/registry/docs/traefik/docs.txt",
+        "markdown_bytes": 9137573,
+        "text_bytes": 9137573,
+        "markdown_sha256": "7ef01483477b3f55056da44c3461b0c8a95f5b5ae0240d791d089f09e1d434c5",
+        "text_sha256": "7ef01483477b3f55056da44c3461b0c8a95f5b5ae0240d791d089f09e1d434c5"
+      },
+      "last_crawled_at": "2026-03-10T18:32:10.060943Z",
+      "last_successful_crawled_at": "2026-03-10T18:32:36.552035Z",
+      "crawl_duration_ms": 26491,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Prometheus",
+      "slug": "prometheus",
+      "source_url": "https://prometheus.io/docs/introduction/overview/",
+      "pages": 0,
+      "content_size_chars": 0,
+      "artifacts": {
+        "markdown_path": "/registry/docs/prometheus/docs.md",
+        "text_path": "/registry/docs/prometheus/docs.txt",
+        "markdown_bytes": 0,
+        "text_bytes": 0,
+        "markdown_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "last_crawled_at": "2026-03-10T18:32:36.552783Z",
+      "last_successful_crawled_at": "2026-03-10T18:33:06.984170Z",
+      "crawl_duration_ms": 30431,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Grafana",
+      "slug": "grafana",
+      "source_url": "https://grafana.com/docs/grafana/latest/",
+      "pages": 2321,
+      "content_size_chars": 31037620,
+      "artifacts": {
+        "markdown_path": "/registry/docs/grafana/docs.md",
+        "text_path": "/registry/docs/grafana/docs.txt",
+        "markdown_bytes": 31107658,
+        "text_bytes": 31107658,
+        "markdown_sha256": "4ebf57c527f478270f1b996f74d319d736a0f33c836836859ce41add947417f1",
+        "text_sha256": "4ebf57c527f478270f1b996f74d319d736a0f33c836836859ce41add947417f1"
+      },
+      "last_crawled_at": "2026-03-10T18:33:06.985483Z",
+      "last_successful_crawled_at": "2026-03-10T18:39:39.643760Z",
+      "crawl_duration_ms": 392657,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "OpenTelemetry",
+      "slug": "opentelemetry",
+      "source_url": "https://opentelemetry.io/docs/",
+      "pages": 1224,
+      "content_size_chars": 20155535,
+      "artifacts": {
+        "markdown_path": "/registry/docs/opentelemetry/docs.md",
+        "text_path": "/registry/docs/opentelemetry/docs.txt",
+        "markdown_bytes": 20252462,
+        "text_bytes": 20252462,
+        "markdown_sha256": "b02b620050f2d674302c41c16ad908862b6b35d3b195594e0fb99a439a2c2e25",
+        "text_sha256": "b02b620050f2d674302c41c16ad908862b6b35d3b195594e0fb99a439a2c2e25"
+      },
+      "last_crawled_at": "2026-03-10T18:39:39.644424Z",
+      "last_successful_crawled_at": "2026-03-10T18:41:16.518745Z",
+      "crawl_duration_ms": 96874,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Jaeger",
+      "slug": "jaeger",
+      "source_url": "https://www.jaegertracing.io/docs/latest/",
+      "pages": 21,
+      "content_size_chars": 143693,
+      "artifacts": {
+        "markdown_path": "/registry/docs/jaeger/docs.md",
+        "text_path": "/registry/docs/jaeger/docs.txt",
+        "markdown_bytes": 143894,
+        "text_bytes": 143894,
+        "markdown_sha256": "753bcb577f11e96a53b88146d3c27f730b3468c497ee0983768d24c83a25781b",
+        "text_sha256": "753bcb577f11e96a53b88146d3c27f730b3468c497ee0983768d24c83a25781b"
+      },
+      "last_crawled_at": "2026-03-10T18:41:16.519265Z",
+      "last_successful_crawled_at": "2026-03-10T18:41:18.272107Z",
+      "crawl_duration_ms": 1752,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Grafana Loki",
+      "slug": "loki",
+      "source_url": "https://grafana.com/docs/loki/latest/",
+      "pages": 496,
+      "content_size_chars": 19445278,
+      "artifacts": {
+        "markdown_path": "/registry/docs/loki/docs.md",
+        "text_path": "/registry/docs/loki/docs.txt",
+        "markdown_bytes": 19453382,
+        "text_bytes": 19453382,
+        "markdown_sha256": "d81da06bae20b0b5c7ec86eb5bf83fd9e48147e3cd5e346df6f5962dfe4aa5fa",
+        "text_sha256": "d81da06bae20b0b5c7ec86eb5bf83fd9e48147e3cd5e346df6f5962dfe4aa5fa"
+      },
+      "last_crawled_at": "2026-03-10T18:41:18.272639Z",
+      "last_successful_crawled_at": "2026-03-10T18:42:13.068204Z",
+      "crawl_duration_ms": 54795,
+      "status": "success",
+      "error_message": null
+    },
+    {
+      "name": "Alertmanager",
+      "slug": "alertmanager",
+      "source_url": "https://prometheus.io/docs/alerting/latest/alertmanager/",
+      "pages": 1,
+      "content_size_chars": 4082,
+      "artifacts": {
+        "markdown_path": "/registry/docs/alertmanager/docs.md",
+        "text_path": "/registry/docs/alertmanager/docs.txt",
+        "markdown_bytes": 4086,
+        "text_bytes": 4086,
+        "markdown_sha256": "7a7d08c63205fb59ac57f62f55308be8b042b686ac945f4837b645a906682b81",
+        "text_sha256": "7a7d08c63205fb59ac57f62f55308be8b042b686ac945f4837b645a906682b81"
+      },
+      "last_crawled_at": "2026-03-10T18:42:13.069014Z",
+      "last_successful_crawled_at": "2026-03-10T18:42:13.394890Z",
+      "crawl_duration_ms": 325,
+      "status": "success",
+      "error_message": null
+    }
+  ]
+}

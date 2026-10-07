@@ -1,0 +1,50 @@
+.toc {
+  display: none;
+}
+
+@media (min-width: 1100px) {
+  .toc {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: max(24px, calc(50% - var(--content-width) / 2 - 260px));
+    transform: translateY(-50%);
+    width: 220px;
+    max-height: 70vh;
+    overflow-y: auto;
+    z-index: 40;
+    scrollbar-width: none;
+  }
+
+  .toc::-webkit-scrollbar {
+    width: 0;
+  }
+}
+
+.link {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+  padding: 4px 0;
+  text-decoration: none;
+  transition: color 0.15s ease;
+  cursor: pointer;
+  will-change: transform;
+}
+
+.num {
+  color: inherit;
+  flex-shrink: 0;
+}
+
+.link:hover {
+  color: var(--text-body);
+  text-decoration: none;
+}
+
+.linkActive,
+.linkActive:hover {
+  color: var(--text);
+}

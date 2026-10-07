@@ -1,0 +1,81 @@
+.wrap {
+  margin: 20px 0 40px;
+}
+
+.tabs {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.tab {
+  background: none;
+  border: none;
+  padding: 0 0 4px;
+  font-family: var(--sans);
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+}
+
+.tab:hover {
+  color: var(--text-body);
+}
+
+.tabActive {
+  color: var(--text);
+  border-bottom-color: var(--underline-hover);
+}
+
+.cmdRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: var(--fs-small);
+  color: var(--text);
+  background: #f4f3f0;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.cmdText {
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.copyBtn {
+  background: none;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  display: flex;
+  line-height: 0;
+}
+
+.copyBtn:hover {
+  color: var(--text-body);
+}
+
+.copyBtn svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.copyBtn .check {
+  display: none;
+}
+
+.copied .copy {
+  display: none;
+}
+
+.copied .check {
+  display: block;
+  color: #4a9b5e;
+}

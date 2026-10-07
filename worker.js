@@ -48,7 +48,21 @@ function trackDownload(request, env, response) {
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    const response = await env.ASSETS.fetch(request);
+    let response = await env.ASSETS.fetch(request);
+
+    // the site is a client-side-routed SPA (TanStack Router) - a direct
+    // request for a route like /docs or /registry has no matching file on
+    // disk, so fall back to index.html and let the client router take over
+    if (response.status === 404 && request.method === "GET") {
+      const indexRequest = new Request(new URL("/index.html", url), request);
+      const indexResponse = await env.ASSETS.fetch(indexRequest);
+      if (indexResponse.ok) {
+        response = new Response(indexResponse.body, {
+          status: 200,
+          headers: indexResponse.headers,
+        });
+      }
+    }
 
     if (TRACKED_PATHS.has(url.pathname)) {
       ctx.waitUntil(Promise.resolve(trackDownload(request, env, response)));

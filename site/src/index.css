@@ -1,0 +1,131 @@
+:root {
+  --bg: #fdfdfb;
+  --text: #19181a;
+  --text-body: #403e3f;
+  --text-muted: #9c9a97;
+  --underline: #d6d4d0;
+  --underline-hover: #85827e;
+  --border: #ebe9e5;
+
+  --sans:
+    'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, Helvetica, Arial, sans-serif;
+  --mono:
+    ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+
+  /* type scale: canonical sizes, use these everywhere instead of hardcoding */
+  --fs-h1: 22px;
+  --fs-h2: 17px;
+  --fs-h3: 14.5px;
+  --fs-body: 15.5px;
+  --fs-small: 13.5px;
+  --fs-micro: 11.5px;
+
+  --weight-heading: 500;
+  --weight-emphasis: 600;
+
+  --content-width: 640px;
+  --side-pad: 24px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  scroll-behavior: smooth;
+}
+
+/* the TocRail lives at the right edge on narrow viewports (same breakpoint
+   it shows itself at) - the native scrollbar there visually competes with
+   it, so hide it; the floating desktop Toc doesn't have this problem since
+   it sits well clear of the edge */
+@media (max-width: 1099.98px) {
+  html {
+    scrollbar-width: none;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-body);
+  font-family: var(--sans);
+  font-size: var(--fs-body);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--text);
+  font-weight: var(--weight-heading);
+  line-height: 1.35;
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--fs-h1);
+}
+
+h2 {
+  font-size: var(--fs-h2);
+}
+
+h3,
+h4 {
+  font-size: var(--fs-h3);
+}
+
+p {
+  margin: 0;
+  font-size: var(--fs-body);
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--underline);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color 0.15s ease;
+}
+
+a:hover {
+  text-decoration-color: var(--underline-hover);
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  background: #f4f3f0;
+  border-radius: 4px;
+  padding: 0.15em 0.4em;
+}
+
+pre {
+  font-family: var(--mono);
+  font-size: 0.85em;
+  line-height: 1.7;
+  background: #f4f3f0;
+  border-radius: 8px;
+  padding: 16px 18px;
+  overflow-x: auto;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+::selection {
+  background: #e4e1da;
+}

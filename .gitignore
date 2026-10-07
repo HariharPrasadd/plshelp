@@ -8,3 +8,10 @@ site/public/registry/docs
 /npm/plshelp-linux-x64/bin/*
 /npm/plshelp-darwin-arm64/bin/*
 /npm/plshelp-win32-x64/bin/*
+
+# local wrangler dev state/cache, never meant to be committed
+.wrangler/
+**/.wrangler/
+
+# site (new_site) build/dev artifacts
+site/node_modules/

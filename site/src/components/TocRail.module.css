@@ -1,0 +1,99 @@
+/* only shown where the floating desktop Toc (min-width: 1100px) hides itself */
+.rail {
+  display: none;
+}
+
+@media (max-width: 1099.98px) {
+  .rail {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    position: fixed;
+    top: 14vh;
+    right: 3px;
+    height: 72vh;
+    z-index: 40;
+    cursor: pointer;
+  }
+}
+
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text-muted);
+  transition: color 0.15s ease, transform 0.12s ease-out;
+  will-change: transform;
+}
+
+.row:hover {
+  color: var(--text-body);
+}
+
+.rowActive,
+.rowActive:hover {
+  color: var(--text);
+}
+
+.tick {
+  display: block;
+  width: 5px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+  transition: width 0.2s ease;
+  flex-shrink: 0;
+}
+
+.tickActive {
+  width: 11px;
+}
+
+/* one shared blur panel behind the whole label column (not one per row, so
+   there's no visible seam between labels) - wide and strong enough that a
+   full section title reads cleanly even directly over body text. fixed to
+   the full viewport height (not just the rail's own height) so it's never
+   short, fading only left-to-right toward the content */
+.labelsBackdrop {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 14px;
+  width: 280px;
+  opacity: 0;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  background: rgba(253, 253, 251, 0.4);
+  mask-image: linear-gradient(to left, black 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to left, black 55%, transparent 100%);
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+
+.rail:hover .labelsBackdrop,
+.railOpen .labelsBackdrop {
+  opacity: 1;
+}
+
+/* hidden until the rail is hovered or tapped open, then the whole list
+   comes out together */
+.labelText {
+  position: relative;
+  font-size: var(--fs-micro);
+  color: inherit;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(6px);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.rail:hover .labelText,
+.railOpen .labelText {
+  opacity: 1;
+  transform: translateX(0);
+}
