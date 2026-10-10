@@ -164,11 +164,11 @@ function Registry() {
         <h1>Registry</h1>
         <p className={styles.meta}>
           {index
-            ? `${entries.length} libraries, updated ${new Date(index.generated_at).toLocaleDateString(
+            ? `${entries.length} libraries. Updated ${new Date(index.generated_at).toLocaleDateString(
                 'en-US',
                 { month: 'short', day: 'numeric', year: 'numeric' },
-              )}. Click one to copy its install command.`
-            : 'Pre-crawled documentation libraries, ready to use without crawling.'}
+              )}. Copy a library's install command by clicking on it!`
+            : 'Libraries we already crawled for you!'}
         </p>
 
         <input
